@@ -14,7 +14,7 @@ ss2d/version="3.3.1"
 
 [application]
 
-config/name="Hill Climb Racing"
+config/name="Cycling through Finland - Pedal Project"
 run/main_scene="uid://bplm7ik64rdon"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"

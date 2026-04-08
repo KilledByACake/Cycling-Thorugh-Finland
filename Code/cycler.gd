@@ -1,16 +1,14 @@
 extends RigidBody2D
 
-var wheels: Array = []
 var speed: float = 60000.0
 var max_speed: float = 50.0
 var fuel: float = 100.0
 var driving = 0
-
 @onready var game_over_timer: Timer = $GameOverTimer
+@onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _ready() -> void:
-	add_to_group("player")
-	wheels = get_tree().get_nodes_in_group("wheel")
+	add_to_group("cycler")
 	_update_ui()
 
 func _physics_process(delta: float) -> void:
@@ -22,18 +20,12 @@ func _physics_process(delta: float) -> void:
 			game_over_timer.stop()
 		if Input.is_action_pressed("ui_right"):
 			driving += 1
-			#to do backflips
-			apply_torque_impulse(-6000 * delta * 60)
-			for wheel in wheels:
-				if wheel.angular_velocity < max_speed:
-					wheel.apply_torque_impulse(speed * delta * 60.0)
+			# nach rechts bewegen, keine Drehung durch Gas
+			apply_central_force(Vector2(speed * delta, 0))
 		if Input.is_action_pressed("ui_left"):
 			driving += 1
-			#to do backflips
-			apply_torque_impulse(-6000 * delta * 60)
-			#for wheel in wheels:
-				#if wheel.angular_velocity > -max_speed:
-					#wheel.apply_torque_impulse(-speed * delta * 60.0)
+			# nach links bewegen, keine Drehung durch Gas
+			apply_central_force(Vector2(-speed * delta, 0))
 	else:
 		if game_over_timer.time_left <= 0.0:
 			game_over_timer.start()
@@ -43,7 +35,21 @@ func _physics_process(delta: float) -> void:
 		use_fuel(delta)
 	else:
 		$EngineSFX.pitch_scale = lerp($EngineSFX.pitch_scale, 1.0, 2.0*delta)
-
+	_update_animation()
+	
+func _update_animation() -> void:
+	# nur horizontale Geschwindigkeit – Drehung soll Animation nicht beeinflussen
+	var move_speed = abs(linear_velocity.x)
+	
+	if move_speed > 5.0:
+		sprite.play("rollen") # <-- deinen Animationsnamen hier einsetzen
+		# Animationsgeschwindigkeit an Fahrgeschwindigkeit koppeln
+		sprite.speed_scale = clamp(move_speed / 50.0, 0.5, 5.0)
+		# Sprite spiegeln je nach Fahrtrichtung
+		sprite.flip_h = linear_velocity.x < 0
+	else:
+		sprite.stop()
+	
 func refuel() -> void:
 	fuel = 100.0
 	_update_ui()
