@@ -47,4 +47,4 @@ offset_bottom = 175.0
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 theme_override_styles/background = SubResource("StyleBoxTexture_2246s")
-value = 50.0
+value = 100.0
