@@ -14,7 +14,6 @@
 [ext_resource type="Script" uid="uid://d218yx0d1ilsn" path="res://addons/rmsmartshape/normal_range.gd" id="10_lk57d"]
 [ext_resource type="PackedScene" uid="uid://ep3y83ujsrdg" path="res://Scenes/coin.tscn" id="12_2hkqn"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Scenes/ui.tscn" id="14_2hkqn"]
-[ext_resource type="PackedScene" uid="uid://bbbpaw5fvqti1" path="res://Scenes/fuel.tscn" id="15_34erp"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="16_c7pbv"]
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="16_k2bse"]
 
@@ -279,25 +278,12 @@ position = Vector2(5585, 1927)
 
 [node name="player" parent="." unique_id=640640380 instance=ExtResource("1_n0qsc")]
 position = Vector2(-4250, 359)
-per_tap_add = 0.35
-tap_decay = 1.3
-torque_per_charge = 4500.0
-body_tilt_torque = -3000.0
-charge_max = 1.0
-slope_resistance_factor = 30.0
-downhill_bonus_factor = 0.3
 
 [node name="Camera2D" type="Camera2D" parent="player" unique_id=1482164929]
 position = Vector2(-16, -12)
 drag_horizontal_enabled = true
 
 [node name="UI" parent="." unique_id=482392122 instance=ExtResource("14_2hkqn")]
-
-[node name="Fuel" parent="." unique_id=1457010218 instance=ExtResource("15_34erp")]
-position = Vector2(4952, 1927)
-
-[node name="Fuel2" parent="." unique_id=1085251071 instance=ExtResource("15_34erp")]
-position = Vector2(14360, 2320)
 
 [node name="Clouds" type="Parallax2D" parent="." unique_id=1041042698]
 scroll_offset = Vector2(1959, 484)

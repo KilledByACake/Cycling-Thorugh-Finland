@@ -13,13 +13,7 @@ radius = 65.00769
 [node name="player" type="RigidBody2D" unique_id=640640380 groups=["player"]]
 gravity_scale = 3.5
 script = ExtResource("1_6t5aa")
-per_tap_add = null
-tap_decay = null
-torque_per_charge = null
-body_tilt_torque = null
-charge_max = null
-slope_resistance_factor = null
-downhill_bonus_factor = null
+torque_per_charge = 8000.0
 
 [node name="wheelholder" type="PinJoint2D" parent="." unique_id=395916683]
 position = Vector2(-131, 68)

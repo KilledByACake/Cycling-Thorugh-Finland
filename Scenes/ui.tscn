@@ -2,10 +2,7 @@
 
 [ext_resource type="Texture2D" uid="uid://d2s3yen30goj6" path="res://Images/Pickups/Coin5.png" id="1_qdvrb"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_nf4gj"]
-[ext_resource type="Texture2D" uid="uid://brfaemff0u6n5" path="res://Images/Pickups/Fuel.png" id="3_nf4gj"]
-
-[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_2246s"]
-expand_margin_left = 6.0
+[ext_resource type="Texture2D" uid="uid://be2gkt16j3iwy" path="res://Images/Other/EnergySymbol2.png" id="3_2246s"]
 
 [node name="UI" type="CanvasLayer" unique_id=482392122 groups=["ui"]]
 
@@ -31,20 +28,25 @@ theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 text = "0"
 
-[node name="TextureRect" type="TextureRect" parent="." unique_id=1871412103]
-offset_left = 13.0
-offset_top = 8.0
-offset_right = 213.0
-offset_bottom = 208.0
-texture = ExtResource("3_nf4gj")
+[node name="Energy" type="TextureRect" parent="." unique_id=1524677923]
+offset_left = -4.0
+offset_top = 4.0
+offset_right = 237.0
+offset_bottom = 230.0
+texture = ExtResource("3_2246s")
+expand_mode = 1
 
-[node name="ProgressBar" type="ProgressBar" parent="TextureRect" unique_id=1667633631]
-layout_mode = 0
-offset_left = 227.0
-offset_top = 28.872002
-offset_right = 578.0
-offset_bottom = 175.0
+[node name="Label" type="Label" parent="Energy" unique_id=216446171]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.1170001
+anchor_top = 0.18400002
+anchor_right = 1.9070001
+anchor_bottom = 0.86700004
+offset_left = -16.197021
+offset_top = -1.5840034
+offset_right = -20.197021
+offset_bottom = 7.8159943
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
-theme_override_styles/background = SubResource("StyleBoxTexture_2246s")
-value = 100.0
+text = "0"
