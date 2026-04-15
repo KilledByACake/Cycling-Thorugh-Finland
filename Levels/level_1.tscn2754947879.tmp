@@ -1,5 +1,6 @@
 [gd_scene format=4 uid="uid://bplm7ik64rdon"]
 
+[ext_resource type="PackedScene" uid="uid://d3ixmpoiropm3" path="res://Scenes/player.tscn" id="1_n0qsc"]
 [ext_resource type="Script" uid="uid://oklv8sdg3a58" path="res://Code/LevelManager.gd" id="1_rs4xw"]
 [ext_resource type="Script" uid="uid://dhdc4b8yddyej" path="res://addons/rmsmartshape/shapes/shape.gd" id="2_77x7w"]
 [ext_resource type="Script" uid="uid://bwcf4pjgprn0k" path="res://addons/rmsmartshape/shapes/point.gd" id="3_xoyoh"]
@@ -13,10 +14,10 @@
 [ext_resource type="Script" uid="uid://d218yx0d1ilsn" path="res://addons/rmsmartshape/normal_range.gd" id="10_lk57d"]
 [ext_resource type="PackedScene" uid="uid://ep3y83ujsrdg" path="res://Scenes/coin.tscn" id="12_2hkqn"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Scenes/ui.tscn" id="14_2hkqn"]
+[ext_resource type="PackedScene" uid="uid://cdy7b5ul2ipxq" path="res://Scenes/cycler_.tscn" id="14_77l7m"]
 [ext_resource type="PackedScene" uid="uid://bbbpaw5fvqti1" path="res://Scenes/fuel.tscn" id="15_34erp"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="16_c7pbv"]
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="16_k2bse"]
-[ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/radler.tscn" id="17_77l7m"]
 
 [sub_resource type="Resource" id="Resource_62b6n"]
 script = ExtResource("3_xoyoh")
@@ -297,12 +298,18 @@ repeat_times = 2
 [node name="Sprite2D" type="Sprite2D" parent="Clouds" unique_id=1084387943]
 texture = ExtResource("16_k2bse")
 
-[node name="Radler" parent="." unique_id=1887104354 instance=ExtResource("17_77l7m")]
-position = Vector2(-1747, 239)
-mass = 1.0
-gravity_scale = 1.0
-angular_damp = 10.0
+[node name="Cycler2" parent="." unique_id=759052331 instance=ExtResource("14_77l7m")]
+position = Vector2(-1698, 4)
+gravity_scale = 2.374
 
-[node name="Camera2D" type="Camera2D" parent="Radler" unique_id=1434816938]
-position = Vector2(110, -87)
-zoom = Vector2(0.7, 0.7)
+[node name="Camera2D" type="Camera2D" parent="Cycler2" unique_id=264884476]
+
+[node name="player" parent="." unique_id=640640380 instance=ExtResource("1_n0qsc")]
+visible = false
+position = Vector2(-1689, 43)
+
+[node name="Camera2D" type="Camera2D" parent="player" unique_id=974620558]
+visible = false
+position = Vector2(-350, -71)
+enabled = false
+drag_horizontal_enabled = true
