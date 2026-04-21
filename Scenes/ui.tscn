@@ -2,15 +2,15 @@
 
 [ext_resource type="Texture2D" uid="uid://d2s3yen30goj6" path="res://Images/Pickups/Coin5.png" id="1_qdvrb"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_nf4gj"]
-[ext_resource type="Texture2D" uid="uid://be2gkt16j3iwy" path="res://Images/Other/EnergySymbol2.png" id="3_2246s"]
+[ext_resource type="Texture2D" uid="uid://cx4iyso3jru3y" path="res://Images/Other/EnergySymbol2.png" id="3_2246s"]
 
 [node name="UI" type="CanvasLayer" unique_id=482392122 groups=["ui"]]
 
 [node name="Coin" type="TextureRect" parent="." unique_id=1019371159]
-offset_left = 13.0
-offset_top = 208.0
-offset_right = 213.0
-offset_bottom = 408.0
+offset_left = 33.0
+offset_top = 392.0
+offset_right = 233.0
+offset_bottom = 592.0
 texture = ExtResource("1_qdvrb")
 
 [node name="Label" type="Label" parent="Coin" unique_id=383672394]
@@ -29,10 +29,10 @@ theme_override_font_sizes/font_size = 120
 text = "0"
 
 [node name="Energy" type="TextureRect" parent="." unique_id=1524677923]
-offset_left = -4.0
-offset_top = 4.0
-offset_right = 237.0
-offset_bottom = 230.0
+offset_left = 16.0
+offset_top = 188.0
+offset_right = 257.0
+offset_bottom = 414.0
 texture = ExtResource("3_2246s")
 expand_mode = 1
 
@@ -50,3 +50,17 @@ offset_bottom = 7.8159943
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 text = "0"
+
+[node name="PlayerNameLabel" type="Label" parent="." unique_id=967513957]
+anchors_preset = -1
+anchor_left = 1.1170001
+anchor_top = 0.18400002
+anchor_right = 1.9070001
+anchor_bottom = 0.86700004
+offset_left = -2095.6401
+offset_top = -162.72002
+offset_right = -2802.4402
+offset_bottom = -702.36005
+theme_override_fonts/font = ExtResource("2_nf4gj")
+theme_override_font_sizes/font_size = 120
+text = "Player Name"

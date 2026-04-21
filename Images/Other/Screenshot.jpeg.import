@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bkmsn72k8ibna"
-path="res://.godot/imported/EnergySymbol1.png-6cd57189ec88c65ebc17c90b8e9852fc.ctex"
+uid="uid://c4rnw07ucj3hq"
+path="res://.godot/imported/Screenshot.jpeg-19c34d12c6729fe0b20330cac13334bb.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Code/EnergySymbol1.png"
-dest_files=["res://.godot/imported/EnergySymbol1.png-6cd57189ec88c65ebc17c90b8e9852fc.ctex"]
+source_file="res://Images/Other/Screenshot.jpeg"
+dest_files=["res://.godot/imported/Screenshot.jpeg-19c34d12c6729fe0b20330cac13334bb.ctex"]
 
 [params]
 
