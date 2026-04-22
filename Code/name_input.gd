@@ -8,12 +8,10 @@ const MAIN_MENU_SCENE_PATH := "res://Levels/main_menu.tscn"
 const LEVEL1_SCENE_PATH := "res://Levels/level_1.tscn"
 
 var characters: Array[String] = [
-	"A","B","C","D","E","F","G",
-	"H","I","J","K","L","M","N",
-	"O","P","Q","R","S","T","U",
-	"V","W","X","Y","Z","Å","Ä",
-	"Ö","1","2","3","4","5","6","7",
-	"8","9","0","",""
+	"Q","W","E","R","T","Y","U","I","O","P","Å",
+	"A","S","D","F","G","H","J","K","L","Ö","Ä",
+	"Z","X","C","V","B","N","M",
+	"1","2","3","4","5","6","7","8","9","0","",""
 ]
 
 var name_text: String = ""
