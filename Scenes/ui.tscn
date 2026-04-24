@@ -64,3 +64,18 @@ offset_bottom = -702.36005
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 text = "Player Name"
+
+[node name="TimerLabel" type="Label" parent="." unique_id=192753063]
+anchors_preset = -1
+anchor_left = 1.1170001
+anchor_top = 0.18400002
+anchor_right = 1.9070001
+anchor_bottom = 0.86700004
+offset_left = -646.64014
+offset_top = -187.72002
+offset_right = -1777.4402
+offset_bottom = -727.36005
+theme_override_fonts/font = ExtResource("2_nf4gj")
+theme_override_font_sizes/font_size = 120
+text = "02:00"
+horizontal_alignment = 2
