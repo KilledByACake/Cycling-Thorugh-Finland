@@ -1,0 +1,161 @@
+[gd_scene format=3 uid="uid://bwvxcx7l0f02n"]
+
+[ext_resource type="Script" uid="uid://de26es2lysnpm" path="res://Code/name_input.gd" id="1_xncxv"]
+[ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_x4mlx"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_xncxv"]
+[ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="3_x4mlx"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x4mlx"]
+texture = ExtResource("2_x4mlx")
+modulate_color = Color(0.35305238, 0.35305238, 0.35305238, 1)
+
+[sub_resource type="Theme" id="Theme_xncxv"]
+default_font = ExtResource("2_xncxv")
+default_font_size = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wk7tp"]
+bg_color = Color(0.5386101, 0.5386101, 0.8320729, 0.34117648)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 16.0
+expand_margin_right = 16.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3jhts"]
+bg_color = Color(0.09408989, 0.09408989, 0.21693242, 0.61960787)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 16.0
+expand_margin_right = 16.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_33yib"]
+bg_color = Color(0.3019608, 0.3019608, 0.5254902, 0.61960787)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 16.0
+expand_margin_right = 16.0
+
+[node name="NameInput" type="Control" unique_id=1964198822]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xncxv")
+
+[node name="Panel" type="Panel" parent="." unique_id=737065188]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_x4mlx")
+script = ExtResource("3_x4mlx")
+
+[node name="Label" type="Label" parent="." unique_id=1974430479]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -344.0
+offset_top = 173.0
+offset_right = 329.0
+offset_bottom = 247.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 65
+text = "Nickname"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=147362238]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_xncxv")
+theme_override_constants/h_separation = 25
+theme_override_constants/v_separation = 25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=313721407]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.34800002
+anchor_top = 0.83000004
+anchor_right = 0.66
+anchor_bottom = 0.87500006
+offset_left = -52.160034
+offset_top = -6.4000244
+offset_right = 30.799927
+offset_bottom = 5.999939
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 100
+
+[node name="quit" type="Button" parent="HBoxContainer" unique_id=1364312027]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_wk7tp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3jhts")
+theme_override_styles/hover = SubResource("StyleBoxFlat_33yib")
+text = "Quit"
+
+[node name="backspace" type="Button" parent="HBoxContainer" unique_id=782151137]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_wk7tp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3jhts")
+theme_override_styles/hover = SubResource("StyleBoxFlat_33yib")
+text = "Backspace"
+
+[node name="done" type="Button" parent="HBoxContainer" unique_id=127716656]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_wk7tp")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_3jhts")
+theme_override_styles/hover = SubResource("StyleBoxFlat_33yib")
+text = "Done"
+
+[node name="Txt" type="Label" parent="." unique_id=2109215096]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -344.0
+offset_top = -438.0
+offset_right = 309.0
+offset_bottom = -364.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 70
+text = "Fill out Nickname"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="HBoxContainer/quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="HBoxContainer/backspace" to="." method="_on_backspace_pressed"]
+[connection signal="pressed" from="HBoxContainer/done" to="." method="_on_done_pressed"]

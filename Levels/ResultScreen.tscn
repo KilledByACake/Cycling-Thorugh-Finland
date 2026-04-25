@@ -1,0 +1,105 @@
+[gd_scene format=3 uid="uid://3b3rascp4kst"]
+
+[ext_resource type="Script" uid="uid://ddmyeee3qgkf7" path="res://Code/result_screen.gd" id="1_g1wwc"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_g88ty"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vrvea"]
+bg_color = Color(0.5386101, 0.5386101, 0.8320729, 0.34117648)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 16.0
+expand_margin_right = 16.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jlewb"]
+bg_color = Color(0.09408989, 0.09408989, 0.21693242, 0.61960787)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 16.0
+expand_margin_right = 16.0
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5r0ce"]
+bg_color = Color(0.3019608, 0.3019608, 0.5254902, 0.61960787)
+corner_radius_top_left = 16
+corner_radius_top_right = 16
+corner_radius_bottom_right = 16
+corner_radius_bottom_left = 16
+expand_margin_left = 16.0
+expand_margin_right = 16.0
+
+[node name="ResultScreen" type="Control" unique_id=2076446682]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_g1wwc")
+
+[node name="CenterContainer" type="CenterContainer" parent="." unique_id=712763998]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -247.5
+offset_top = -120.5
+offset_right = 247.5
+offset_bottom = 120.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer" unique_id=852029852]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1749066736]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_g88ty")
+theme_override_font_sizes/font_size = 70
+text = "HIGH SCORES"
+horizontal_alignment = 1
+
+[node name="InfoLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1772755218]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_g88ty")
+theme_override_font_sizes/font_size = 70
+text = "Scores"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=330491432]
+layout_mode = 2
+size_flags_vertical = 8
+theme_override_constants/separation = 100
+
+[node name="Retry" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1576396313]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("2_g88ty")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_vrvea")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jlewb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5r0ce")
+text = "Retry"
+
+[node name="Main Menu" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1649614579]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("2_g88ty")
+theme_override_font_sizes/font_size = 50
+theme_override_styles/normal = SubResource("StyleBoxFlat_vrvea")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_jlewb")
+theme_override_styles/hover = SubResource("StyleBoxFlat_5r0ce")
+text = "Main Menu"
+
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Retry" to="." method="_on_retry_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Main Menu" to="." method="_on_main_menu_pressed"]

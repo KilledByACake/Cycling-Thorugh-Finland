@@ -11,8 +11,9 @@
 radius = 65.00769
 
 [node name="player" type="RigidBody2D" unique_id=640640380 groups=["player"]]
-gravity_scale = 2.374
+gravity_scale = 3.5
 script = ExtResource("1_6t5aa")
+torque_per_charge = 8000.0
 
 [node name="wheelholder" type="PinJoint2D" parent="." unique_id=395916683]
 position = Vector2(-131, 68)
@@ -68,5 +69,13 @@ wait_time = 5.0
 [node name="EngineSFX" type="AudioStreamPlayer" parent="." unique_id=1682945267]
 stream = ExtResource("6_x3wgy")
 autoplay = true
+
+[node name="SlopeLeft" type="RayCast2D" parent="." unique_id=395632126]
+position = Vector2(-133, 12)
+target_position = Vector2(0, 110)
+
+[node name="SlopeRight" type="RayCast2D" parent="." unique_id=2056123223]
+position = Vector2(138, 15)
+target_position = Vector2(-5, -110)
 
 [connection signal="timeout" from="GameOverTimer" to="." method="_on_game_over_timer_timeout"]

@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://cpfljdkjckjcp"]
+
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_tyydf"]
+[ext_resource type="Script" uid="uid://7hyj28nttlxl" path="res://Code/character_input_button.gd" id="2_re82h"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5x3k7"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_3dqab"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_nbeah"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_x4dxk"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_dn5lm"]
+
+[node name="CharacterInput" type="Control" unique_id=1272193075]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -10.0
+offset_right = -10.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+
+[node name="CharacterInputButton" type="Button" parent="." unique_id=945838871]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 0.012
+anchor_bottom = 0.037
+offset_right = 0.9599991
+offset_bottom = 0.040000916
+theme_override_colors/font_color = Color(0.875, 0.875, 0.875, 1)
+theme_override_colors/font_focus_color = Color(0, 0.5921569, 0.39215687, 1)
+theme_override_colors/font_pressed_color = Color(0, 0.5921569, 0.39215687, 1)
+theme_override_colors/font_hover_color = Color(0, 0.5921569, 0.39215687, 1)
+theme_override_fonts/font = ExtResource("1_tyydf")
+theme_override_font_sizes/font_size = 32
+theme_override_styles/normal = SubResource("StyleBoxEmpty_5x3k7")
+theme_override_styles/pressed = SubResource("StyleBoxEmpty_3dqab")
+theme_override_styles/hover = SubResource("StyleBoxEmpty_nbeah")
+theme_override_styles/hover_pressed = SubResource("StyleBoxEmpty_x4dxk")
+theme_override_styles/focus = SubResource("StyleBoxEmpty_dn5lm")
+text = "A"
+script = ExtResource("2_re82h")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="CharacterInputButton" unique_id=1330920850]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_fonts/normal_font = ExtResource("1_tyydf")
+theme_override_font_sizes/normal_font_size = 32
+fit_content = true
+scroll_active = false
+vertical_alignment = 1
