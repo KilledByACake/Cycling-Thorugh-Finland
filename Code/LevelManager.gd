@@ -2,7 +2,7 @@ extends Node2D
 
 signal round_over(won: bool)
 
-const ROUND_TIME_SEC: int = 5
+const ROUND_TIME_SEC: int = 5 # game time
 const TARGET_ENERGY: int = 200
 const BANNER_DURATION_SEC: float = 2.0
 
@@ -25,7 +25,7 @@ var game_timer: Timer
 func _ready() -> void:
 	_refresh_coin_ui()
 	_refresh_energy_ui()
-	_update_player_name_from_tree() # <-- show name from meta
+	_update_player_name_from_tree()
 	_start_round_timer()
 
 func _process(_delta: float) -> void:
@@ -55,6 +55,15 @@ func _refresh_energy_ui() -> void:
 	if energy_label:
 		energy_label.text = str(energy_points)
 
+func _update_player_name_from_tree() -> void:
+	if not player_name_label:
+		return
+	var n: String = ""
+	if get_tree().has_meta("player_name"):
+		n = str(get_tree().get_meta("player_name"))
+	if n != "":
+		player_name_label.text = n
+
 func _start_round_timer() -> void:
 	game_timer = Timer.new()
 	game_timer.one_shot = true
@@ -81,7 +90,6 @@ func _finish_round() -> void:
 	await _show_result_screen_overlay(won, energy_points, TARGET_ENERGY)
 
 func _freeze_world() -> void:
-	# Freeze known gameplay roots (adjust names if needed)
 	var roots: Array = []
 	var play_root := get_node_or_null("play")
 	if play_root: roots.append(play_root)
@@ -90,7 +98,6 @@ func _freeze_world() -> void:
 	var player_lower := get_node_or_null("player")
 	if player_lower: roots.append(player_lower)
 
-	# Also allow optional group-based freeze for any node in "freezable"
 	get_tree().call_group("freezable", "freeze")
 
 	for r in roots:
@@ -99,10 +106,8 @@ func _freeze_world() -> void:
 func _freeze_recursive(n: Node) -> void:
 	if n == null:
 		return
-	# Skip UI/overlays
 	if (n is CanvasLayer) and (n.name == "UI" or n.name == "OverlayLayer"):
 		return
-
 	_freeze_node(n)
 	for c in n.get_children():
 		_freeze_recursive(c)
@@ -117,15 +122,11 @@ func _freeze_node(n: Node) -> void:
 		rb.linear_velocity = Vector2.ZERO
 		rb.angular_velocity = 0.0
 		rb.sleeping = true
-		# rb.mode = RigidBody2D.MODE_STATIC  # uncomment for a hard stop
 	else:
-		# Generic: stop logic/physics if present
 		if n.has_method("set_physics_process"):
 			n.call("set_physics_process", false)
 		if n.has_method("set_process"):
 			n.call("set_process", false)
-
-	# Stop common visuals
 	if n is AnimationPlayer:
 		(n as AnimationPlayer).stop()
 	elif n is AnimatedSprite2D:
@@ -149,31 +150,20 @@ func _show_banner_overlay(won: bool) -> void:
 func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
 	_ensure_overlay_layer()
 	var rs: Control = RESULT_SCREEN_SCENE.instantiate() as Control
-	overlay_layer.add_child(rs)
-	await rs.ready
-	if rs.has_method("set_result"):
-		rs.call("set_result", won, energy, target, "")
-
+	overlay_layer.add_child(rs)  # add first
+	# Build the name once here
+	var player_name_text: String = ""
+	if get_tree().has_meta("player_name"):
+		player_name_text = str(get_tree().get_meta("player_name"))
+	# Call set_result on the next frame so the nodes exist
+	rs.call_deferred("set_result", won, energy, target, player_name_text)
+	
 func _ensure_overlay_layer() -> void:
 	if overlay_layer == null:
 		overlay_layer = CanvasLayer.new()
 		overlay_layer.name = "OverlayLayer"
 		overlay_layer.layer = 10
 		add_child(overlay_layer)
-
-func _update_player_name_from_tree() -> void:
-	if not player_name_label:
-		# Fallback: try to locate it under UI if the path differs
-		var ui := get_node_or_null("UI")
-		if ui:
-			player_name_label = ui.find_child("PlayerNameLabel", true, false) as Label
-		if not player_name_label:
-			return
-	var n: String = ""
-	if get_tree().has_meta("player_name"):
-		n = str(get_tree().get_meta("player_name"))
-	if n != "":
-		player_name_label.text = n
 
 func _format_time(t: int) -> String:
 	var m: int = int(t / 60.0)
