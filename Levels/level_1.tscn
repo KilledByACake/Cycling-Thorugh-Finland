@@ -294,6 +294,3 @@ repeat_times = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="Clouds" unique_id=1084387943]
 texture = ExtResource("16_k2bse")
-
-[node name="OverlayLayer" type="CanvasLayer" parent="." unique_id=1859661122]
-layer = 10
