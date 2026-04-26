@@ -12,6 +12,8 @@ const SHOW_TOP_N: int = 5
 @onready var main_btn: Button = get_node("CenterContainer/VBoxContainer/HBoxContainer/Main Menu") as Button
 
 func _ready() -> void:
+	
+	print("/root/HighScores exists: ", get_node_or_null("/root/HighScores") != null)
 	# Labels should not capture the mouse
 	if title_label: title_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	if info_label: info_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
