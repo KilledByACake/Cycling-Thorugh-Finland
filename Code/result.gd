@@ -1,7 +1,7 @@
 extends Control
 
-const LEVEL1_SCENE_PATH: String = "res://Levels/level_1.tscn"
-const MAIN_MENU_SCENE_PATH: String = "res://Levels/main_menu.tscn"
+const LEVEL1_SCENE_PATH: String = "res://Levels/Game.tscn"
+const MAIN_MENU_SCENE_PATH: String = "res://Levels/MainMenu.tscn"
 const SHOW_TOP_N: int = 5
 
 @onready var center: CenterContainer = $CenterContainer

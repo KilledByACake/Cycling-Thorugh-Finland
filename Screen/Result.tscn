@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://3b3rascp4kst"]
 
-[ext_resource type="Script" uid="uid://ddmyeee3qgkf7" path="res://Code/result_screen.gd" id="1_g1wwc"]
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_g88ty"]
+[ext_resource type="Script" uid="uid://ddmyeee3qgkf7" path="res://Code/result.gd" id="1_l2t1i"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_b23m6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vrvea"]
 bg_color = Color(0.5386101, 0.5386101, 0.8320729, 0.34117648)
@@ -39,7 +39,7 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_g1wwc")
+script = ExtResource("1_l2t1i")
 
 [node name="CenterContainer" type="CenterContainer" parent="." unique_id=712763998]
 layout_mode = 1
@@ -60,14 +60,14 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1749066736]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_g88ty")
+theme_override_fonts/font = ExtResource("2_b23m6")
 theme_override_font_sizes/font_size = 70
 text = "HIGH SCORES"
 horizontal_alignment = 1
 
 [node name="InfoLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1772755218]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_g88ty")
+theme_override_fonts/font = ExtResource("2_b23m6")
 theme_override_font_sizes/font_size = 70
 text = "Scores"
 horizontal_alignment = 1
@@ -82,7 +82,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
-theme_override_fonts/font = ExtResource("2_g88ty")
+theme_override_fonts/font = ExtResource("2_b23m6")
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_vrvea")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jlewb")
@@ -94,7 +94,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
-theme_override_fonts/font = ExtResource("2_g88ty")
+theme_override_fonts/font = ExtResource("2_b23m6")
 theme_override_font_sizes/font_size = 50
 theme_override_styles/normal = SubResource("StyleBoxFlat_vrvea")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jlewb")

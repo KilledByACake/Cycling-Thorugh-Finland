@@ -4,10 +4,10 @@ signal name_confirmed(name: String)
 const MIN_NAME_CHARACTERS: int = 3
 const MAX_NAME_CHARACTERS: int = 15
 
-const MAIN_MENU_SCENE_PATH: String = "res://Levels/main_menu.tscn"
-const LEVEL1_SCENE_PATH: String = "res://Levels/level_1.tscn"
+const MAIN_MENU_SCENE_PATH: String = "res://Levels/MainMenu.tscn"
+const LEVEL1_SCENE_PATH: String = "res://Levels/Game.tscn"
 
-# Nordic-friendly layout, 10 keys per row, no empty entries
+# Nordic-friendly layout, Querty, 10 keys per row, no empty entries
 var rows: Array = [
 	["1","2","3","4","5","6","7","8","9","0"],
 	["Q","W","E","R","T","Y","U","I","O","P"],
