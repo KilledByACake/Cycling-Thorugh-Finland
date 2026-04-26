@@ -2,7 +2,7 @@ extends Area2D
 
 func _on_body_shape_entered(body_rid: RID, body: Node2D, body_shape_index: int, local_shape_index: int) -> void:
 	var actor := body
-	while actor and not actor.is_in_group("cycler"):
+	while actor and not actor.is_in_group("radler"):
 		actor = actor.get_parent()
 	if actor and actor.has_method("refuel"):
 		actor.refuel()

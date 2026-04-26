@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://brftna4btfksp"]
 
-[ext_resource type="Script" uid="uid://wf7w2bw0g7ts" path="res://Code/radler.gd" id="1_1u43k"]
+[ext_resource type="Script" uid="uid://doayyjsfhmki1" path="res://Code/radler.gd" id="1_1u43k"]
 [ext_resource type="Texture2D" uid="uid://bxbfst5o5guqg" path="res://Images/Characters/Magdalena-cycling.png" id="2_wbbc8"]
 [ext_resource type="AudioStream" uid="uid://bq84lwo73rgxr" path="res://Audio/EngineSound.ogg" id="3_kllh3"]
 

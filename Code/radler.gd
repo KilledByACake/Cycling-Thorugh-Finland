@@ -1,6 +1,5 @@
 extends RigidBody2D
 
-
 var maxSpeed: float = 100000 # max speed
 var acceleration: float = 20000 # force perpedaling
 
