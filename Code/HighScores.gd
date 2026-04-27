@@ -1,4 +1,5 @@
 extends Node
+#TO RESET DAILY HIGH SCORE, FILL OUT _RESET
 
 const FILE_PATH: String = "user://highscores.json"
 
