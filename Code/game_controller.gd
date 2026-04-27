@@ -2,7 +2,7 @@ extends Node2D
 
 signal round_over(won: bool)
 
-const ROUND_TIME_SEC: int = 5 # game time
+const ROUND_TIME_SEC: int = 6 # game time
 const TARGET_ENERGY: int = 200
 const BANNER_DURATION_SEC: float = 1.0
 

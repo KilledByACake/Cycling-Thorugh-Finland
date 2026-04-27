@@ -74,7 +74,7 @@ horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/VBoxContainer" unique_id=330491432]
 layout_mode = 2
-size_flags_vertical = 8
+size_flags_vertical = 4
 theme_override_constants/separation = 100
 
 [node name="Retry" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1576396313]

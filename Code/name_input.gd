@@ -7,21 +7,23 @@ const MAX_NAME_CHARACTERS: int = 15
 const MAIN_MENU_SCENE_PATH: String = "res://Levels/MainMenu.tscn"
 const LEVEL1_SCENE_PATH: String = "res://Levels/Game.tscn"
 
-# Nordic-friendly layout, Querty, 10 keys per row, no empty entries
+# On-screen keyboard layout
 var rows: Array = [
 	["1","2","3","4","5","6","7","8","9","0"],
 	["Q","W","E","R","T","Y","U","I","O","P"],
 	["A","S","D","F","G","H","J","K","L","Å"],
 	["Z","X","C","V","B","N","M","Ä","Ö","_"]
 ]
-
-# All rows aligned
 var indents: PackedInt32Array = [0, 0, 0, 0]
 
 var name_text: String = ""
 
 @onready var grid: GridContainer = $GridContainer
 @onready var name_label: Label = $Label
+
+# Reset-view dialogs (display-only daily list)
+var _confirm_reset_dlg: ConfirmationDialog
+var _info_dlg: AcceptDialog
 
 func _ready() -> void:
 	grid.columns = _calc_columns()
@@ -41,10 +43,8 @@ func _calc_columns() -> int:
 func _build_character_grid() -> void:
 	for c in grid.get_children():
 		c.queue_free()
-
 	var columns: int = _calc_columns()
 	grid.columns = columns
-
 	for i in rows.size():
 		var indent: int = indents[i]
 		_add_spacers(indent)
@@ -101,8 +101,7 @@ func _update_name_label() -> void:
 		name_label.text = name_text + ("_" if name_text.length() < MAX_NAME_CHARACTERS else "")
 
 func _flash_name_label() -> void:
-	if not name_label:
-		return
+	if not name_label: return
 	var original := name_label.modulate
 	name_label.modulate = Color(1, 0.6, 0.6)
 	await get_tree().create_timer(0.12).timeout
@@ -118,18 +117,55 @@ func _on_backspace_pressed() -> void:
 
 func _on_done_pressed() -> void:
 	var trimmed := name_text.strip_edges()
+	# Special command to reset today's display-only list
+	if trimmed == "_RESET":
+		_show_reset_confirm()
+		return
 	if trimmed.length() < MIN_NAME_CHARACTERS:
 		_flash_name_label()
 		return
-	# Set the name before changing scene
 	get_tree().set_meta("player_name", trimmed)
 	emit_signal("name_confirmed", trimmed)
 	get_tree().change_scene_to_file(LEVEL1_SCENE_PATH)
 
-func _unhandled_input(event: InputEvent) -> void:
-	if event.is_action_pressed("ui_accept"):
-		var f := get_viewport().gui_get_focus_owner()
-		if f is Button and not (f as Button).disabled:
-			(f as Button).emit_signal("pressed")
-	elif event.is_action_pressed("ui_cancel"):
-		_on_backspace_pressed()
+# Reset-view confirmation flow
+func _show_reset_confirm() -> void:
+	if _confirm_reset_dlg == null:
+		_confirm_reset_dlg = ConfirmationDialog.new()
+		_confirm_reset_dlg.title = "Confirm"
+		_confirm_reset_dlg.dialog_text = "Are you sure you want to reset today's high score list?"
+		add_child(_confirm_reset_dlg)
+		if not _confirm_reset_dlg.confirmed.is_connected(_on_reset_confirmed):
+			_confirm_reset_dlg.confirmed.connect(_on_reset_confirmed)
+		var cancel_btn := _confirm_reset_dlg.get_cancel_button()
+		if cancel_btn and not cancel_btn.pressed.is_connected(_on_reset_canceled):
+			cancel_btn.pressed.connect(_on_reset_canceled)
+		_confirm_reset_dlg.get_ok_button().text = "Yes"
+		_confirm_reset_dlg.get_cancel_button().text = "No"
+	_confirm_reset_dlg.popup_centered()
+
+func _on_reset_confirmed() -> void:
+	var hs := get_node_or_null("/root/HighScores")
+	if hs:
+		hs.call("reset_today_view") # clears today's display-only list
+	_show_info_and_return()
+
+func _on_reset_canceled() -> void:
+	name_text = ""
+	_update_name_label()
+	var first := _first_focusable_button()
+	if first:
+		first.grab_focus()
+
+func _show_info_and_return() -> void:
+	if _info_dlg == null:
+		_info_dlg = AcceptDialog.new()
+		_info_dlg.title = "Info"
+		_info_dlg.dialog_text = "Daily high score list is reset."
+		add_child(_info_dlg)
+		if not _info_dlg.confirmed.is_connected(_on_info_ok):
+			_info_dlg.confirmed.connect(_on_info_ok)
+	_info_dlg.popup_centered()
+
+func _on_info_ok() -> void:
+	get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
