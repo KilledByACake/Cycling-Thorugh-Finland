@@ -96,48 +96,25 @@ animations = [{
 "speed": 6.0
 }]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_nvifo"]
-radius = 94.26028
-
-[sub_resource type="CircleShape2D" id="CircleShape2D_mcakt"]
-radius = 96.0
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_n0njr"]
-radius = 112.0
-height = 448.0
-
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_qxwi0"]
-radius = 52.0
-height = 138.0
-
 [node name="Radler" type="RigidBody2D" unique_id=1887104354]
+position = Vector2(-143, 194)
 gravity_scale = 3.0
 script = ExtResource("1_1u43k")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=857657351]
-position = Vector2(149, -177)
-scale = Vector2(2.0546875, 2.0546875)
+position = Vector2(138, -197)
+scale = Vector2(1.4570313, 1.5664063)
 sprite_frames = SubResource("SpriteFrames_ap03w")
 animation = &"rollen"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=715153054]
-position = Vector2(293, -39)
-shape = SubResource("CircleShape2D_nvifo")
-
-[node name="CollisionShape2D2" type="CollisionShape2D" parent="." unique_id=79843014]
-position = Vector2(12, -39)
-shape = SubResource("CircleShape2D_mcakt")
-
-[node name="CollisionShape2D3" type="CollisionShape2D" parent="." unique_id=1155415348]
-position = Vector2(141, -193)
-shape = SubResource("CapsuleShape2D_n0njr")
-
-[node name="CollisionShape2D4" type="CollisionShape2D" parent="." unique_id=890107315]
-position = Vector2(297, -188)
-shape = SubResource("CapsuleShape2D_qxwi0")
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="AnimatedSprite2D" unique_id=1014135267]
+position = Vector2(-94.71314, 125.76559)
+scale = Vector2(0.6863271, 0.638404)
+polygon = PackedVector2Array(0, -34, 39, -17, 90, -39, 101, -52, 141, -39, 184, -56, 211, -25, 243, -18, 286, -30, 307, -66, 308, -113, 283, -145, 255, -156, 255, -168, 270, -167, 276, -207, 275, -244, 245, -232, 233, -215, 209, -214, 206, -243, 163, -263, 155, -309, 154, -354, 143, -377, 114, -378, 95, -360, 94, -346, 36, -347, 19, -298, 40, -271, 77, -281, 52, -207, 85, -178, 78, -168, 5, -169, -23, -126, -27, -82, -12, -45)
 
 [node name="GroundRay" type="RayCast2D" parent="." unique_id=144607224]
-position = Vector2(147, 2)
+position = Vector2(239, -19)
+target_position = Vector2(0, 29)
 
 [node name="EngineSFX" type="AudioStreamPlayer" parent="." unique_id=245767930]
 stream = ExtResource("3_kllh3")
