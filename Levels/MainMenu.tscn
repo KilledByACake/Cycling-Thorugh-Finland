@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dy27ncb1fei4c"]
 
-[ext_resource type="Script" uid="uid://cmyrugokbuwms" path="res://main_menu.gd" id="1_3es34"]
+[ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="1_2k6u6"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_6ucrw"]
 [ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="1_jy27m"]
 
@@ -35,14 +35,13 @@ corner_radius_bottom_left = 16
 expand_margin_left = 16.0
 expand_margin_right = 16.0
 
-[node name="MainMenu" type="Control" unique_id=2104746411]
-layout_mode = 3
+[node name="MainMenu" type="Panel" unique_id=299239332]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_3es34")
+script = ExtResource("1_2k6u6")
 
 [node name="Panel" type="Panel" parent="." unique_id=1829506493]
 layout_mode = 1

@@ -1,4 +1,5 @@
 extends Node
+#TO RESET DAILY HIGH SCORE, FILL OUT _RESET
 
 const FILE_PATH: String = "user://highscores.json"
 
@@ -11,6 +12,7 @@ var store: Dictionary = {}
 
 func _ready() -> void:
 	store = _load_store()
+	_rollover_if_new_day()
 
 func _empty_store() -> Dictionary:
 	return {
@@ -18,7 +20,10 @@ func _empty_store() -> Dictionary:
 		"daily": {},
 		"monthly": {},
 		"yearly": {},
-		"alltime": []
+		"alltime": [],
+		"daily_reset": {},          # buckets keyed by "YYYY-MM-DD#session"
+		"daily_reset_session": {},  # date -> current session index (0 means none)
+		"last_seen_date": ""
 	}
 
 func _today_iso() -> String:
@@ -28,6 +33,7 @@ func _today_iso() -> String:
 func _bucket_keys(datestr: String) -> Array:
 	return [datestr, datestr.substr(0, 7), datestr.substr(0, 4)]
 
+# Insert ascending by key with a cap; returns inserted index or -1 if dropped.
 func _asc_insert_cap(arr: Array, entry: Dictionary, key: String = "score", cap: int = 5) -> int:
 	arr.append(entry)
 	var i: int = arr.size() - 1
@@ -47,8 +53,9 @@ func _asc_insert_cap(arr: Array, entry: Dictionary, key: String = "score", cap: 
 func _idx_to_rank(idx: int, bucket: Array) -> Variant:
 	if idx < 0:
 		return null
-	return bucket.size() - idx  # 1 = best
+	return bucket.size() - idx # 1 = best
 
+# Rebuild canonical buckets from history.
 func _load_store() -> Dictionary:
 	if not FileAccess.file_exists(FILE_PATH):
 		return _empty_store()
@@ -59,6 +66,13 @@ func _load_store() -> Dictionary:
 		var s: Dictionary = _empty_store()
 		for e in (data as Dictionary).get("history", []):
 			_add_score_internal(s, e as Dictionary, false)
+		# carry optional fields if present
+		if (data as Dictionary).has("daily_reset"):
+			s["daily_reset"] = (data as Dictionary)["daily_reset"]
+		if (data as Dictionary).has("daily_reset_session"):
+			s["daily_reset_session"] = (data as Dictionary)["daily_reset_session"]
+		if (data as Dictionary).has("last_seen_date"):
+			s["last_seen_date"] = (data as Dictionary)["last_seen_date"]
 		return s
 	elif typeof(data) == TYPE_ARRAY:
 		var s2: Dictionary = _empty_store()
@@ -83,6 +97,26 @@ func _normalize_entry(entry: Dictionary) -> Dictionary:
 		"avg_speed": entry.get("avg_speed", null),
 	}
 
+# Helper: compose the reset key for today’s active session.
+func _reset_key_for(day_key: String, sessions: Dictionary) -> String:
+	var sess: int = int(sessions.get(day_key, 0))
+	if sess <= 0:
+		return ""
+	return "%s#%d" % [day_key, sess]
+
+# Ensure a fresh session pointer when day changes.
+func _rollover_if_new_day() -> void:
+	var today: String = _today_iso()
+	var last: String = str(store.get("last_seen_date", ""))
+	if last != today:
+		store["last_seen_date"] = today
+		var sessions: Dictionary = (store.get("daily_reset_session", {}) as Dictionary)
+		var new_sessions: Dictionary = {}
+		if sessions.has(today):
+			new_sessions[today] = int(sessions[today]) # keep today only
+		store["daily_reset_session"] = new_sessions
+		_save_store()
+
 func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool) -> Dictionary:
 	var e: Dictionary = _normalize_entry(entry)
 	dst_store["history"].append(e)
@@ -92,6 +126,7 @@ func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool
 	var month_key: String = keys[1]
 	var year_key: String = keys[2]
 
+	# Canonical buckets
 	var daily: Array = (dst_store["daily"].get(day_key, []) as Array)
 	dst_store["daily"][day_key] = daily
 	var di: int = _asc_insert_cap(daily, e, "score", TOPN_DAILY)
@@ -108,6 +143,17 @@ func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool
 	dst_store["alltime"] = alltime
 	var ai: int = _asc_insert_cap(alltime, e, "score", TOPN_ALLTIME)
 
+	# Display-only: add to active reset session for that day if any
+	var daily_reset: Dictionary = (dst_store.get("daily_reset", {}) as Dictionary)
+	dst_store["daily_reset"] = daily_reset
+	var sessions: Dictionary = (dst_store.get("daily_reset_session", {}) as Dictionary)
+	dst_store["daily_reset_session"] = sessions
+	var reset_key: String = _reset_key_for(day_key, sessions)
+	if reset_key != "":
+		var dr: Array = (daily_reset.get(reset_key, []) as Array)
+		daily_reset[reset_key] = dr
+		_asc_insert_cap(dr, e, "score", TOPN_DAILY)
+
 	if do_save:
 		_save_store()
 
@@ -119,8 +165,34 @@ func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool
 	}
 
 # Public API
+
 func add_score(entry: Dictionary) -> Dictionary:
 	return _add_score_internal(store, entry, true)
+
+# Start a new display-only session for today
+func reset_today_view() -> void:
+	var today: String = _today_iso()
+	var sessions: Dictionary = (store.get("daily_reset_session", {}) as Dictionary)
+	store["daily_reset_session"] = sessions
+	var next_sess: int = int(sessions.get(today, 0)) + 1
+	sessions[today] = next_sess
+	var key: String = "%s#%d" % [today, next_sess]
+	var daily_reset: Dictionary = (store.get("daily_reset", {}) as Dictionary)
+	store["daily_reset"] = daily_reset
+	daily_reset[key] = []
+	store["last_seen_date"] = today
+	_save_store()
+
+# Read only the newest session for today (or empty if none)
+func top_today_reset(n: int = 5, highest_first: bool = true) -> Array:
+	var today: String = _today_iso()
+	var sessions: Dictionary = (store.get("daily_reset_session", {}) as Dictionary)
+	var sess: int = int(sessions.get(today, 0))
+	if sess <= 0:
+		return []
+	var key: String = "%s#%d" % [today, sess]
+	var bucket: Array = (store.get("daily_reset", {}) as Dictionary).get(key, []) as Array
+	return _top_from_bucket(bucket, n, highest_first)
 
 func top_today(n: int = 5, highest_first: bool = true) -> Array:
 	var bucket: Array = store["daily"].get(_today_iso(), []) as Array
