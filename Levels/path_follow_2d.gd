@@ -95,9 +95,10 @@ func _update_animation() -> void:
 		sprite.stop()
 
 func _update_energy_ui() -> void:
-	var p := get_parent()
-	if p and p.has_method("update_energy_UI"):
-		p.update_energy_UI(energy_points)
+	# Send the energy value to the level root so the UI updates.
+	var level := get_tree().current_scene
+	if level and level.has_method("update_energy_UI"):
+		level.update_energy_UI(energy_points)
 
 # Compute start_offset (near PathLeft) and end_offset (near PathRight)
 func _compute_start_end_offsets() -> void:

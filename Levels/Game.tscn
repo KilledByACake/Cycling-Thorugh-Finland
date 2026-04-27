@@ -166,8 +166,6 @@ texture = ExtResource("15_demcn")
 curve = SubResource("Curve2D_lhmk6")
 script = ExtResource("16_dasy0")
 ground_collision_path = NodePath("../Ground/StaticBody2D/CollisionPolygon2D")
-left_marker_path = null
-right_marker_path = null
 x_margin = 120.0
 tangent_smoothness = 0.6
 
