@@ -1,7 +1,7 @@
-[gd_scene format=4 uid="uid://bplm7ik64rdon"]
+[gd_scene format=4 uid="uid://bs4h48jlc54y3"]
 
 [ext_resource type="Script" uid="uid://cpnl0xtu7w1mc" path="res://Code/level_1.gd" id="1_77l7m"]
-[ext_resource type="PackedScene" uid="uid://begi8cpog3er3" path="res://Levels/terrain.tscn" id="2_77l7m"]
+[ext_resource type="PackedScene" uid="uid://begi8cpog3er3" path="res://Scenes/terrain.tscn" id="2_77l7m"]
 [ext_resource type="Script" uid="uid://dhdc4b8yddyej" path="res://addons/rmsmartshape/shapes/shape.gd" id="2_77x7w"]
 [ext_resource type="Script" uid="uid://bwcf4pjgprn0k" path="res://addons/rmsmartshape/shapes/point.gd" id="3_xoyoh"]
 [ext_resource type="Script" uid="uid://bo5f7qe27jfje" path="res://addons/rmsmartshape/shapes/point_array.gd" id="4_f4pg2"]
@@ -12,9 +12,7 @@
 [ext_resource type="Script" uid="uid://nc5bfedvnpgm" path="res://addons/rmsmartshape/materials/shape_material.gd" id="8_2hkqn"]
 [ext_resource type="Script" uid="uid://d0xjijisx1woh" path="res://addons/rmsmartshape/materials/edge_material.gd" id="9_rs4xw"]
 [ext_resource type="Script" uid="uid://d218yx0d1ilsn" path="res://addons/rmsmartshape/normal_range.gd" id="10_lk57d"]
-[ext_resource type="PackedScene" uid="uid://ep3y83ujsrdg" path="res://Scenes/coin.tscn" id="12_2hkqn"]
-[ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Scenes/ui.tscn" id="14_2hkqn"]
-[ext_resource type="PackedScene" uid="uid://bbbpaw5fvqti1" path="res://Scenes/fuel.tscn" id="15_34erp"]
+[ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Scenes/UI.tscn" id="14_2hkqn"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="16_c7pbv"]
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="16_k2bse"]
 [ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/radler.tscn" id="17_hsj5a"]
@@ -265,34 +263,7 @@ metadata/_custom_type_script = "uid://dhdc4b8yddyej"
 build_mode = 1
 polygon = PackedVector2Array(-3088.2422, -1063.7792, -2708.7158, -1089.4249, -2381.6196, -1054.5302, -2105.2295, -976.5783, -1877.8225, -873.0535, -1472.2668, -583.87604, -1442.7593, -561.7476, -1423.5586, -552.895, -1406.7345, -547.16907, -1384.7095, -533.84705, -1160.9629, -368.61166, -1059.0387, -312.84244, -947.639, -274.39767, -889.1725, -264.98505, -829.281, -263.87927, -768.27924, -272.40558, -706.48193, -291.88916, -626.7438, -312.5586, -514.43054, -325.113, 614.9713, -343.75882, 1502.4429, -451.14886, 1888.589, -582.076, 2052.98, -673.95605, 2192.808, -786.1553, 2899.5386, -1309.2065, 3798.1782, -1820.1334, 4898.8037, -2361.9688, 5569.09, -1439.075, 6108.909, -847.46765, 6231.552, -749.4287, 6343.06, -683.0435, 6440.3296, -654.16626, 6520.257, -668.65125, 6589.834, -681.54486, 6660.068, -649.56964, 6733.869, -581.0943, 6814.151, -484.48764, 7005.8013, -240.35443, 7258.3154, 15.880615, 7414.6763, 127.61471, 7594.9897, 217.26822, 7802.168, 276.4726, 8039.1216, 296.8591, 8308.764, 270.05914, 8614.006, 187.70396, 8957.76, 41.424973, 9342.938, -177.14648, 10157.875, -584.14886, 10956.306, -802.69916, 11709.825, -874.15607, 12390.032, -839.87756, 13416.896, -619.5486, 13809.68, -472.5796, 17410.357, -2499.9912, 21592.393, -1503.0466, 16813.479, 2963.2651, -9846.231, 2604.0986, -9235.522, -1980.8262, -7860.8105, -1190.7102, -5940.662, -1813.9529, -5608.324, -1889.3467, -5482.283, -1906.8112, -5390.3623, -1907.7329, -5177.103, -1875.6559, -5120.0664, -1860.7273, -5087.63, -1847.2749, -5078.6533, -1841.275, -5073.4478, -1835.8511, -5071.2197, -1831.0721, -5071.175, -1827.0074, -5072.5215, -1823.7258, -5074.465, -1821.2964, -5076.213, -1819.7881, -5076.9717, -1819.27, -5067.3286, -1816.5466, -4910.465, -1675.7727, -4484.101, -1378.419, -4190.589, -1229.6033, -3854.5796, -1111.9371, -3484.3667, -1048.8518, -3289.025, -1045.0995)
 
-[node name="Coin" parent="." unique_id=403929337 instance=ExtResource("12_2hkqn")]
-position = Vector2(95, 584)
-
-[node name="Coin2" parent="." unique_id=1140995091 instance=ExtResource("12_2hkqn")]
-position = Vector2(399, 521)
-
-[node name="Coin3" parent="." unique_id=1620713799 instance=ExtResource("12_2hkqn")]
-position = Vector2(825, 508)
-
-[node name="Coin4" parent="." unique_id=1919917266 instance=ExtResource("12_2hkqn")]
-position = Vector2(1600, 953)
-
-[node name="Coin5" parent="." unique_id=2092786171 instance=ExtResource("12_2hkqn")]
-position = Vector2(3793, 1368)
-
-[node name="Coin6" parent="." unique_id=1060338277 instance=ExtResource("12_2hkqn")]
-position = Vector2(2470, 1268)
-
-[node name="Coin7" parent="." unique_id=1310694348 instance=ExtResource("12_2hkqn")]
-position = Vector2(5585, 1927)
-
 [node name="UI" parent="." unique_id=482392122 instance=ExtResource("14_2hkqn")]
-
-[node name="Fuel" parent="." unique_id=1457010218 instance=ExtResource("15_34erp")]
-position = Vector2(4952, 1927)
-
-[node name="Fuel2" parent="." unique_id=1085251071 instance=ExtResource("15_34erp")]
-position = Vector2(14360, 2320)
 
 [node name="Clouds" type="Parallax2D" parent="." unique_id=1041042698]
 scroll_offset = Vector2(1959, 484)
@@ -304,7 +275,7 @@ repeat_times = 2
 texture = ExtResource("16_k2bse")
 
 [node name="Radler" parent="." unique_id=1887104354 instance=ExtResource("17_hsj5a")]
-position = Vector2(-1810, 177)
+position = Vector2(350, 231)
 
 [node name="Camera2D" type="Camera2D" parent="Radler" unique_id=974620558]
 drag_horizontal_enabled = true

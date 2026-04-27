@@ -20,15 +20,21 @@ var round_finished: bool = false
 @onready var timer_label: Label = get_node_or_null("UI/TimerLabel") as Label
 @onready var overlay_layer: CanvasLayer = get_node_or_null("OverlayLayer") as CanvasLayer
 
-@export var hill_scene: PackedScene  
+@export var hill_scene: PackedScene  # assign this in the Inspector
 
 var game_timer: Timer
 
 func _ready():
-	var hill = hill_scene.instantiate()
-	hill.hill_seed = 42
-	hill.position = Vector2(-3000, 0)
-	add_child(hill)
+	# Create and place the hill if assigned
+	if hill_scene == null:
+		push_error("hill_scene is not assigned. Select this Level node and set hill_scene in the Inspector.")
+	else:
+		var hill = hill_scene.instantiate()
+		# Set seed if the hill has such a property
+		if _has_property(hill, "hill_seed"):
+			hill.hill_seed = 42
+		hill.position = Vector2(-3000, 0)
+		add_child(hill)
 	
 	_refresh_coin_ui()
 	_refresh_energy_ui()
@@ -176,3 +182,10 @@ func _format_time(t: int) -> String:
 	var m: int = int(t / 60.0)
 	var s: int = t % 60
 	return "%02d:%02d" % [m, s]
+
+# Utility: check if an instance exposes a given property name
+func _has_property(obj: Object, prop: String) -> bool:
+	for p in obj.get_property_list():
+		if p.has("name") and p["name"] == prop:
+			return true
+	return false
