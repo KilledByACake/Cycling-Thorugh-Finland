@@ -4,7 +4,7 @@ signal round_over(won: bool)
 
 const ROUND_TIME_SEC: int = 5 # game time
 const TARGET_ENERGY: int = 200
-const BANNER_DURATION_SEC: float = 2.0
+const BANNER_DURATION_SEC: float = 1.0
 
 const GAME_OVER_SCENE: PackedScene = preload("res://Screen/GameOver.tscn")
 const YOU_WON_SCENE: PackedScene = preload("res://Screen/Victory.tscn")
