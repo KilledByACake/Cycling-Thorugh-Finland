@@ -1,6 +1,7 @@
 [gd_scene format=4 uid="uid://bplm7ik64rdon"]
 
 [ext_resource type="Script" uid="uid://cpnl0xtu7w1mc" path="res://Code/level_1.gd" id="1_77l7m"]
+[ext_resource type="PackedScene" uid="uid://begi8cpog3er3" path="res://Levels/terrain.tscn" id="2_77l7m"]
 [ext_resource type="Script" uid="uid://dhdc4b8yddyej" path="res://addons/rmsmartshape/shapes/shape.gd" id="2_77x7w"]
 [ext_resource type="Script" uid="uid://bwcf4pjgprn0k" path="res://addons/rmsmartshape/shapes/point.gd" id="3_xoyoh"]
 [ext_resource type="Script" uid="uid://bo5f7qe27jfje" path="res://addons/rmsmartshape/shapes/point_array.gd" id="4_f4pg2"]
@@ -14,7 +15,6 @@
 [ext_resource type="PackedScene" uid="uid://ep3y83ujsrdg" path="res://Scenes/coin.tscn" id="12_2hkqn"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Scenes/ui.tscn" id="14_2hkqn"]
 [ext_resource type="PackedScene" uid="uid://bbbpaw5fvqti1" path="res://Scenes/fuel.tscn" id="15_34erp"]
-[ext_resource type="Script" path="res://Code/level_1.ge" id="16_77l7m"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="16_c7pbv"]
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="16_k2bse"]
 [ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/radler.tscn" id="17_hsj5a"]
@@ -232,8 +232,10 @@ fill_textures = Array[Texture2D]([ExtResource("6_rs4xw")])
 [node name="level 1" type="Node2D" unique_id=22896662]
 position = Vector2(41, 8)
 script = ExtResource("1_77l7m")
+hill_scene = ExtResource("2_77l7m")
 
 [node name="BackgroundScene" type="Parallax2D" parent="." unique_id=870220922]
+visible = false
 scroll_scale = Vector2(0.2, 0.2)
 scroll_offset = Vector2(5685, 2549)
 autoscroll = Vector2(2, 0)
@@ -244,7 +246,10 @@ position = Vector2(-4482, -1315.0001)
 scale = Vector2(1.9386667, 1.034)
 texture = ExtResource("16_c7pbv")
 
+[node name="Terrain" parent="." unique_id=1830455226 instance=ExtResource("2_77l7m")]
+
 [node name="Ground" type="Node2D" parent="." unique_id=225340820]
+visible = false
 z_index = 10
 position = Vector2(6017, 2549)
 script = ExtResource("2_77x7w")
@@ -288,7 +293,6 @@ position = Vector2(4952, 1927)
 
 [node name="Fuel2" parent="." unique_id=1085251071 instance=ExtResource("15_34erp")]
 position = Vector2(14360, 2320)
-script = ExtResource("16_77l7m")
 
 [node name="Clouds" type="Parallax2D" parent="." unique_id=1041042698]
 scroll_offset = Vector2(1959, 484)
