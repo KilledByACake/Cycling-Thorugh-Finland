@@ -21,7 +21,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-HighScores="*res://Code/HighScores.gd"
+HighScores="*uid://qfh87rfpe5hu"
 
 [display]
 
