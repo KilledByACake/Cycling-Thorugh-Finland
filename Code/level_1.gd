@@ -2,8 +2,11 @@ extends Node2D
 
 signal round_over(won: bool)
 
+@export_node_path("Path2D") var rail_path: NodePath
+@export var trigger_path_rebuild: bool = true
+
 # Round config
-const ROUND_TIME_SEC: int = 6               # adjust as you want
+const ROUND_TIME_SEC: int = 150               # adjust as you want
 const TARGET_ENERGY: int = 200
 const BANNER_DURATION_SEC: float = 2.0
 
@@ -25,23 +28,65 @@ var game_timer: Timer
 @onready var timer_label: Label = get_node_or_null("UI/TimerLabel") as Label
 @onready var overlay_layer: CanvasLayer = get_node_or_null("OverlayLayer") as CanvasLayer
 
-@export var hill_scene: PackedScene  
-
-#var game_timer: Timer
+# HILL
+@export var hill_scene: PackedScene
+@export_range(0.0, 1.0, 0.01) var terrain_difficulty: float = 0.4
+@export var terrain_length: int = 8000
+@export var terrain_base_y: float = 420.0
 
 func _ready():
 	_ensure_overlay_layer()
-	#var hill = hill_scene.instantiate()
-	#hill.hill_seed = 42
-	#hill.position = Vector2(-3000, 0)
-	#add_child(hill)
 
-	
-	
+	# Sanitize any absolute NodePaths in the scene before we spawn terrain
+	_scan_and_fix_nodepaths(self, true)
+
+	_spawn_terrain()
 	_refresh_coin_ui()
 	_refresh_energy_ui()
 	_update_player_name_from_tree()
 	_start_round_timer()
+
+func _spawn_terrain() -> void:
+	if hill_scene == null:
+		push_warning("hill_scene is not set.")
+		return
+
+	var hill: Node2D = hill_scene.instantiate() as Node2D
+	# Optional offset so the player starts somewhere around x=0 visually
+	hill.position = Vector2(0, 0)
+
+	# Configure exported properties on the instance
+	# The names must match the properties in Terrain.gd
+	_set_if_has_property(hill, "length", terrain_length)
+	_set_if_has_property(hill, "base_y", terrain_base_y)
+	_set_if_has_property(hill, "difficulty", terrain_difficulty)
+	_set_if_has_property(hill, "amplitude", 80.0)
+	_set_if_has_property(hill, "noise_frequency", 0.0018)
+	_set_if_has_property(hill, "max_slope_deg", 18.0)
+	_set_if_has_property(hill, "sample_step", 4)
+
+	# Randomize seed so each round is different
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+	rng.randomize()
+	# Supports both "seed" and "rng_seed"
+	if _has_property(hill, "rng_seed"):
+		hill.set("rng_seed", rng.randi())
+	elif _has_property(hill, "seed"):
+		hill.set("seed", rng.randi())
+
+	add_child(hill)
+
+	# Give the terrain one frame to finish generating in _ready()
+	await get_tree().process_frame
+
+	# Sanitize NodePaths again (now that Terrain and its children exist)
+	_scan_and_fix_nodepaths(self, true)
+
+	# Optionally trigger a Path2D rebuild if it has a PathAutoBuilder script attached
+	if trigger_path_rebuild:
+		var p2d: Path2D = _resolve_node_safe(rail_path) as Path2D
+		if p2d != null and p2d.has_method("rebuild_auto"):
+			p2d.call("rebuild_auto")
 
 func _process(_delta: float) -> void:
 	if round_finished:
@@ -177,3 +222,50 @@ func _format_time(t: int) -> String:
 	var m: int = int(t / 60.0)
 	var s: int = t % 60
 	return "%02d:%02d" % [m, s]
+
+# --- Helpers -------------------------------------------------------------
+
+# Resolve nodes safely (supports absolute and relative paths once inside tree)
+func _resolve_node_safe(path: NodePath) -> Node:
+	if path.is_empty():
+		return null
+	if not is_inside_tree():
+		return null
+	if path.is_absolute():
+		return get_tree().root.get_node_or_null(path)
+	return get_node_or_null(path)
+
+# Set property only if it exists (avoids "Invalid set index" when names differ)
+func _has_property(obj: Object, prop: StringName) -> bool:
+	for d in obj.get_property_list():
+		if typeof(d) == TYPE_DICTIONARY and d.has("name") and StringName(d["name"]) == prop:
+			return true
+	return false
+
+func _set_if_has_property(obj: Object, prop: StringName, value) -> void:
+	if _has_property(obj, prop):
+		obj.set(prop, value)
+
+# Scan the subtree for absolute NodePaths and convert them to relative (auto_fix=true to modify).
+func _scan_and_fix_nodepaths(root: Node, auto_fix: bool = true) -> void:
+	_scan_np_recursive(root, auto_fix)
+
+func _scan_np_recursive(n: Node, auto_fix: bool) -> void:
+	# Inspect exported properties and convert absolute NodePaths to relative.
+	for d in n.get_property_list():
+		if typeof(d) == TYPE_DICTIONARY and d.has("type") and int(d["type"]) == TYPE_NODE_PATH:
+			var pname: StringName = StringName(d["name"])
+			var np: NodePath = n.get(pname)
+			if np is NodePath and not np.is_empty() and np.is_absolute():
+				var target: Node = get_tree().root.get_node_or_null(np)
+				if target != null:
+					var rel: NodePath = n.get_path_to(target)
+					if auto_fix:
+						n.set(pname, rel)
+					print("Fixed absolute NodePath: ", n.get_path(), ".", String(pname), " -> ", String(rel))
+				else:
+					print("Found absolute NodePath but target missing: ", n.get_path(), ".", String(pname), " = ", String(np))
+	# Recurse
+	for c in n.get_children():
+		if c is Node:
+			_scan_np_recursive(c, auto_fix)

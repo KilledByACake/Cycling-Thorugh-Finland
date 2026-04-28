@@ -1,97 +1,74 @@
 @tool
 extends Node2D
 
-# --- Settings ---
-@export var hill_seed: int = 42
-@export var width: int = 8000
-@export var base_y: int = 400
+@export var rng_seed: int = 42
+@export var length: int = 8000
+@export var base_y: float = 420.0
 @export var amplitude: float = 80.0
-@export var frequency: float = 0.002
+@export var noise_frequency: float = 0.0018
+@export_range(0.0, 1.0, 0.01) var difficulty: float = 0.4
+@export var sample_step: int = 4
+@export var max_slope_deg: float = 18.0
 
-# Regenerate in editor when any export var changes
-@export var regenerate: bool = false:
-	set(v):
-		regenerate = false
-		_setup_gradient()
-		_generate(hill_seed)
+@onready var polygon: Polygon2D = get_node_or_null("Polygon2D")
 
-@onready var polygon = $Polygon2D
+var _top_points: PackedVector2Array = PackedVector2Array()
 
-func _ready():
-	_setup_gradient()
-	_generate(hill_seed)
+func _ready() -> void:
+	_generate()
 
-# -------------------------------------------------------
-# GRADIENT SETUP
-# -------------------------------------------------------
-func _setup_gradient():
-	var polygon_node = get_node_or_null("Polygon2D")
-	if polygon_node == null:
+func _generate() -> void:
+	if polygon == null:
 		return
 
-	var gradient = Gradient.new()
-	# Remove default points first
-	gradient.remove_point(1)
-	gradient.remove_point(0)
-	gradient.add_point(0.00, Color("#927548"))
-	gradient.add_point(0.12, Color("#4F7941"))
-	gradient.add_point(0.24, Color("#365C58"))
-	gradient.add_point(0.39, Color("#3B455C"))
-	gradient.add_point(0.52, Color("#6A5A36"))
-	gradient.add_point(0.66, Color("#7C3931"))
-	gradient.add_point(0.82, Color("#5B3B5C"))
-	gradient.add_point(0.98, Color("#283246"))
+	_top_points.clear()
+	_top_points.resize(0)
 
-	var grad_tex = GradientTexture2D.new()
-	grad_tex.gradient = gradient
-	grad_tex.fill_from = Vector2(0.5, 0.0)
-	grad_tex.fill_to   = Vector2(0.5, 1.0)
-	grad_tex.width  = 2
-	grad_tex.height = 256
+	var rng := RandomNumberGenerator.new()
+	rng.seed = rng_seed
+	var off1: float = rng.randf_range(0.0, 1000.0)
+	var off2: float = rng.randf_range(0.0, 1000.0)
 
-	polygon_node.texture = grad_tex
-	polygon_node.texture_filter = CanvasItem.TEXTURE_FILTER_LINEAR
+	var x: int = 0
+	var prev_y: float = base_y
+	var slope_limit: float = tan(deg_to_rad(max_slope_deg))
 
-# -------------------------------------------------------
-# HILL GENERATION
-# -------------------------------------------------------
-func _generate(s: int):
-	var polygon_node = get_node_or_null("Polygon2D")
-	if polygon_node == null:
-		push_warning("Hill: No Polygon2D child found!")
-		return
+	while x <= length:
+		# Simple layered sines (cheap and deterministic)
+		var y: float = sin((x * noise_frequency) + off1) * amplitude
+		y += sin((x * noise_frequency) * 2.1 + off2) * (amplitude * 0.35 * (0.7 + difficulty * 0.6))
+		var target_y: float = base_y + y
 
-	var rng = RandomNumberGenerator.new()
-	rng.seed = s
+		# Optional slope limiting
+		if _top_points.size() > 0:
+			var dy: float = target_y - prev_y
+			var dx: float = float(sample_step)
+			var s: float = dy / dx
+			if abs(s) > slope_limit:
+				target_y = prev_y + clamp(s, -slope_limit, slope_limit) * dx
 
-	var offset1 = rng.randf_range(0, 1000)
-	var offset2 = rng.randf_range(0, 1000)
-	var offset3 = rng.randf_range(0, 1000)
+		_top_points.append(Vector2(x, target_y))
+		prev_y = target_y
+		x += sample_step
 
-	var top_points = PackedVector2Array()
-	var bottom_y = base_y + amplitude + 200
+	# Close polygon downwards
+	var bottom_y: float = base_y + amplitude + 200.0
+	var poly := PackedVector2Array(_top_points)
+	poly.append(Vector2(length, bottom_y))
+	poly.append(Vector2(0, bottom_y))
+	polygon.polygon = poly
 
-	for x in range(width + 1):
-		var y = sin(x * frequency         + offset1) * amplitude
-		y     += sin(x * frequency * 2.3  + offset2) * (amplitude * 0.4)
-		y     += sin(x * frequency * 5.1  + offset3) * (amplitude * 0.15)
-		top_points.append(Vector2(x, base_y + y))
-
-	var poly = PackedVector2Array(top_points)
-	poly.append(Vector2(width, bottom_y))
-	poly.append(Vector2(0,     bottom_y))
-	polygon_node.polygon = poly
-
-	# UVs
-	var uvs = PackedVector2Array()
-	var y_min = base_y - amplitude
-	var y_range = bottom_y - y_min
-
-	for p in top_points:
-		var u = p.x / float(width)
-		var v = (p.y - y_min) / y_range
+	# Simple UVs for gradient (optional)
+	var uvs := PackedVector2Array()
+	var y_min: float = base_y - amplitude
+	var y_range: float = (bottom_y - y_min)
+	for p in _top_points:
+		var u: float = p.x / float(length)
+		var v: float = (p.y - y_min) / y_range
 		uvs.append(Vector2(u, v))
-
 	uvs.append(Vector2(1.0, 1.0))
 	uvs.append(Vector2(0.0, 1.0))
-	polygon_node.uv = uvs
+	polygon.uv = uvs
+
+func get_top_points() -> PackedVector2Array:
+	return _top_points.duplicate()

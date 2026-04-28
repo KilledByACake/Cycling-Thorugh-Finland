@@ -13,6 +13,12 @@ class Segment:
 # Ground polygon source (drag your Ground/CollisionPolygon2D here)
 @export_node_path("CollisionPolygon2D") var ground_collision_path: NodePath
 
+# Alternative visual ground (if you have no CollisionPolygon2D)
+@export_node_path("Polygon2D") var ground_polygon2d_path: NodePath
+
+# Alternative: your procedural Terrain node that exposes get_top_points()
+@export_node_path("Node") var terrain_node_path: NodePath
+
 # Optional markers to define the horizontal sampling range (recommended).
 # Place two Node2D/Position2D as children anywhere you like, move them over the ground,
 # then assign them here. Only their X is used.
@@ -25,8 +31,11 @@ class Segment:
 # Path vertical lift. Keep 0.0 if you already use PathFollow2D's V Offset to lift the rider.
 @export var ride_height: float = 0.0
 
-# Sampling density across X (pixels). Smaller = more points, smoother curve.
+# Sampling density across X (pixels) for CollisionPolygon2D-based build. Smaller = more points.
 @export var sample_step: float = 16.0
+
+# When building from top-point arrays (Terrain/Polygon2D), take every Nth point.
+@export var points_stride: int = 8
 
 # Smoothing strength for the rebuilt curve (0 = straight segments, 1 = strong smoothing)
 @export_range(0.0, 1.0, 0.05) var tangent_smoothness: float = 0.5
@@ -36,7 +45,7 @@ class Segment:
 	set(value):
 		rebuild_now = false
 		if Engine.is_editor_hint():
-			rebuild_from_collision()
+			rebuild_auto()
 
 @export var snap_points_to_ground: bool = false:
 	set(value):
@@ -49,9 +58,70 @@ class Segment:
 
 func _ready() -> void:
 	if build_on_ready and not Engine.is_editor_hint():
-		rebuild_from_collision()
+		rebuild_auto()
 
+# ------------------------------------------------------------
+# Public entry: try Terrain -> Polygon2D -> CollisionPolygon2D
+# ------------------------------------------------------------
+func rebuild_auto() -> void:
+	# Prefer Terrain.get_top_points() for perfect match and performance.
+	var terrain: Node = _resolve_node_safe(terrain_node_path)
+	if (terrain as Object) != null and terrain.has_method("get_top_points"):
+		var top_points: PackedVector2Array = terrain.call("get_top_points")
+		var src2d := terrain as Node2D
+		if src2d != null and top_points.size() >= 2:
+			_build_from_top_points(top_points, src2d)
+			return
+
+	# Next, try Polygon2D (assumes top chain first and last two are the bottom closer)
+	var poly2d: Polygon2D = _resolve_node_safe(ground_polygon2d_path) as Polygon2D
+	if poly2d != null and poly2d.polygon.size() >= 3:
+		var poly: PackedVector2Array = poly2d.polygon
+		var top_chain: PackedVector2Array = poly.slice(0, max(0, poly.size() - 2))
+		if top_chain.size() >= 2:
+			_build_from_top_points(top_chain, poly2d)
+			return
+
+	# Finally, fall back to sampling over CollisionPolygon2D
+	var col: CollisionPolygon2D = _resolve_node_safe(ground_collision_path) as CollisionPolygon2D
+	if col != null and col.polygon.size() >= 3:
+		rebuild_from_collision(col)
+		return
+
+	push_warning("PathAutoBuilder: No valid source found. Assign terrain_node_path, ground_polygon2d_path, or ground_collision_path.")
+
+# ------------------------------------------------------------
+# Build from a top-points polyline (Terrain/Polygon2D)
+# ------------------------------------------------------------
+func _build_from_top_points(points_local_to_src: PackedVector2Array, src: Node2D) -> void:
+	if points_local_to_src.size() < 2:
+		push_warning("PathAutoBuilder: not enough points to build curve.")
+		return
+
+	# Transform from source local -> path local
+	var to_path_local: Transform2D = global_transform.affine_inverse() * src.global_transform
+
+	var curve_new: Curve2D = Curve2D.new()
+	var stride: int = max(1, points_stride)
+	for i in range(0, points_local_to_src.size(), stride):
+		var p_src: Vector2 = points_local_to_src[i]
+		var p_local: Vector2 = to_path_local * p_src
+		curve_new.add_point(p_local + Vector2(0.0, -ride_height))
+
+	# Ensure last point is present
+	if curve_new.point_count == 0 or points_local_to_src.size() > 0:
+		var p_end: Vector2 = to_path_local * points_local_to_src[points_local_to_src.size() - 1]
+		if curve_new.point_count == 0 or curve_new.get_point_position(curve_new.point_count - 1).distance_to(p_end) > 0.5:
+			curve_new.add_point(p_end + Vector2(0.0, -ride_height))
+
+	_apply_smoothing(curve_new, tangent_smoothness)
+	curve = curve_new
+	queue_redraw()
+
+# ------------------------------------------------------------
 # Build segments from Ground polygon in Path2D local space
+# (CollisionPolygon2D-based workflow)
+# ------------------------------------------------------------
 func _get_polygon_segments_local(col: CollisionPolygon2D) -> Array[Segment]:
 	var pts: PackedVector2Array = col.polygon
 	var arr: Array[Segment] = []
@@ -97,9 +167,9 @@ func _compute_sample_bounds_local(col: CollisionPolygon2D) -> Vector2:
 		max_x = maxf(max_x, p_local.x)
 
 	# If both markers are set and valid, use them (ignores x_margin)
-	var lm: Node2D = get_node_or_null(left_marker_path) as Node2D
-	var rm: Node2D = get_node_or_null(right_marker_path) as Node2D
-	if lm and rm:
+	var lm: Node2D = _resolve_node_safe(left_marker_path) as Node2D
+	var rm: Node2D = _resolve_node_safe(right_marker_path) as Node2D
+	if lm != null and rm != null:
 		# Convert marker positions to Path2D local space
 		var lm_local: Vector2 = global_transform.affine_inverse() * lm.global_position
 		var rm_local: Vector2 = global_transform.affine_inverse() * rm.global_position
@@ -118,14 +188,14 @@ func _compute_sample_bounds_local(col: CollisionPolygon2D) -> Vector2:
 		max_x = mid
 	return Vector2(min_x, max_x)
 
-# Rebuild the entire Path2D curve from Ground polygon
+# Rebuild the entire Path2D curve from Ground polygon (CollisionPolygon2D)
 func rebuild_from_collision(col: CollisionPolygon2D = null) -> void:
 	var ground: CollisionPolygon2D = col
 	if ground == null:
 		if ground_collision_path.is_empty():
 			push_warning("PathAutoBuilder: ground_collision_path is empty.")
 			return
-		ground = get_node_or_null(ground_collision_path) as CollisionPolygon2D
+		ground = _resolve_node_safe(ground_collision_path) as CollisionPolygon2D
 	if ground == null or ground.polygon.size() < 3:
 		push_warning("PathAutoBuilder: Ground CollisionPolygon2D missing or invalid.")
 		return
@@ -157,18 +227,14 @@ func rebuild_from_collision(col: CollisionPolygon2D = null) -> void:
 	curve = new_curve
 	queue_redraw()
 
-# Snap existing Path2D points to the ground at their current X
+# Snap existing Path2D points to the ground at their current X (works best with CollisionPolygon2D source)
 func _snap_curve_to_ground() -> void:
-	if ground_collision_path.is_empty():
-		push_warning("Assign ground_collision_path to Ground/CollisionPolygon2D.")
+	var col: CollisionPolygon2D = _resolve_node_safe(ground_collision_path) as CollisionPolygon2D
+	if col == null or col.polygon.size() < 3:
+		push_warning("Assign a valid ground_collision_path to use snap.")
 		return
 	if curve == null or curve.point_count == 0:
 		push_warning("Path2D has no points. Use 'rebuild_now' instead.")
-		return
-
-	var col: CollisionPolygon2D = get_node_or_null(ground_collision_path) as CollisionPolygon2D
-	if col == null or col.polygon.size() < 3:
-		push_warning("Ground CollisionPolygon2D missing or invalid.")
 		return
 
 	var segs: Array[Segment] = _get_polygon_segments_local(col)
@@ -183,6 +249,7 @@ func _snap_curve_to_ground() -> void:
 			p.y = gy - ride_height
 			curve.set_point_position(i, p)
 
+	# Reset tangents after snapping
 	for i in range(curve.point_count):
 		curve.set_point_in(i, Vector2.ZERO)
 		curve.set_point_out(i, Vector2.ZERO)
@@ -213,3 +280,21 @@ func _apply_smoothing(c: Curve2D, strength: float) -> void:
 
 		c.set_point_in(i, -dir * handle_len)
 		c.set_point_out(i, dir * handle_len)
+
+# ------------------------------------------------------------
+# Safe node resolving that avoids absolute-path errors
+# ------------------------------------------------------------
+func _resolve_node_safe(path: NodePath) -> Node:
+	if path.is_empty():
+		return null
+	# Avoid calling get_node with an absolute path when not in the tree
+	if path.is_absolute():
+		if not is_inside_tree():
+			# In editor, this node might not be in the active scene tree yet.
+			push_warning("PathAutoBuilder: absolute NodePath cannot be resolved when not inside the scene tree. Use a relative path.")
+			return null
+		return get_tree().root.get_node_or_null(path)
+	else:
+		if not is_inside_tree():
+			return null
+		return get_node_or_null(path)
