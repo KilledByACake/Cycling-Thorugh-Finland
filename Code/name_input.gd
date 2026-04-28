@@ -7,6 +7,13 @@ const MAX_NAME_CHARACTERS: int = 15
 const MAIN_MENU_SCENE_PATH: String = "res://Levels/MainMenu.tscn"
 const LEVEL1_SCENE_PATH: String = "res://Levels/Game.tscn"
 
+# Dialog sizing used only when "_RESET" is typed
+const DIALOG_LABEL_SIZE: int = 72
+const DIALOG_BUTTON_SIZE: int = 64
+const DIALOG_MIN_SIZE: Vector2i = Vector2i(900, 420) # smaller = buttons sit higher
+const DIALOG_BTN_MIN: Vector2i = Vector2i(320, 130)
+const DIALOG_BUTTONS_SEP: int = 40
+
 # On-screen keyboard layout
 var rows: Array = [
 	["1","2","3","4","5","6","7","8","9","0"],
@@ -128,7 +135,45 @@ func _on_done_pressed() -> void:
 	emit_signal("name_confirmed", trimmed)
 	get_tree().change_scene_to_file(LEVEL1_SCENE_PATH)
 
-# Reset-view confirmation flow
+# --- styling used only when "_RESET" is typed ---
+
+func _style_confirm_dialog(dlg: ConfirmationDialog) -> void:
+	var lbl := dlg.get_label()
+	if lbl:
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		lbl.add_theme_font_size_override("font_size", DIALOG_LABEL_SIZE)
+	var ok := dlg.get_ok_button()
+	if ok:
+		ok.text = "Yes"
+		ok.custom_minimum_size = DIALOG_BTN_MIN
+		ok.add_theme_font_size_override("font_size", DIALOG_BUTTON_SIZE)
+	var cancel := dlg.get_cancel_button()
+	if cancel:
+		cancel.text = "No"
+		cancel.custom_minimum_size = DIALOG_BTN_MIN
+		cancel.add_theme_font_size_override("font_size", DIALOG_BUTTON_SIZE)
+	if ok and ok.get_parent() is BoxContainer:
+		var box := ok.get_parent() as BoxContainer
+		box.alignment = BoxContainer.ALIGNMENT_CENTER
+		box.add_theme_constant_override("separation", DIALOG_BUTTONS_SEP)
+
+func _style_info_dialog(dlg: AcceptDialog) -> void:
+	var lbl := dlg.get_label()
+	if lbl:
+		lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		lbl.add_theme_font_size_override("font_size", DIALOG_LABEL_SIZE)
+	var ok := dlg.get_ok_button()
+	if ok:
+		ok.custom_minimum_size = DIALOG_BTN_MIN
+		ok.add_theme_font_size_override("font_size", DIALOG_BUTTON_SIZE)
+	if ok and ok.get_parent() is BoxContainer:
+		var box := ok.get_parent() as BoxContainer
+		box.alignment = BoxContainer.ALIGNMENT_CENTER
+		box.add_theme_constant_override("separation", DIALOG_BUTTONS_SEP)
+
+# Reset-view confirmation flow (design applies only here)
 func _show_reset_confirm() -> void:
 	if _confirm_reset_dlg == null:
 		_confirm_reset_dlg = ConfirmationDialog.new()
@@ -142,7 +187,9 @@ func _show_reset_confirm() -> void:
 			cancel_btn.pressed.connect(_on_reset_canceled)
 		_confirm_reset_dlg.get_ok_button().text = "Yes"
 		_confirm_reset_dlg.get_cancel_button().text = "No"
-	_confirm_reset_dlg.popup_centered()
+		_style_confirm_dialog(_confirm_reset_dlg)
+	# Center and clamp size so it stays centered on any display
+	_confirm_reset_dlg.popup_centered_clamped(DIALOG_MIN_SIZE, 0.9)
 
 func _on_reset_confirmed() -> void:
 	var hs := get_node_or_null("/root/HighScores")
@@ -165,7 +212,9 @@ func _show_info_and_return() -> void:
 		add_child(_info_dlg)
 		if not _info_dlg.confirmed.is_connected(_on_info_ok):
 			_info_dlg.confirmed.connect(_on_info_ok)
-	_info_dlg.popup_centered()
+		_style_info_dialog(_info_dlg)
+	# Center and clamp size (matches the confirm dialog)
+	_info_dlg.popup_centered_clamped(DIALOG_MIN_SIZE, 0.9)
 
 func _on_info_ok() -> void:
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
