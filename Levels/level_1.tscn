@@ -235,7 +235,6 @@ script = ExtResource("1_77l7m")
 hill_scene = ExtResource("2_77l7m")
 
 [node name="BackgroundScene" type="Parallax2D" parent="." unique_id=870220922]
-visible = false
 scroll_scale = Vector2(0.2, 0.2)
 scroll_offset = Vector2(5685, 2549)
 autoscroll = Vector2(2, 0)
@@ -247,9 +246,10 @@ scale = Vector2(1.9386667, 1.034)
 texture = ExtResource("16_c7pbv")
 
 [node name="Terrain" parent="." unique_id=1830455226 instance=ExtResource("2_77l7m")]
+visible = false
+position = Vector2(-1981, 16)
 
 [node name="Ground" type="Node2D" parent="." unique_id=225340820]
-visible = false
 z_index = 10
 position = Vector2(6017, 2549)
 script = ExtResource("2_77x7w")
