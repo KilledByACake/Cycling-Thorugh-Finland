@@ -2,15 +2,7 @@
 
 [ext_resource type="Script" uid="uid://ddmyeee3qgkf7" path="res://Code/result.gd" id="1_l2t1i"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_b23m6"]
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vrvea"]
-bg_color = Color(0.5386101, 0.5386101, 0.8320729, 0.34117648)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 16.0
-expand_margin_right = 16.0
+[ext_resource type="StyleBox" uid="uid://csn6mu6bm258" path="res://Style/button_design.tres" id="3_b23m6"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_jlewb"]
 bg_color = Color(0.09408989, 0.09408989, 0.21693242, 0.61960787)
@@ -85,7 +77,7 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_b23m6")
 theme_override_font_sizes/font_size = 120
-theme_override_styles/normal = SubResource("StyleBoxFlat_vrvea")
+theme_override_styles/normal = ExtResource("3_b23m6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jlewb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5r0ce")
 text = "Retry"
@@ -97,7 +89,7 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_b23m6")
 theme_override_font_sizes/font_size = 120
-theme_override_styles/normal = SubResource("StyleBoxFlat_vrvea")
+theme_override_styles/normal = ExtResource("3_b23m6")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jlewb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5r0ce")
 text = "Main Menu"

@@ -4,6 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_x4mlx"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_xncxv"]
 [ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="3_x4mlx"]
+[ext_resource type="StyleBox" uid="uid://csn6mu6bm258" path="res://Style/button_design.tres" id="5_2p714"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x4mlx"]
 texture = ExtResource("2_x4mlx")
@@ -12,15 +13,6 @@ modulate_color = Color(0.35305238, 0.35305238, 0.35305238, 1)
 [sub_resource type="Theme" id="Theme_xncxv"]
 default_font = ExtResource("2_xncxv")
 default_font_size = 140
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_wk7tp"]
-bg_color = Color(0.5386101, 0.5386101, 0.8320729, 0.34117648)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 16.0
-expand_margin_right = 16.0
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3jhts"]
 bg_color = Color(0.09408989, 0.09408989, 0.21693242, 0.61960787)
@@ -112,7 +104,7 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_xncxv")
 theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = SubResource("StyleBoxFlat_wk7tp")
+theme_override_styles/normal = ExtResource("5_2p714")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_3jhts")
 theme_override_styles/hover = SubResource("StyleBoxFlat_33yib")
 text = "Quit"
@@ -124,7 +116,7 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_xncxv")
 theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = SubResource("StyleBoxFlat_wk7tp")
+theme_override_styles/normal = ExtResource("5_2p714")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_3jhts")
 theme_override_styles/hover = SubResource("StyleBoxFlat_33yib")
 text = "Backspace"
@@ -136,7 +128,7 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_xncxv")
 theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = SubResource("StyleBoxFlat_wk7tp")
+theme_override_styles/normal = ExtResource("5_2p714")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_3jhts")
 theme_override_styles/hover = SubResource("StyleBoxFlat_33yib")
 text = "Done"
