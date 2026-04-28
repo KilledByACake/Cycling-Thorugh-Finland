@@ -14,7 +14,7 @@
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="15_demcn"]
 [ext_resource type="Script" uid="uid://co1x31w7232x4" path="res://Code/path_2d.gd" id="16_dasy0"]
 [ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/radler.tscn" id="16_n8fgn"]
-[ext_resource type="Script" uid="uid://sleewu5x0dsi" path="res://Levels/path_follow_2d.gd" id="18_dasy0"]
+[ext_resource type="Script" uid="uid://sleewu5x0dsi" path="res://Code/path_follow_2d.gd" id="18_dasy0"]
 
 [sub_resource type="Resource" id="Resource_dasy0"]
 script = ExtResource("4_wy6ri")
@@ -186,5 +186,5 @@ end_marker_path = NodePath("../PathRight")
 [node name="Radler" parent="Path2D/PathFollow2D" unique_id=801071611 instance=ExtResource("16_n8fgn")]
 
 [node name="Camera2D" type="Camera2D" parent="Path2D/PathFollow2D/Radler" unique_id=974620558]
-position = Vector2(254, -266)
+position = Vector2(305.5832, -369.96594)
 drag_horizontal_enabled = true
