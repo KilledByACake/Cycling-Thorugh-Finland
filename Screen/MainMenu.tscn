@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://dy27ncb1fei4c"]
 
-[ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="1_2k6u6"]
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_6ucrw"]
-[ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="1_jy27m"]
+[ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="1_xj426"]
+[ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_vn53a"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="3_l62vm"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3es34"]
-texture = ExtResource("1_jy27m")
+texture = ExtResource("2_vn53a")
 modulate_color = Color(0.35305238, 0.35305238, 0.35305238, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_6ucrw"]
@@ -41,7 +41,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_2k6u6")
+script = ExtResource("1_xj426")
 
 [node name="Panel" type="Panel" parent="." unique_id=1829506493]
 layout_mode = 1
@@ -65,7 +65,7 @@ offset_right = 326.5
 offset_bottom = -254.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("1_6ucrw")
+theme_override_fonts/font = ExtResource("3_l62vm")
 theme_override_font_sizes/font_size = 230
 text = "Cycle Through Finland"
 horizontal_alignment = 1
@@ -90,7 +90,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
-theme_override_fonts/font = ExtResource("1_6ucrw")
+theme_override_fonts/font = ExtResource("3_l62vm")
 theme_override_font_sizes/font_size = 180
 theme_override_styles/normal = SubResource("StyleBoxFlat_6ucrw")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8md67")
@@ -102,7 +102,7 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
-theme_override_fonts/font = ExtResource("1_6ucrw")
+theme_override_fonts/font = ExtResource("3_l62vm")
 theme_override_font_sizes/font_size = 180
 theme_override_styles/normal = SubResource("StyleBoxFlat_6ucrw")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_8md67")
