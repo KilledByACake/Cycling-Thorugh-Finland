@@ -61,14 +61,14 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1749066736]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_b23m6")
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 230
 text = "HIGH SCORES"
 horizontal_alignment = 1
 
 [node name="InfoLabel" type="Label" parent="CenterContainer/VBoxContainer" unique_id=1772755218]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_b23m6")
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 170
 text = "Scores"
 horizontal_alignment = 1
 
@@ -76,6 +76,7 @@ horizontal_alignment = 1
 layout_mode = 2
 size_flags_vertical = 4
 theme_override_constants/separation = 100
+alignment = 1
 
 [node name="Retry" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1576396313]
 layout_mode = 2
@@ -83,7 +84,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_b23m6")
-theme_override_font_sizes/font_size = 50
+theme_override_font_sizes/font_size = 120
 theme_override_styles/normal = SubResource("StyleBoxFlat_vrvea")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jlewb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5r0ce")
@@ -95,7 +96,7 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_b23m6")
-theme_override_font_sizes/font_size = 50
+theme_override_font_sizes/font_size = 120
 theme_override_styles/normal = SubResource("StyleBoxFlat_vrvea")
 theme_override_styles/pressed = SubResource("StyleBoxFlat_jlewb")
 theme_override_styles/hover = SubResource("StyleBoxFlat_5r0ce")

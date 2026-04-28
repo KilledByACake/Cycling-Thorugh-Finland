@@ -24,6 +24,6 @@ offset_bottom = 43.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("1_m8yab")
-theme_override_font_sizes/font_size = 70
+theme_override_font_sizes/font_size = 200
 text = "Game Over"
 horizontal_alignment = 1
