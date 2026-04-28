@@ -27,14 +27,14 @@ var game_timer: Timer
 
 @export var hill_scene: PackedScene  
 
-var game_timer: Timer
+#var game_timer: Timer
 
 func _ready():
 	_ensure_overlay_layer()
-	var hill = hill_scene.instantiate()
-	hill.hill_seed = 42
-	hill.position = Vector2(-3000, 0)
-	add_child(hill)
+	#var hill = hill_scene.instantiate()
+	#hill.hill_seed = 42
+	#hill.position = Vector2(-3000, 0)
+	#add_child(hill)
 
 	
 	
