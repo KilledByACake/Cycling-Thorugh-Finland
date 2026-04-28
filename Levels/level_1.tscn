@@ -12,9 +12,7 @@
 [ext_resource type="Script" uid="uid://nc5bfedvnpgm" path="res://addons/rmsmartshape/materials/shape_material.gd" id="8_2hkqn"]
 [ext_resource type="Script" uid="uid://d0xjijisx1woh" path="res://addons/rmsmartshape/materials/edge_material.gd" id="9_rs4xw"]
 [ext_resource type="Script" uid="uid://d218yx0d1ilsn" path="res://addons/rmsmartshape/normal_range.gd" id="10_lk57d"]
-[ext_resource type="PackedScene" uid="uid://ep3y83ujsrdg" path="res://Scenes/coin.tscn" id="12_2hkqn"]
-[ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Scenes/ui.tscn" id="14_2hkqn"]
-[ext_resource type="PackedScene" uid="uid://bbbpaw5fvqti1" path="res://Scenes/fuel.tscn" id="15_34erp"]
+[ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Screen/UI.tscn" id="14_2hkqn"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="16_c7pbv"]
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="16_k2bse"]
 [ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/radler.tscn" id="17_hsj5a"]
@@ -232,7 +230,6 @@ fill_textures = Array[Texture2D]([ExtResource("6_rs4xw")])
 [node name="level 1" type="Node2D" unique_id=22896662]
 position = Vector2(41, 8)
 script = ExtResource("1_77l7m")
-hill_scene = ExtResource("2_77l7m")
 
 [node name="BackgroundScene" type="Parallax2D" parent="." unique_id=870220922]
 scroll_scale = Vector2(0.2, 0.2)
