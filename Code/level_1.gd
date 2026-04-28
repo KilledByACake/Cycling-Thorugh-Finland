@@ -27,7 +27,7 @@ var game_timer: Timer
 func _ready():
 	var hill = hill_scene.instantiate()
 	hill.hill_seed = 42
-	hill.position = Vector2(-3000, 0)
+	hill.position = Vector2(0, 0)
 	add_child(hill)
 	
 	_refresh_coin_ui()

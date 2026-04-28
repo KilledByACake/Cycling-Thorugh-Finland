@@ -3,10 +3,10 @@ extends Node2D
 
 # --- Settings ---
 @export var hill_seed: int = 42
-@export var width: int = 6000
+@export var width: int = 8000
 @export var base_y: int = 400
 @export var amplitude: float = 80.0
-@export var frequency: float = 0.005
+@export var frequency: float = 0.002
 
 # Regenerate in editor when any export var changes
 @export var regenerate: bool = false:
