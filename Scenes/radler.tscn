@@ -96,18 +96,24 @@ animations = [{
 "speed": 6.0
 }]
 
-[node name="Radler" type="CharacterBody2D" unique_id=50299590]
+[node name="Radler" type="RigidBody2D" unique_id=1887104354]
+position = Vector2(-143, 194)
+gravity_scale = 3.0
 script = ExtResource("1_1u43k")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=857657351]
-position = Vector2(-0.49996948, 8.299988)
+position = Vector2(138, -197)
 scale = Vector2(1.4570313, 1.5664063)
 sprite_frames = SubResource("SpriteFrames_ap03w")
 animation = &"rollen"
 
 [node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1014135267]
-position = Vector2(-138.49998, 205.29999)
+position = Vector2(-1.5258789e-05, 0)
 polygon = PackedVector2Array(0, -34, 39, -17, 90, -39, 101, -52, 141, -39, 184, -56, 211, -25, 243, -18, 286, -30, 307, -66, 308, -113, 283, -145, 255, -156, 255, -168, 270, -167, 276, -207, 275, -244, 245, -232, 233, -215, 209, -214, 206, -243, 163, -263, 155, -309, 154, -354, 143, -377, 114, -378, 95, -360, 94, -346, 36, -347, 19, -298, 40, -271, 77, -281, 52, -207, 85, -178, 78, -168, 5, -169, -23, -126, -27, -82, -12, -45)
+
+[node name="GroundRay" type="RayCast2D" parent="." unique_id=144607224]
+position = Vector2(239, -19)
+target_position = Vector2(0, 29)
 
 [node name="EngineSFX" type="AudioStreamPlayer" parent="." unique_id=245767930]
 stream = ExtResource("3_kllh3")
