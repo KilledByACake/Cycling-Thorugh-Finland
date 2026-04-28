@@ -30,6 +30,7 @@ var frozen: bool = false                    # Level_Controller can freeze the pl
 func _ready() -> void:
 	# Grouping lets other systems (e.g., LevelController) address the player.
 	add_to_group("player")
+	add_to_group("radler") 
 	add_to_group("input_receivers")
 	add_to_group("freezable")
 

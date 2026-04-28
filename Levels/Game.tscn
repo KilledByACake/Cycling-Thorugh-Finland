@@ -16,6 +16,10 @@
 [ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/radler.tscn" id="16_n8fgn"]
 [ext_resource type="Script" uid="uid://sleewu5x0dsi" path="res://Levels/path_follow_2d.gd" id="18_dasy0"]
 
+[sub_resource type="Resource" id="Resource_dasy0"]
+script = ExtResource("4_wy6ri")
+position = Vector2(26032.162, -805.09204)
+
 [sub_resource type="Resource" id="Resource_34erp"]
 script = ExtResource("4_wy6ri")
 position = Vector2(25993.523, 2953.5713)
@@ -37,10 +41,6 @@ script = ExtResource("4_wy6ri")
 position = Vector2(-4312.452, -1466.7529)
 point_in = Vector2(-1559.8271, 487.4458)
 point_out = Vector2(1559.8271, -487.4458)
-
-[sub_resource type="Resource" id="Resource_dasy0"]
-script = ExtResource("4_wy6ri")
-position = Vector2(26032.162, -805.09204)
 
 [sub_resource type="Resource" id="Resource_wy6ri"]
 script = ExtResource("4_wy6ri")
@@ -131,25 +131,25 @@ build_mode = 1
 polygon = PackedVector2Array(26027.895, -805.0917, 25989.24, 2953.572, -9864.727, 2604.0994, -9759.863, -1430.734, -8346.324, -1316.1372, -6922.706, -1208.6527, -5614.8115, -1237.5778, -4949.4014, -1320.3306, -4328.7524, -1466.7526, -4000.0066, -1520.2485, -3606.8162, -1504.0393, -2674.375, -1299.0719, -556.17865, -454.9148, 2046.0608, 922.50745)
 
 [node name="Coin" parent="." unique_id=403929337 instance=ExtResource("13_pn5pt")]
-position = Vector2(-445, 1063)
+position = Vector2(-470, 1265)
 
 [node name="Coin2" parent="." unique_id=1140995091 instance=ExtResource("13_pn5pt")]
-position = Vector2(-124, 1095)
+position = Vector2(422, 1276)
 
 [node name="Coin3" parent="." unique_id=1620713799 instance=ExtResource("13_pn5pt")]
-position = Vector2(875, 1059)
+position = Vector2(1469, 1074)
 
 [node name="Coin4" parent="." unique_id=1919917266 instance=ExtResource("13_pn5pt")]
-position = Vector2(1839, 869)
+position = Vector2(2934, 1115)
 
 [node name="Coin5" parent="." unique_id=2092786171 instance=ExtResource("13_pn5pt")]
-position = Vector2(4383, 1156)
+position = Vector2(4973, 1897)
 
 [node name="Coin6" parent="." unique_id=1060338277 instance=ExtResource("13_pn5pt")]
-position = Vector2(2670, 717)
+position = Vector2(3769, 1398)
 
 [node name="Coin7" parent="." unique_id=1310694348 instance=ExtResource("13_pn5pt")]
-position = Vector2(6314, 1676)
+position = Vector2(6379, 2551)
 
 [node name="UI" parent="." unique_id=482392122 instance=ExtResource("14_skt5q")]
 
