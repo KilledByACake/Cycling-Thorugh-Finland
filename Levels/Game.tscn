@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cpnl0xtu7w1mc" path="res://Code/level_1.gd" id="1_eca5b"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="2_qvq5f"]
+[ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Blueberry.tscn" id="7_i12b1"]
 [ext_resource type="PackedScene" uid="uid://ep3y83ujsrdg" path="res://Scenes/coin.tscn" id="13_pn5pt"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Screen/UI.tscn" id="14_skt5q"]
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="15_demcn"]
@@ -30,16 +31,14 @@ texture = ExtResource("2_qvq5f")
 [node name="Terrain" parent="." unique_id=1830455226 instance=ExtResource("16_eca5b")]
 position = Vector2(-3754, 1063)
 length = 80000
+base_y = 820.0
 
 [node name="Path2D" type="Path2D" parent="." unique_id=1771067717]
 curve = SubResource("Curve2D_y58dp")
 script = ExtResource("16_dasy0")
-terrain_node_path = NodePath("../Terrain")
-x_margin = 120.0
-tangent_smoothness = 0.6
 
 [node name="PathLeft" type="Node2D" parent="Path2D" unique_id=187768649]
-position = Vector2(-1767, 1172)
+position = Vector2(-2937, 1798)
 
 [node name="PathRight" type="Node2D" parent="Path2D" unique_id=2010174335]
 position = Vector2(29865, 1827)
@@ -58,11 +57,17 @@ end_marker_path = NodePath("../PathRight")
 position = Vector2(254, -266)
 drag_horizontal_enabled = true
 
+[node name="Blueberry" parent="." unique_id=288817796 instance=ExtResource("7_i12b1")]
+position = Vector2(-1256, 1832.6226)
+terrain_path = NodePath("../Terrain")
+auto_find_terrain = true
+message = "I am Blueberry"
+
 [node name="Coin" parent="." unique_id=403929337 instance=ExtResource("13_pn5pt")]
-position = Vector2(-470, 1265)
+position = Vector2(-386, 1630)
 
 [node name="Coin2" parent="." unique_id=1140995091 instance=ExtResource("13_pn5pt")]
-position = Vector2(422, 1276)
+position = Vector2(-165, 1644)
 
 [node name="Coin3" parent="." unique_id=1620713799 instance=ExtResource("13_pn5pt")]
 position = Vector2(1469, 1074)

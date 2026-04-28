@@ -1,6 +1,7 @@
 @tool
 extends Node2D
 
+# ---- Terrain settings ----
 @export var rng_seed: int = 42
 @export var length: int = 8000
 @export var base_y: float = 420.0
@@ -9,6 +10,15 @@ extends Node2D
 @export_range(0.0, 1.0, 0.01) var difficulty: float = 0.4
 @export var sample_step: int = 4
 @export var max_slope_deg: float = 18.0
+
+# How far down to close the ground polygon (pixels). Increase to avoid “air” below the ground.
+@export var ground_thickness: float = 800.0
+
+# Editor button to force regeneration
+@export var regenerate: bool = false:
+	set(value):
+		regenerate = false
+		_generate()
 
 @onready var polygon: Polygon2D = get_node_or_null("Polygon2D")
 
@@ -24,7 +34,7 @@ func _generate() -> void:
 	_top_points.clear()
 	_top_points.resize(0)
 
-	var rng := RandomNumberGenerator.new()
+	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = rng_seed
 	var off1: float = rng.randf_range(0.0, 1000.0)
 	var off2: float = rng.randf_range(0.0, 1000.0)
@@ -51,15 +61,16 @@ func _generate() -> void:
 		prev_y = target_y
 		x += sample_step
 
-	# Close polygon downwards
-	var bottom_y: float = base_y + amplitude + 200.0
-	var poly := PackedVector2Array(_top_points)
+	# Close the polygon deeper using ground_thickness (avoid “air” below ground)
+	var bottom_y: float = base_y + abs(amplitude) + ground_thickness
+
+	var poly: PackedVector2Array = PackedVector2Array(_top_points)
 	poly.append(Vector2(length, bottom_y))
-	poly.append(Vector2(0, bottom_y))
+	poly.append(Vector2(0.0, bottom_y))
 	polygon.polygon = poly
 
 	# Simple UVs for gradient (optional)
-	var uvs := PackedVector2Array()
+	var uvs: PackedVector2Array = PackedVector2Array()
 	var y_min: float = base_y - amplitude
 	var y_range: float = (bottom_y - y_min)
 	for p in _top_points:
@@ -72,3 +83,18 @@ func _generate() -> void:
 
 func get_top_points() -> PackedVector2Array:
 	return _top_points.duplicate()
+
+# Height on the ground at a given X (local space)
+func get_surface_y(x_pos: float) -> float:
+	if _top_points.is_empty():
+		return base_y
+	x_pos = clamp(x_pos, 0.0, float(length))
+	var step := float(max(1, sample_step))
+	var idx: int = int(floor(x_pos / step))
+	idx = clamp(idx, 0, _top_points.size() - 2)
+	var p0: Vector2 = _top_points[idx]
+	var p1: Vector2 = _top_points[idx + 1]
+	var t: float = 0.0
+	if p1.x != p0.x:
+		t = (x_pos - p0.x) / (p1.x - p0.x)
+	return lerp(p0.y, p1.y, t)
