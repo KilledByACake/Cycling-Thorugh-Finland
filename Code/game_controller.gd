@@ -1,171 +1,131 @@
-extends Node2D
+extends CharacterBody2D
 
-signal round_over(won: bool)
+# Tap = speed (tuning)
+@export var power_per_tap: float = 1.0      # tap power added per Space press
+@export var power_decay: float = 2.5        # tap power lost per second
+@export var speed_per_power: float = 200.0  # horizontal speed per 1.0 tap power
+@export var max_speed: float = 2000.0       # speed clamp
 
-const ROUND_TIME_SEC: int = 6 # game time
-const TARGET_ENERGY: int = 200
-const BANNER_DURATION_SEC: float = 1.0
+# Ground follow (tuning)
+@export var ray_length: float = 80.0        # GroundRay length downward (pixels)
+@export var ride_height: float = 18.0       # distance above ground along its normal (≈ wheel radius)
+@export var align_speed: float = 12.0       # rotation smoothing toward slope (higher = snappier)
+@export var follow_pos_lerp: float = 12.0   # vertical smoothing toward ground (higher = snappier)
 
-const GAME_OVER_SCENE: PackedScene = preload("res://Screen/GameOver.tscn")
-const YOU_WON_SCENE: PackedScene = preload("res://Screen/Victory.tscn")
-const RESULT_SCREEN_SCENE: PackedScene = preload("res://Screen/Result.tscn")
+# Score
+@export var energy_per_tap: int = 5
 
-var coins_collected: int = 0
+# Runtime state
+var tap_power: float = 0.0                  # accumulates on tap; decays over time
+var speed_x: float = 0.0                    # current rightward speed (pixels/sec)
 var energy_points: int = 0
-var round_finished: bool = false
+var input_locked: bool = false              # Game_Controller can disable input
+var frozen: bool = false                    # Level_Controller can freeze the player
 
-@onready var coin_label: Label = get_node_or_null("UI/Coin/Label") as Label
-@onready var energy_label: Label = get_node_or_null("UI/Energy/Label") as Label
-@onready var player_name_label: Label = get_node_or_null("UI/PlayerNameLabel") as Label
-@onready var timer_label: Label = get_node_or_null("UI/TimerLabel") as Label
-@onready var overlay_layer: CanvasLayer = get_node_or_null("OverlayLayer") as CanvasLayer
-
-var game_timer: Timer
+# Child nodes
+@onready var sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
+@onready var ground_ray: RayCast2D = get_node_or_null("GroundRay") as RayCast2D
 
 func _ready() -> void:
-	_refresh_coin_ui()
-	_refresh_energy_ui()
-	_update_player_name_from_tree()
-	_start_round_timer()
+	# Grouping lets other systems (e.g., LevelController) address the player.
+	add_to_group("player")
+	add_to_group("input_receivers")
+	add_to_group("freezable")
 
-func _process(_delta: float) -> void:
-	if round_finished:
+	# Ensure the ground ray is vertical, long enough, and enabled.
+	if ground_ray:
+		ground_ray.global_rotation = 0.0
+		ground_ray.target_position = Vector2(0.0, ray_length)
+		ground_ray.enabled = true
+
+	# CharacterBody2D uses `velocity`; make sure we start at rest.
+	velocity = Vector2.ZERO
+
+	_update_energy_ui()
+
+func _physics_process(delta: float) -> void:
+	# Tap-to-accelerate (polling avoids UI Controls consuming the key event).
+	if not input_locked and not frozen and Input.is_action_just_pressed("ui_accept"):
+		on_pedal_tap()
+
+	# Convert tap power → horizontal speed (with decay and clamp).
+	tap_power = max(0.0, tap_power - power_decay * delta)
+	speed_x = clamp(tap_power * speed_per_power, 0.0, max_speed)
+
+	# We move manually; vertical is handled by the ground follow below.
+	# Using direct position update keeps us fully in control and avoids unwanted physics.
+	# (Godot 4: don't write to global_position.x directly; update the whole Vector2.)
+	global_position += Vector2(speed_x * delta, 0.0)
+
+	# Keep the player aligned to and just above the ground.
+	_follow_and_align_to_ground(delta)
+
+	_update_animation()
+
+func on_pedal_tap() -> void:
+	if input_locked or frozen:
 		return
-	if game_timer and is_instance_valid(timer_label) and timer_label:
-		var t: int = max(0, int(ceil(game_timer.time_left)))
-		timer_label.text = _format_time(t)
+	tap_power += power_per_tap
+	energy_points += energy_per_tap
+	_update_energy_ui()
 
-func add_coins(amount: int) -> void:
-	if round_finished:
+func _follow_and_align_to_ground(delta: float) -> void:
+	if ground_ray == null:
+		# No ray available: slowly rotate back to flat.
+		rotation = lerp_angle(rotation, 0.0, clamp(align_speed * delta, 0.0, 1.0))
 		return
-	coins_collected += amount
-	_refresh_coin_ui()
 
-func update_energy_UI(value: int) -> void:
-	if round_finished:
-		return
-	energy_points = value
-	_refresh_energy_ui()
+	# Cast straight down each frame (keeps it vertical even if the player rotates).
+	ground_ray.global_rotation = 0.0
+	ground_ray.target_position = Vector2(0.0, ray_length)
+	ground_ray.force_raycast_update()
 
-func _refresh_coin_ui() -> void:
-	if coin_label:
-		coin_label.text = str(coins_collected)
+	if ground_ray.is_colliding():
+		var hit_pos: Vector2 = ground_ray.get_collision_point()
+		var n: Vector2 = ground_ray.get_collision_normal().normalized()
 
-func _refresh_energy_ui() -> void:
-	if energy_label:
-		energy_label.text = str(energy_points)
+		# Position: stay ride_height above the surface along its normal (prevents sinking on slopes).
+		var target_y: float = (hit_pos - n * ride_height).y
+		var pos_lerp: float = clamp(follow_pos_lerp * delta, 0.0, 1.0)
+		# Godot 4: read → modify → assign back the full Vector2.
+		var gp := global_position
+		gp.y = lerp(gp.y, target_y, pos_lerp)
+		global_position = gp
 
-func _update_player_name_from_tree() -> void:
-	if not player_name_label:
-		return
-	var n: String = ""
-	if get_tree().has_meta("player_name"):
-		n = str(get_tree().get_meta("player_name"))
-	if n != "":
-		player_name_label.text = n
-
-func _start_round_timer() -> void:
-	game_timer = Timer.new()
-	game_timer.one_shot = true
-	game_timer.wait_time = ROUND_TIME_SEC
-	add_child(game_timer)
-	game_timer.timeout.connect(_finish_round)
-	game_timer.start()
-	if timer_label:
-		timer_label.text = _format_time(ROUND_TIME_SEC)
-
-func _finish_round() -> void:
-	if round_finished:
-		return
-	round_finished = true
-
-	if is_instance_valid(timer_label) and timer_label:
-		timer_label.text = "00:00"
-
-	var won: bool = energy_points >= TARGET_ENERGY
-	_freeze_world()
-	emit_signal("round_over", won)
-
-	await _show_banner_overlay(won)
-	await _show_result_screen_overlay(won, energy_points, TARGET_ENERGY)
-
-func _freeze_world() -> void:
-	var roots: Array = []
-	var play_root := get_node_or_null("play")
-	if play_root: roots.append(play_root)
-	var player := get_node_or_null("Player")
-	if player: roots.append(player)
-	var player_lower := get_node_or_null("player")
-	if player_lower: roots.append(player_lower)
-
-	get_tree().call_group("freezable", "freeze")
-
-	for r in roots:
-		_freeze_recursive(r)
-
-func _freeze_recursive(n: Node) -> void:
-	if n == null:
-		return
-	if (n is CanvasLayer) and (n.name == "UI" or n.name == "OverlayLayer"):
-		return
-	_freeze_node(n)
-	for c in n.get_children():
-		_freeze_recursive(c)
-
-func _freeze_node(n: Node) -> void:
-	if n is CharacterBody2D:
-		var cb := n as CharacterBody2D
-		cb.velocity = Vector2.ZERO
-		cb.set_physics_process(false)
-	elif n is RigidBody2D:
-		var rb := n as RigidBody2D
-		rb.linear_velocity = Vector2.ZERO
-		rb.angular_velocity = 0.0
-		rb.sleeping = true
+		# Rotation: align with the ground tangent, facing right.
+		var tangent_right: Vector2 = Vector2(-n.y, n.x)
+		if tangent_right.x < 0.0:
+			tangent_right = -tangent_right
+		var target_angle: float = tangent_right.angle()
+		rotation = lerp_angle(rotation, target_angle, clamp(align_speed * delta, 0.0, 1.0))
 	else:
-		if n.has_method("set_physics_process"):
-			n.call("set_physics_process", false)
-		if n.has_method("set_process"):
-			n.call("set_process", false)
-	if n is AnimationPlayer:
-		(n as AnimationPlayer).stop()
-	elif n is AnimatedSprite2D:
-		(n as AnimatedSprite2D).speed_scale = 0.0
-	elif n is GPUParticles2D:
-		(n as GPUParticles2D).emitting = false
-	elif n is CPUParticles2D:
-		(n as CPUParticles2D).emitting = false
-	elif n is AudioStreamPlayer:
-		(n as AudioStreamPlayer).stop()
+		# If we’re airborne or between tiles: gently rotate toward flat.
+		rotation = lerp_angle(rotation, 0.0, clamp(align_speed * delta, 0.0, 1.0))
 
-func _show_banner_overlay(won: bool) -> void:
-	_ensure_overlay_layer()
-	var scene: PackedScene = YOU_WON_SCENE if won else GAME_OVER_SCENE
-	var banner: Control = scene.instantiate() as Control
-	overlay_layer.add_child(banner)
-	await get_tree().create_timer(BANNER_DURATION_SEC).timeout
-	if is_instance_valid(banner):
-		banner.queue_free()
+func _update_animation() -> void:
+	# Speed drives animation rate.
+	if sprite == null:
+		return
+	var s: float = speed_x
+	if s > 1.0:
+		sprite.play("rollen")
+		sprite.speed_scale = clamp(s / 120.0, 0.2, 8.0)
+	else:
+		sprite.stop()
 
-func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
-	_ensure_overlay_layer()
-	var rs: Control = RESULT_SCREEN_SCENE.instantiate() as Control
-	overlay_layer.add_child(rs)  # add first
-	# Build the name once here
-	var player_name_text: String = ""
-	if get_tree().has_meta("player_name"):
-		player_name_text = str(get_tree().get_meta("player_name"))
-	# Call set_result on the next frame so the nodes exist
-	rs.call_deferred("set_result", won, energy, target, player_name_text)
-	
-func _ensure_overlay_layer() -> void:
-	if overlay_layer == null:
-		overlay_layer = CanvasLayer.new()
-		overlay_layer.name = "OverlayLayer"
-		overlay_layer.layer = 10
-		add_child(overlay_layer)
+func _update_energy_ui() -> void:
+	# Parent nodes can implement update_energy_UI(int).
+	var p := get_parent()
+	if p and p.has_method("update_energy_UI"):
+		p.update_energy_UI(energy_points)
 
-func _format_time(t: int) -> String:
-	var m: int = int(t / 60.0)
-	var s: int = t % 60
-	return "%02d:%02d" % [m, s]
+# Called by GameController
+func lock_input(v: bool) -> void:
+	input_locked = v
+
+func freeze() -> void:
+	frozen = true
+	tap_power = 0.0
+	speed_x = 0.0
+	# CharacterBody2D: clear velocity if you use it elsewhere later.
+	velocity = Vector2.ZERO

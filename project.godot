@@ -21,7 +21,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-HighScores="*res://Code/HighScores.gd"
+HighScores="*uid://qfh87rfpe5hu"
 
 [display]
 
@@ -38,6 +38,13 @@ enabled=PackedStringArray("res://addons/rmsmartshape/plugin.cfg")
 
 player=""
 ui=""
+
+[layer_names]
+
+2d_physics/layer_1="Ground"
+2d_physics/layer_2="Player"
+2d_physics/layer_3="Items"
+2d_physics/layer_4="Sensors"
 
 [physics]
 
