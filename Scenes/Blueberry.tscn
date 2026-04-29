@@ -81,7 +81,6 @@ _data = {
 
 [node name="Blueberry" type="Area2D" unique_id=658099648]
 script = ExtResource("1_vwcqu")
-message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
 collector_groups = PackedStringArray("player", "radler")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]

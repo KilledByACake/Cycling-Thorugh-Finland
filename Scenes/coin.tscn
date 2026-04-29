@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://ep3y83ujsrdg"]
 
 [ext_resource type="Texture2D" uid="uid://d2s3yen30goj6" path="res://Images/Pickups/Coin5.png" id="1_2qo34"]
-[ext_resource type="Script" uid="uid://cbgtafjen66l0" path="res://Code/Coin.gd" id="1_jgi06"]
+[ext_resource type="Script" uid="uid://jndi214jpqq3" path="res://Code/Coin.gd" id="1_jgi06"]
 [ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_g537i"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_jgi06"]

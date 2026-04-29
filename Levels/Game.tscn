@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://cpnl0xtu7w1mc" path="res://Code/level_1.gd" id="1_eca5b"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="2_qvq5f"]
 [ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Blueberry.tscn" id="7_i12b1"]
-[ext_resource type="PackedScene" uid="uid://ep3y83ujsrdg" path="res://Scenes/coin.tscn" id="13_pn5pt"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Screen/UI.tscn" id="14_skt5q"]
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="15_demcn"]
 [ext_resource type="Script" uid="uid://co1x31w7232x4" path="res://Code/path_2d.gd" id="16_dasy0"]
@@ -58,21 +57,22 @@ position = Vector2(254, -266)
 drag_horizontal_enabled = true
 
 [node name="Blueberry" parent="." unique_id=288817796 instance=ExtResource("7_i12b1")]
-position = Vector2(-1256, 1772.6226)
+position = Vector2(-1247, 1830.7031)
 terrain_path = NodePath("../Terrain")
-snap_y_offset = -100.0
+message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
+award_energy_kj = 180
 
-[node name="Coin" parent="." unique_id=403929337 instance=ExtResource("13_pn5pt")]
-position = Vector2(-386, 1630)
+[node name="Blueberry2" parent="." unique_id=658099648 instance=ExtResource("7_i12b1")]
+position = Vector2(-421, 1749.7057)
+terrain_path = NodePath("../Terrain")
+message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
+award_energy_kj = 180
 
-[node name="Coin2" parent="." unique_id=1140995091 instance=ExtResource("13_pn5pt")]
-position = Vector2(-165, 1644)
-
-[node name="Coin3" parent="." unique_id=1620713799 instance=ExtResource("13_pn5pt")]
-position = Vector2(1469, 1074)
-
-[node name="Coin4" parent="." unique_id=1919917266 instance=ExtResource("13_pn5pt")]
-position = Vector2(2934, 1115)
+[node name="Blueberry3" parent="." unique_id=928166962 instance=ExtResource("7_i12b1")]
+position = Vector2(373, 1872.8359)
+terrain_path = NodePath("../Terrain")
+message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
+award_energy_kj = 180
 
 [node name="UI" parent="." unique_id=482392122 instance=ExtResource("14_skt5q")]
 

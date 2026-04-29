@@ -3,33 +3,26 @@ extends Node2D
 signal round_over(won: bool)
 
 @export_node_path("Path2D") var rail_path: NodePath
-@export var trigger_path_rebuild: bool = true   # set false if your Path2D builds itself (@tool path2d.gd)
-@export var randomize_seed_on_play: bool = true # set false while designing to match editor/runtime
+@export var trigger_path_rebuild: bool = true
+@export var randomize_seed_on_play: bool = true
 
-# Round config
-const ROUND_TIME_SEC: int = 150               # adjust as you want
+const ROUND_TIME_SEC: int = 150
 const TARGET_ENERGY: int = 200
 const BANNER_DURATION_SEC: float = 2.0
 
-# Result/Banner scenes
 const GAME_OVER_SCENE: PackedScene = preload("res://Screen/GameOver.tscn")
 const YOU_WON_SCENE: PackedScene = preload("res://Screen/Victory.tscn")
 const RESULT_SCREEN_SCENE: PackedScene = preload("res://Screen/Result.tscn")
 
-# Runtime state
-var coins_collected: int = 0
 var energy_points: int = 0
 var round_finished: bool = false
 var game_timer: Timer
 
-# UI refs (match your node paths)
-@onready var coin_label: Label = get_node_or_null("UI/Coin/Label") as Label
-@onready var energy_label: Label = get_node_or_null("UI/Energy/Label") as Label
-@onready var player_name_label: Label = get_node_or_null("UI/PlayerNameLabel") as Label
+@onready var player_name_label: Label = get_node_or_null("UI/PlayerName") as Label
 @onready var timer_label: Label = get_node_or_null("UI/TimerLabel") as Label
 @onready var overlay_layer: CanvasLayer = get_node_or_null("OverlayLayer") as CanvasLayer
+@onready var ui_root: CanvasLayer = get_node_or_null("UI") as CanvasLayer
 
-# HILL
 @export var hill_scene: PackedScene
 @export_range(0.0, 1.0, 0.01) var terrain_difficulty: float = 0.4
 @export var terrain_length: int = 8000
@@ -43,7 +36,6 @@ func _ready():
 	_ensure_overlay_layer()
 	_scan_and_fix_nodepaths(self, true)
 	_spawn_terrain()
-	_refresh_coin_ui()
 	_refresh_energy_ui()
 	_update_player_name_from_tree()
 	_start_round_timer()
@@ -52,10 +44,8 @@ func _spawn_terrain() -> void:
 	if hill_scene == null:
 		push_warning("hill_scene is not set.")
 		return
-
 	var hill: Node2D = hill_scene.instantiate() as Node2D
 	hill.position = Vector2(0, 0)
-
 	_set_if_has_property(hill, "length", terrain_length)
 	_set_if_has_property(hill, "base_y", terrain_base_y)
 	_set_if_has_property(hill, "difficulty", terrain_difficulty)
@@ -63,7 +53,6 @@ func _spawn_terrain() -> void:
 	_set_if_has_property(hill, "noise_frequency", terrain_noise_frequency)
 	_set_if_has_property(hill, "max_slope_deg", terrain_max_slope_deg)
 	_set_if_has_property(hill, "sample_step", terrain_sample_step)
-
 	if randomize_seed_on_play:
 		var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 		rng.randomize()
@@ -71,12 +60,9 @@ func _spawn_terrain() -> void:
 			hill.set("rng_seed", rng.randi())
 		elif _has_property(hill, "seed"):
 			hill.set("seed", rng.randi())
-
 	add_child(hill)
-
 	await get_tree().process_frame
 	_scan_and_fix_nodepaths(self, true)
-
 	if trigger_path_rebuild:
 		var p2d: Path2D = _resolve_node_safe(rail_path) as Path2D
 		if p2d != null and p2d.has_method("rebuild_auto"):
@@ -91,12 +77,12 @@ func _process(_delta: float) -> void:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		timer_label.text = _format_time(t)
 
-# Called by player scripts to update UI/state
-func add_coins(amount: int) -> void:
+# Energy API (used by player taps and pickups)
+func add_energy(amount: int) -> void:
 	if round_finished:
 		return
-	coins_collected += amount
-	_refresh_coin_ui()
+	energy_points += amount
+	_refresh_energy_ui()
 
 func update_energy_UI(value: int) -> void:
 	if round_finished:
@@ -104,13 +90,23 @@ func update_energy_UI(value: int) -> void:
 	energy_points = value
 	_refresh_energy_ui()
 
-func _refresh_coin_ui() -> void:
-	if coin_label:
-		coin_label.text = str(coins_collected)
+# Backward-compat: if anything still calls add_coins, route it to energy
+func add_coins(amount: int) -> void:
+	add_energy(amount)
 
 func _refresh_energy_ui() -> void:
-	if energy_label:
-		energy_label.text = str(energy_points)
+	# If UI.gd exists with set_energy, use it
+	if ui_root and ui_root.has_method("set_energy"):
+		ui_root.call("set_energy", energy_points)
+		return
+	# Fallback: try common label paths under UI (adjust if needed)
+	var lbl: Label = null
+	if ui_root:
+		lbl = ui_root.get_node_or_null("Energy/Label") as Label
+		if lbl == null:
+			lbl = ui_root.get_node_or_null("Label") as Label
+	if lbl:
+		lbl.text = str(energy_points)
 
 func _update_player_name_from_tree() -> void:
 	if not player_name_label:
@@ -137,11 +133,9 @@ func _finish_round() -> void:
 	round_finished = true
 	if timer_label:
 		timer_label.text = "00:00"
-
 	var won: bool = energy_points >= TARGET_ENERGY
 	_freeze_world()
 	emit_signal("round_over", won)
-
 	await _show_banner_overlay(won)
 	_show_result_screen_overlay(won, energy_points, TARGET_ENERGY)
 
@@ -204,25 +198,19 @@ func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
 
 func show_popup_message(text: String, id: String = "") -> void:
 	_ensure_overlay_layer()
-
-	# Layout you can tweak
-	var panel_size: Vector2 = Vector2(520, 140)  # width/height of the popup box
-	var right_offset_px: float = 200.0          # how far to the right of the screen center
-	var font_size_px: int = 36                  # text size
-	var padding_px: int = 16                    # inner padding
-
-	# Panel background (slightly transparent)
+	var panel_size: Vector2 = Vector2(520, 140)
+	var right_offset_px: float = 200.0
+	var font_size_px: int = 36
+	var padding_px: int = 16
 	var panel := Panel.new()
 	var sb := StyleBoxFlat.new()
-	sb.bg_color = Color(0, 0, 0, 0.45)          # dark translucent background
+	sb.bg_color = Color(0, 0, 0, 0.45)
 	sb.corner_radius_top_left = 12
 	sb.corner_radius_top_right = 12
 	sb.corner_radius_bottom_left = 12
 	sb.corner_radius_bottom_right = 12
 	panel.add_theme_stylebox_override("panel", sb)
-	panel.modulate = Color(1, 1, 1, 0)          # start invisible
-
-	# Anchor at screen center and place the panel to the right of center
+	panel.modulate = Color(1, 1, 1, 0)
 	panel.anchor_left = 0.5
 	panel.anchor_right = 0.5
 	panel.anchor_top = 0.5
@@ -231,18 +219,13 @@ func show_popup_message(text: String, id: String = "") -> void:
 	panel.offset_top = -panel_size.y * 0.5
 	panel.offset_right = right_offset_px + panel_size.x
 	panel.offset_bottom = -panel_size.y * 0.5 + panel_size.y
-
-	# RichTextLabel for nice wrapping (no scrollbars)
 	var lbl := RichTextLabel.new()
 	lbl.bbcode_enabled = true
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.scroll_active = false
 	lbl.fit_content = false
 	lbl.add_theme_font_size_override("normal_font_size", font_size_px)
-	# Optional: center text inside the panel; remove [center] if you want left align
 	lbl.text = "[center]" + text + "[/center]"
-
-	# Fill the panel with some padding
 	lbl.anchor_left = 0.0
 	lbl.anchor_right = 1.0
 	lbl.anchor_top = 0.0
@@ -251,14 +234,11 @@ func show_popup_message(text: String, id: String = "") -> void:
 	lbl.offset_right = -padding_px
 	lbl.offset_top = padding_px
 	lbl.offset_bottom = -padding_px
-
 	panel.add_child(lbl)
 	overlay_layer.add_child(panel)
-
-	# Fade in, hold, fade out
 	var tw := create_tween()
 	tw.tween_property(panel, "modulate", Color(1, 1, 1, 1), 0.18)
-	tw.tween_interval(1.6)  # how long it stays visible
+	tw.tween_interval(1.6)
 	tw.tween_property(panel, "modulate", Color(1, 1, 1, 0), 0.25)
 	tw.finished.connect(func():
 		if is_instance_valid(panel):
@@ -278,7 +258,6 @@ func _format_time(t: int) -> String:
 	return "%02d:%02d" % [m, s]
 
 # --- Helpers -------------------------------------------------------------
-
 func _resolve_node_safe(path: NodePath) -> Node:
 	if path.is_empty():
 		return null
