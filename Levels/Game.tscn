@@ -44,7 +44,7 @@ position = Vector2(-2937, 1798)
 position = Vector2(29865, 1827)
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1236212940]
-position = Vector2(-3695.4897, 1031.053)
+position = Vector2(-2938.0002, 1710)
 rotation = 0.08092459
 v_offset = -170.0
 script = ExtResource("18_dasy0")
@@ -58,10 +58,9 @@ position = Vector2(254, -266)
 drag_horizontal_enabled = true
 
 [node name="Blueberry" parent="." unique_id=288817796 instance=ExtResource("7_i12b1")]
-position = Vector2(-1256, 1832.6226)
+position = Vector2(-1256, 1772.6226)
 terrain_path = NodePath("../Terrain")
-auto_find_terrain = true
-message = "I am Blueberry"
+snap_y_offset = -100.0
 
 [node name="Coin" parent="." unique_id=403929337 instance=ExtResource("13_pn5pt")]
 position = Vector2(-386, 1630)

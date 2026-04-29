@@ -202,34 +202,67 @@ func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
 		player_name_text = str(get_tree().get_meta("player_name"))
 	rs.call_deferred("set_result", won, energy, target, player_name_text)
 
-# Simple popup API (Pickups can call: level.show_popup_message("Picked a blueberry!"))
 func show_popup_message(text: String, id: String = "") -> void:
 	_ensure_overlay_layer()
-	var label := Label.new()
-	label.text = text
-	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 28)
-	label.modulate = Color(1, 1, 1, 0)
 
-	label.anchor_left = 0.5
-	label.anchor_right = 0.5
-	label.anchor_top = 0.0
-	label.anchor_bottom = 0.0
-	label.offset_left = -250
-	label.offset_right = 250
-	label.offset_top = 20
-	label.offset_bottom = 60
+	# Layout you can tweak
+	var panel_size: Vector2 = Vector2(520, 140)  # width/height of the popup box
+	var right_offset_px: float = 200.0          # how far to the right of the screen center
+	var font_size_px: int = 36                  # text size
+	var padding_px: int = 16                    # inner padding
 
-	overlay_layer.add_child(label)
+	# Panel background (slightly transparent)
+	var panel := Panel.new()
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(0, 0, 0, 0.45)          # dark translucent background
+	sb.corner_radius_top_left = 12
+	sb.corner_radius_top_right = 12
+	sb.corner_radius_bottom_left = 12
+	sb.corner_radius_bottom_right = 12
+	panel.add_theme_stylebox_override("panel", sb)
+	panel.modulate = Color(1, 1, 1, 0)          # start invisible
 
+	# Anchor at screen center and place the panel to the right of center
+	panel.anchor_left = 0.5
+	panel.anchor_right = 0.5
+	panel.anchor_top = 0.5
+	panel.anchor_bottom = 0.5
+	panel.offset_left = right_offset_px
+	panel.offset_top = -panel_size.y * 0.5
+	panel.offset_right = right_offset_px + panel_size.x
+	panel.offset_bottom = -panel_size.y * 0.5 + panel_size.y
+
+	# RichTextLabel for nice wrapping (no scrollbars)
+	var lbl := RichTextLabel.new()
+	lbl.bbcode_enabled = true
+	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	lbl.scroll_active = false
+	lbl.fit_content = false
+	lbl.add_theme_font_size_override("normal_font_size", font_size_px)
+	# Optional: center text inside the panel; remove [center] if you want left align
+	lbl.text = "[center]" + text + "[/center]"
+
+	# Fill the panel with some padding
+	lbl.anchor_left = 0.0
+	lbl.anchor_right = 1.0
+	lbl.anchor_top = 0.0
+	lbl.anchor_bottom = 1.0
+	lbl.offset_left = padding_px
+	lbl.offset_right = -padding_px
+	lbl.offset_top = padding_px
+	lbl.offset_bottom = -padding_px
+
+	panel.add_child(lbl)
+	overlay_layer.add_child(panel)
+
+	# Fade in, hold, fade out
 	var tw := create_tween()
-	tw.tween_property(label, "modulate", Color(1, 1, 1, 1), 0.15)
-	tw.tween_interval(1.0)
-	tw.tween_property(label, "modulate", Color(1, 1, 1, 0), 0.25)
-	tw.finished.connect(func ():
-		if is_instance_valid(label):
-			label.queue_free()
+	tw.tween_property(panel, "modulate", Color(1, 1, 1, 1), 0.18)
+	tw.tween_interval(1.6)  # how long it stays visible
+	tw.tween_property(panel, "modulate", Color(1, 1, 1, 0), 0.25)
+	tw.finished.connect(func():
+		if is_instance_valid(panel):
+			panel.queue_free()
 	)
 
 func _ensure_overlay_layer() -> void:
