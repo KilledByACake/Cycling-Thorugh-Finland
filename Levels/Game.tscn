@@ -2,7 +2,10 @@
 
 [ext_resource type="Script" uid="uid://cpnl0xtu7w1mc" path="res://Code/level_1.gd" id="1_eca5b"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="2_qvq5f"]
-[ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Blueberry.tscn" id="7_i12b1"]
+[ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Items/Blueberry.tscn" id="7_i12b1"]
+[ext_resource type="PackedScene" uid="uid://yy2svaa57xus" path="res://Scenes/Items/Strawberry.tscn" id="10_i12b1"]
+[ext_resource type="PackedScene" uid="uid://bx30rwu2g1mrc" path="res://Scenes/Items/Raspberry.tscn" id="11_tx4co"]
+[ext_resource type="PackedScene" uid="uid://b50sjm3kawb5w" path="res://Scenes/Items/Apple.tscn" id="12_h107k"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Screen/UI.tscn" id="14_skt5q"]
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="15_demcn"]
 [ext_resource type="Script" uid="uid://co1x31w7232x4" path="res://Code/path_2d.gd" id="16_dasy0"]
@@ -23,12 +26,12 @@ autoscroll = Vector2(2, 0)
 repeat_times = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="BackgroundScene" unique_id=944051733]
-position = Vector2(-6531.9995, -1381)
+position = Vector2(-2881, -1407)
 scale = Vector2(1.9386667, 1.034)
 texture = ExtResource("2_qvq5f")
 
 [node name="Terrain" parent="." unique_id=1830455226 instance=ExtResource("16_eca5b")]
-position = Vector2(-3754, 1063)
+position = Vector2(-1231, 462)
 length = 80000
 base_y = 820.0
 
@@ -36,14 +39,14 @@ base_y = 820.0
 curve = SubResource("Curve2D_y58dp")
 script = ExtResource("16_dasy0")
 
-[node name="PathLeft" type="Node2D" parent="Path2D" unique_id=187768649]
-position = Vector2(-2937, 1798)
-
 [node name="PathRight" type="Node2D" parent="Path2D" unique_id=2010174335]
-position = Vector2(29865, 1827)
+position = Vector2(73623, 1498)
+
+[node name="PathLeft" type="Node2D" parent="Path2D" unique_id=187768649]
+position = Vector2(1783, 1389)
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1236212940]
-position = Vector2(-2938.0002, 1710)
+position = Vector2(1778, 1281.0002)
 rotation = 0.08092459
 v_offset = -170.0
 script = ExtResource("18_dasy0")
@@ -51,36 +54,39 @@ start_marker_path = NodePath("../PathLeft")
 end_marker_path = NodePath("../PathRight")
 
 [node name="Radler" parent="Path2D/PathFollow2D" unique_id=801071611 instance=ExtResource("16_n8fgn")]
+position = Vector2(-10.505859, 18.911133)
 
 [node name="Camera2D" type="Camera2D" parent="Path2D/PathFollow2D/Radler" unique_id=974620558]
 position = Vector2(254, -266)
 drag_horizontal_enabled = true
 
-[node name="Blueberry" parent="." unique_id=288817796 instance=ExtResource("7_i12b1")]
-position = Vector2(-1247, 1830.7031)
-terrain_path = NodePath("../Terrain")
-message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
-award_energy_kj = 180
-
-[node name="Blueberry2" parent="." unique_id=658099648 instance=ExtResource("7_i12b1")]
-position = Vector2(-421, 1749.7057)
-terrain_path = NodePath("../Terrain")
-message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
-award_energy_kj = 180
-
-[node name="Blueberry3" parent="." unique_id=928166962 instance=ExtResource("7_i12b1")]
-position = Vector2(373, 1872.8359)
-terrain_path = NodePath("../Terrain")
-message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
-award_energy_kj = 180
-
 [node name="UI" parent="." unique_id=482392122 instance=ExtResource("14_skt5q")]
 
 [node name="Clouds" type="Parallax2D" parent="." unique_id=1041042698]
-scroll_offset = Vector2(1959, 484)
+scroll_offset = Vector2(-1418, 560)
 repeat_size = Vector2(3000, 0)
 autoscroll = Vector2(0.4, 0)
-repeat_times = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="Clouds" unique_id=1084387943]
 texture = ExtResource("15_demcn")
+
+[node name="Blueberry" parent="." unique_id=288817796 instance=ExtResource("7_i12b1")]
+position = Vector2(17499, 1280.7081)
+terrain_path = NodePath("../Terrain")
+snap_y_offset = -100.0
+message = "A fist of blueberries gives ≈ 180 kJ. In Finland you can pick “mustikka” thanks to jokamiehenoikeus (everyman’s right)!"
+award_energy_kj = 180
+
+[node name="Strawberry" parent="." unique_id=1629111315 instance=ExtResource("10_i12b1")]
+position = Vector2(4254, 1248.9894)
+terrain_path = NodePath("../Terrain")
+snap_y_offset = -100.0
+
+[node name="Raspberry" parent="." unique_id=658099648 instance=ExtResource("11_tx4co")]
+position = Vector2(11735, 1191.133)
+terrain_path = NodePath("../Terrain")
+
+[node name="Strawberry2" parent="." unique_id=825299681 instance=ExtResource("12_h107k")]
+position = Vector2(29038, 1191.8977)
+terrain_path = NodePath("../Terrain")
+snap_y_offset = -100.0
