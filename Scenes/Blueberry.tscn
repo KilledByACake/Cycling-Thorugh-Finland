@@ -1,11 +1,11 @@
-[gd_scene format=3 uid="uid://ep3y83ujsrdg"]
+[gd_scene format=3 uid="uid://c4u2wq7pdwgjm"]
 
-[ext_resource type="Texture2D" uid="uid://d2s3yen30goj6" path="res://Images/Pickups/Coin5.png" id="1_2qo34"]
-[ext_resource type="Script" uid="uid://cbgtafjen66l0" path="res://Code/Coin.gd" id="1_jgi06"]
-[ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_g537i"]
+[ext_resource type="Texture2D" uid="uid://d2s3yen30goj6" path="res://Images/Pickups/Coin5.png" id="1_funre"]
+[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_vwcqu"]
+[ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_g86ho"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_jgi06"]
-radius = 81.61495
+[sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]
+radius = 81.0
 
 [sub_resource type="Animation" id="Animation_h2p6v"]
 length = 0.001
@@ -67,32 +67,30 @@ tracks/2/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
-"stream": ExtResource("3_g537i")
+"stream": ExtResource("3_g86ho")
 }],
 "times": PackedFloat32Array(0)
 }
 tracks/2/use_blend = true
 
-[sub_resource type="AnimationLibrary" id="AnimationLibrary_81h6x"]
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gxi26"]
 _data = {
 &"RESET": SubResource("Animation_h2p6v"),
 &"pickup": SubResource("Animation_ffmqm")
 }
 
-[node name="Coin" type="Area2D" unique_id=1919917266]
-script = ExtResource("1_jgi06")
+[node name="Blueberry" type="Area2D" unique_id=658099648]
+script = ExtResource("1_vwcqu")
+auto_find_terrain = null
+collector_group = &"collector"
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1192433282]
-texture = ExtResource("1_2qo34")
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
+texture = ExtResource("1_funre")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=140918686]
-position = Vector2(-2, 0)
-shape = SubResource("CircleShape2D_jgi06")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1885821890]
+shape = SubResource("CircleShape2D_vwcqu")
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=135623066]
-libraries/ = SubResource("AnimationLibrary_81h6x")
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1342139366]
+libraries/ = SubResource("AnimationLibrary_gxi26")
 
-[node name="Pickup" type="AudioStreamPlayer" parent="." unique_id=110235685]
-
-[connection signal="body_entered" from="." to="." method="_on_body_entered"]
-[connection signal="animation_finished" from="AnimationPlayer" to="." method="_on_animation_player_animation_finished"]
+[node name="Pickup" type="AudioStreamPlayer" parent="." unique_id=569350202]

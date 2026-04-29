@@ -18,6 +18,10 @@ extends PathFollow2D
 # Score
 @export var energy_per_tap: int = 5
 
+# Curve readiness and update behavior
+@export var wait_frames_for_curve: int = 5  # frames to wait for the curve to be built
+@export var auto_recompute_on_curve_change: bool = true  # recompute offsets when path curve changes
+
 # Runtime state
 var tap_power: float = 0.0
 var speed_x: float = 0.0
@@ -35,6 +39,10 @@ var prev_progress: float = 0.0
 @onready var sprite: AnimatedSprite2D = get_node_or_null("Radler/AnimatedSprite2D") as AnimatedSprite2D
 
 func _ready() -> void:
+	# Safety: ensure this script is on the correct node type and hierarchy
+	assert(self is PathFollow2D, "path_follow2d.gd must be attached to a PathFollow2D node.")
+	assert(get_parent() is Path2D, "PathFollow2D must be a child of a Path2D.")
+
 	# Keep Inspector v_offset; clean transform.
 	scale = Vector2.ONE
 	rotates = true
@@ -43,11 +51,16 @@ func _ready() -> void:
 		rider.scale = Vector2.ONE
 		rider.rotation = 0.0
 
-	# Wait one frame so Path2D (and auto-build) updates the curve.
-	await get_tree().process_frame
-	_compute_start_end_offsets()
+	# Wait until the Path2D curve exists and is baked (handles late-built curves).
+	await _wait_for_curve_ready()
 
-	# Start at PathLeft (or at curve start if no marker).
+	# Recompute when the curve changes (e.g., rebuilt from terrain)
+	var p2d: Path2D = get_parent() as Path2D
+	if auto_recompute_on_curve_change and p2d and p2d.curve and not p2d.curve.changed.is_connected(_on_curve_changed):
+		p2d.curve.changed.connect(_on_curve_changed, Object.CONNECT_DEFERRED)
+
+	# Initial offsets and start position
+	_compute_start_end_offsets()
 	progress = start_offset
 	prev_progress = progress
 	input_locked = false  # ensure not locked at start
@@ -58,9 +71,11 @@ func _physics_process(delta: float) -> void:
 	if not input_locked and not frozen and Input.is_action_just_pressed("ui_accept"):
 		on_pedal_tap()
 
+	# Update speed from tap power
 	tap_power = max(0.0, tap_power - power_decay * delta)
 	speed_x = clamp(tap_power * speed_per_power, 0.0, max_speed)
 
+	# Move along the curve
 	var new_progress: float = progress + speed_x * delta
 	if not loop and new_progress > end_offset:
 		new_progress = end_offset
@@ -102,7 +117,7 @@ func _update_energy_ui() -> void:
 
 # Compute start_offset (near PathLeft) and end_offset (near PathRight)
 func _compute_start_end_offsets() -> void:
-	var p2d := get_parent() as Path2D
+	var p2d: Path2D = get_parent() as Path2D
 	if p2d == null or p2d.curve == null:
 		start_offset = 0.0
 		end_offset = 0.0
@@ -119,7 +134,7 @@ func _compute_start_end_offsets() -> void:
 
 	# Ensure start <= end. If they collapse, fall back to full length so we can move.
 	if end_offset < start_offset:
-		var tmp := start_offset
+		var tmp: float = start_offset
 		start_offset = end_offset
 		end_offset = tmp
 	if end_offset <= start_offset + 1.0:
@@ -129,7 +144,7 @@ func _compute_start_end_offsets() -> void:
 func _offset_from_marker(p2d: Path2D, marker_path: NodePath, fallback: float, length: float) -> float:
 	if marker_path.is_empty():
 		return fallback
-	var marker := get_node_or_null(marker_path) as Node2D
+	var marker: Node2D = _resolve_node_safe(marker_path) as Node2D
 	if marker == null:
 		return fallback
 
@@ -157,3 +172,50 @@ func freeze() -> void:
 	frozen = true
 	tap_power = 0.0
 	speed_x = 0.0
+
+# --- Helpers -------------------------------------------------------------
+
+# Wait until curve exists and has a valid baked length (handles async/path auto-build).
+func _wait_for_curve_ready() -> void:
+	var frames_left: int = max(0, wait_frames_for_curve)
+	while frames_left >= 0:
+		var p2d: Path2D = get_parent() as Path2D
+		if p2d and p2d.curve and p2d.curve.get_baked_length() > 0.0:
+			break
+		await get_tree().process_frame
+		frames_left -= 1
+
+# When the curve changes (e.g., path rebuilt), recompute offsets and keep rider position proportionally.
+func _on_curve_changed() -> void:
+	var p2d: Path2D = get_parent() as Path2D
+	if p2d == null or p2d.curve == null:
+		return
+
+	# Preserve normalized progress between start/end, then recompute offsets.
+	var t_norm: float = 0.0
+	var denom: float = max(1.0, end_offset - start_offset)
+	if denom > 0.0:
+		t_norm = clamp((progress - start_offset) / denom, 0.0, 1.0)
+
+	_compute_start_end_offsets()
+
+	# Remap to new range.
+	progress = lerp(start_offset, end_offset, t_norm)
+	prev_progress = progress
+
+# Public helper that the level can call after rebuilding the path curve.
+func recompute_after_curve_change() -> void:
+	_compute_start_end_offsets()
+	progress = start_offset
+	prev_progress = progress
+	input_locked = false
+
+# Resolve NodePath safely, supporting absolute and relative paths once inside the tree.
+func _resolve_node_safe(path: NodePath) -> Node:
+	if path.is_empty():
+		return null
+	if not is_inside_tree():
+		return null
+	if path.is_absolute():
+		return get_tree().root.get_node_or_null(path)
+	return get_node_or_null(path)
