@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://c4u2wq7pdwgjm"]
 
-[ext_resource type="Texture2D" uid="uid://d2s3yen30goj6" path="res://Images/Pickups/Coin5.png" id="1_funre"]
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_vwcqu"]
+[ext_resource type="Texture2D" uid="uid://cffp1bpev0igo" path="res://Images/Pickups/blueberry.png" id="2_g86ho"]
 [ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_g86ho"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]
@@ -81,13 +81,15 @@ _data = {
 
 [node name="Blueberry" type="Area2D" unique_id=658099648]
 script = ExtResource("1_vwcqu")
-auto_find_terrain = null
-collector_group = &"collector"
+collector_groups = PackedStringArray("player", "radler")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
-texture = ExtResource("1_funre")
+position = Vector2(-2, 0)
+scale = Vector2(0.192607, 0.19260702)
+texture = ExtResource("2_g86ho")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1885821890]
+position = Vector2(-1, -2)
 shape = SubResource("CircleShape2D_vwcqu")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1342139366]
