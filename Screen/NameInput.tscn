@@ -4,7 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_x4mlx"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_xncxv"]
 [ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="3_x4mlx"]
-[ext_resource type="StyleBox" uid="uid://csn6mu6bm258" path="res://Style/button_design.tres" id="5_2p714"]
+[ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="5_8gsew"]
+[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="6_8gsew"]
+[ext_resource type="StyleBox" uid="uid://c8r6f6hj78pi4" path="res://Style/button_pressed_hover_smaller.tres" id="6_g0jiq"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x4mlx"]
 texture = ExtResource("2_x4mlx")
@@ -13,24 +15,6 @@ modulate_color = Color(0.35305238, 0.35305238, 0.35305238, 1)
 [sub_resource type="Theme" id="Theme_xncxv"]
 default_font = ExtResource("2_xncxv")
 default_font_size = 140
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3jhts"]
-bg_color = Color(0.09408989, 0.09408989, 0.21693242, 0.61960787)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 16.0
-expand_margin_right = 16.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_33yib"]
-bg_color = Color(0.3019608, 0.3019608, 0.5254902, 0.61960787)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 16.0
-expand_margin_right = 16.0
 
 [node name="NameInput" type="Control" unique_id=1964198822]
 layout_mode = 3
@@ -83,6 +67,7 @@ theme_override_constants/h_separation = 25
 theme_override_constants/v_separation = 25
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=313721407]
+layout_direction = 2
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -95,7 +80,8 @@ offset_right = 328.0
 offset_bottom = 598.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_constants/separation = 100
+theme_override_constants/separation = 400
+alignment = 1
 
 [node name="quit" type="Button" parent="HBoxContainer" unique_id=1364312027]
 layout_mode = 2
@@ -103,10 +89,10 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_xncxv")
-theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = ExtResource("5_2p714")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_3jhts")
-theme_override_styles/hover = SubResource("StyleBoxFlat_33yib")
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = ExtResource("5_8gsew")
+theme_override_styles/pressed = ExtResource("6_8gsew")
+theme_override_styles/hover = ExtResource("6_8gsew")
 text = "Quit"
 
 [node name="backspace" type="Button" parent="HBoxContainer" unique_id=782151137]
@@ -115,10 +101,10 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_xncxv")
-theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = ExtResource("5_2p714")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_3jhts")
-theme_override_styles/hover = SubResource("StyleBoxFlat_33yib")
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = ExtResource("6_g0jiq")
+theme_override_styles/pressed = ExtResource("6_8gsew")
+theme_override_styles/hover = ExtResource("6_8gsew")
 text = "Backspace"
 
 [node name="done" type="Button" parent="HBoxContainer" unique_id=127716656]
@@ -127,10 +113,10 @@ size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_xncxv")
-theme_override_font_sizes/font_size = 150
-theme_override_styles/normal = ExtResource("5_2p714")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_3jhts")
-theme_override_styles/hover = SubResource("StyleBoxFlat_33yib")
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = ExtResource("5_8gsew")
+theme_override_styles/pressed = ExtResource("6_8gsew")
+theme_override_styles/hover = ExtResource("6_8gsew")
 text = "Done"
 
 [node name="Txt" type="Label" parent="." unique_id=2109215096]

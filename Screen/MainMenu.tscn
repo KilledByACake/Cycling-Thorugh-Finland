@@ -3,7 +3,8 @@
 [ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="1_xj426"]
 [ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_vn53a"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="3_l62vm"]
-[ext_resource type="StyleBox" uid="uid://csn6mu6bm258" path="res://Style/button_design.tres" id="4_vn53a"]
+[ext_resource type="StyleBox" uid="uid://c8r6f6hj78pi4" path="res://Style/button_pressed_hover_smaller.tres" id="4_l62vm"]
+[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_21dhm"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3es34"]
 texture = ExtResource("2_vn53a")
@@ -725,24 +726,6 @@ cache/0/105/0/glyphs/71/size = Vector2(58, 84)
 cache/0/105/0/glyphs/71/uv_rect = Rect2(121, 83, 58, 84)
 cache/0/105/0/glyphs/71/texture_idx = 0
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8md67"]
-bg_color = Color(0.09408989, 0.09408989, 0.21693242, 0.61960787)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 16.0
-expand_margin_right = 16.0
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_15p6s"]
-bg_color = Color(0.3019608, 0.3019608, 0.5254902, 0.61960787)
-corner_radius_top_left = 16
-corner_radius_top_right = 16
-corner_radius_bottom_right = 16
-corner_radius_bottom_left = 16
-expand_margin_left = 16.0
-expand_margin_right = 16.0
-
 [node name="MainMenu" type="Panel" unique_id=299239332]
 anchors_preset = 15
 anchor_right = 1.0
@@ -785,24 +768,24 @@ anchor_left = 0.5
 anchor_top = 0.57900006
 anchor_right = 0.5
 anchor_bottom = 0.57900006
-offset_left = -1038.0
-offset_top = -141.64014
-offset_right = 1090.0
-offset_bottom = -13.640137
+offset_left = -843.0
+offset_top = -64.64014
+offset_right = 865.0
+offset_bottom = 63.359863
 grow_horizontal = 2
+grow_vertical = 2
 theme = SubResource("Theme_l62vm")
 theme_override_constants/separation = 200
 
 [node name="Dashboard" type="Button" parent="HBoxContainer" unique_id=593884011]
 layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 3
+size_flags_horizontal = 2
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = SubResource("FontFile_58dv0")
 theme_override_font_sizes/font_size = 105
-theme_override_styles/normal = ExtResource("4_vn53a")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_8md67")
-theme_override_styles/hover = SubResource("StyleBoxFlat_15p6s")
+theme_override_styles/normal = ExtResource("4_l62vm")
+theme_override_styles/pressed = ExtResource("5_21dhm")
+theme_override_styles/hover = ExtResource("5_21dhm")
 text = "Dashboard"
 
 [node name="Start Game" type="Button" parent="HBoxContainer" unique_id=1564997854]
@@ -812,9 +795,9 @@ size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("3_l62vm")
 theme_override_font_sizes/font_size = 105
-theme_override_styles/normal = ExtResource("4_vn53a")
-theme_override_styles/pressed = SubResource("StyleBoxFlat_8md67")
-theme_override_styles/hover = SubResource("StyleBoxFlat_15p6s")
+theme_override_styles/normal = ExtResource("4_l62vm")
+theme_override_styles/pressed = ExtResource("5_21dhm")
+theme_override_styles/hover = ExtResource("5_21dhm")
 text = "Start Game"
 
 [connection signal="pressed" from="HBoxContainer/Dashboard" to="." method="_on_dashboard_pressed"]

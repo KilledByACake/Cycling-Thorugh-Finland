@@ -25,6 +25,7 @@ extends Node2D
 var _top_points: PackedVector2Array = PackedVector2Array()
 
 func _ready() -> void:
+	#$Polygon2D.uv = $Polygon2D.polygon
 	_generate()
 
 func _generate() -> void:
@@ -69,18 +70,21 @@ func _generate() -> void:
 	poly.append(Vector2(0.0, bottom_y))
 	polygon.polygon = poly
 
-	# Simple UVs for gradient (optional)
+	# Simple UVs for gradient 
 	var uvs: PackedVector2Array = PackedVector2Array()
-	var y_min: float = base_y - amplitude
-	var y_range: float = (bottom_y - y_min)
+	#var y_min: float = base_y - amplitude
+	#var y_range: float = (bottom_y - y_min)
 	for p in _top_points:
 		var u: float = p.x / float(length)
-		var v: float = (p.y - y_min) / y_range
-		uvs.append(Vector2(u, v))
-	uvs.append(Vector2(1.0, 1.0))
-	uvs.append(Vector2(0.0, 1.0))
+		#var v: float = (p.y - y_min) / y_range
+		uvs.append(Vector2(u, 0.0))
+	uvs.append(Vector2(1.0, 0.0)) # bottom right
+	uvs.append(Vector2(0.0, 0.0)) #bottom left
 	polygon.uv = uvs
-
+	
+	if polygon.texture is GradientTexture2D:
+		polygon.texture.width = length
+			
 func get_top_points() -> PackedVector2Array:
 	return _top_points.duplicate()
 
