@@ -74,16 +74,23 @@ func _generate() -> void:
 	var uvs: PackedVector2Array = PackedVector2Array()
 	#var y_min: float = base_y - amplitude
 	#var y_range: float = (bottom_y - y_min)
+		
+	#actual length of terrain	
+	var actual_length: float = _top_points[-1].x
+	# Und die UVs anpassen:
 	for p in _top_points:
-		var u: float = p.x / float(length)
-		#var v: float = (p.y - y_min) / y_range
+		var u: float = (p.x / float(actual_length) * 255)
 		uvs.append(Vector2(u, 0.0))
-	uvs.append(Vector2(1.0, 0.0)) # bottom right
-	uvs.append(Vector2(0.0, 0.0)) #bottom left
+
+	uvs.append(Vector2(0.0, 0.0))    # bottom left
+	uvs.append(Vector2(255.0, 0.0	))  # bottom right
+	print(_top_points[0], _top_points[-1])
+	
 	polygon.uv = uvs
 	
 	if polygon.texture is GradientTexture2D:
-		polygon.texture.width = length
+		polygon.texture.width = 256
+		polygon.texture.height = 1	
 			
 func get_top_points() -> PackedVector2Array:
 	return _top_points.duplicate()

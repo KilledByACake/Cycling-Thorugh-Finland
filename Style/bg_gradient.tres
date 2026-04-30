@@ -1,0 +1,6 @@
+[gd_resource type="GradientTexture2D" format=3 uid="uid://d0cf7c6iyefxk"]
+
+[ext_resource type="Gradient" uid="uid://dbn0oja1yklov" path="res://Style/background gradient.tres" id="1_63d86"]
+
+[resource]
+gradient = ExtResource("1_63d86")

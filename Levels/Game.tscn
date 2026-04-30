@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://br0wf2u4jlghp"]
 
 [ext_resource type="Script" uid="uid://cpnl0xtu7w1mc" path="res://Code/level_1.gd" id="1_eca5b"]
+[ext_resource type="Texture2D" uid="uid://d0cf7c6iyefxk" path="res://Style/bg_gradient.tres" id="2_h107k"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="2_qvq5f"]
 [ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Items/Blueberry.tscn" id="7_i12b1"]
 [ext_resource type="PackedScene" uid="uid://yy2svaa57xus" path="res://Scenes/Items/Strawberry.tscn" id="10_i12b1"]
@@ -20,13 +21,6 @@ colors = PackedColorArray(0.36078432, 0.31764707, 0.24705882, 1, 0.16470589, 0.2
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_wndho"]
 gradient = SubResource("Gradient_h107k")
 
-[sub_resource type="Gradient" id="Gradient_tx4co"]
-offsets = PackedFloat32Array(0, 0.16468254, 0.31150794, 0.45436507, 0.609127, 0.7797619, 0.89484125, 1)
-colors = PackedColorArray(0.44705883, 0.39215687, 0.30588236, 1, 0.21176471, 0.3019608, 0.18039216, 1, 0.1882353, 0.31764707, 0.30588236, 1, 0.21176471, 0.24705882, 0.3254902, 1, 0.36078432, 0.30588236, 0.18431373, 1, 0.41568628, 0.19607843, 0.16862746, 1, 0.2901961, 0.19215687, 0.29803923, 1, 0.12941177, 0.15686275, 0.21960784, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_h107k"]
-gradient = SubResource("Gradient_tx4co")
-
 [sub_resource type="Curve2D" id="Curve2D_y58dp"]
 resource_local_to_scene = true
 
@@ -45,9 +39,10 @@ offset_left = -1225.0
 offset_top = 946.0
 offset_right = 78788.0
 offset_bottom = 2176.0
-texture = SubResource("GradientTexture2D_h107k")
+texture = ExtResource("2_h107k")
 
 [node name="BackgroundScene" type="Parallax2D" parent="." unique_id=870220922]
+visible = false
 scroll_scale = Vector2(0.2, 0.2)
 scroll_offset = Vector2(5685, 2549)
 autoscroll = Vector2(2, 0)
