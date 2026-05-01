@@ -18,10 +18,21 @@ var energy_points: int = 0
 var round_finished: bool = false
 var game_timer: Timer
 
-@onready var player_name_label: Label = get_node_or_null("UI/PlayerName") as Label
-@onready var timer_label: Label = get_node_or_null("UI/TimerLabel") as Label
-@onready var overlay_layer: CanvasLayer = get_node_or_null("OverlayLayer") as CanvasLayer
-@onready var ui_root: CanvasLayer = get_node_or_null("UI") as CanvasLayer
+# Timer blinking (UI)
+@export var timer_blink_threshold_sec: int = 5
+@export var timer_blink_interval_sec: float = 0.3
+@export var timer_blink_color: Color = Color(1, 0.2, 0.2)
+@export var timer_normal_color: Color = Color(1, 1, 1)
+
+var _timer_blink_active: bool = false
+var _timer_blink_accum: float = 0.0
+var _timer_blink_state: bool = false
+
+# UI references (resolved at runtime)
+var ui_root: CanvasLayer
+var player_name_label: Label
+var timer_label: Label
+var energy_label: Label
 
 @export var hill_scene: PackedScene
 @export_range(0.0, 1.0, 0.01) var terrain_difficulty: float = 0.4
@@ -32,13 +43,26 @@ var game_timer: Timer
 @export var terrain_max_slope_deg: float = 18.0
 @export var terrain_sample_step: int = 4
 
+# Inactivity → Game Over (10s total), with warning blink for last 5s of inactivity
+@export var inactivity_timeout_sec: float = 10.0
+@export var inactivity_warning_threshold_sec: float = 5.0
+var inactivity_timer: Timer
+var inactivity_warning_timer: Timer
+var _blink_due_to_inactivity: bool = false
+
+# Overlay
+var overlay_layer: CanvasLayer
+
 func _ready():
 	_ensure_overlay_layer()
 	_scan_and_fix_nodepaths(self, true)
 	_spawn_terrain()
+	await get_tree().process_frame
+	_resolve_ui_refs()
 	_refresh_energy_ui()
 	_update_player_name_from_tree()
 	_start_round_timer()
+	_setup_inactivity_detection()
 
 func _spawn_terrain() -> void:
 	if hill_scene == null:
@@ -54,7 +78,7 @@ func _spawn_terrain() -> void:
 	_set_if_has_property(hill, "max_slope_deg", terrain_max_slope_deg)
 	_set_if_has_property(hill, "sample_step", terrain_sample_step)
 	if randomize_seed_on_play:
-		var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+		var rng := RandomNumberGenerator.new()
 		rng.randomize()
 		if _has_property(hill, "rng_seed"):
 			hill.set("rng_seed", rng.randi())
@@ -70,12 +94,17 @@ func _spawn_terrain() -> void:
 		elif p2d != null and p2d.has_method("_rebuild_from_terrain"):
 			p2d.call("_rebuild_from_terrain")
 
-func _process(_delta: float) -> void:
+func _process(delta: float) -> void:
 	if round_finished:
 		return
 	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		timer_label.text = _format_time(t)
+
+		# Blink if either round timer is low, or inactivity warning is active
+		var should_blink := (t <= timer_blink_threshold_sec) or _blink_due_to_inactivity
+		_enable_timer_blink(should_blink)
+		_update_timer_blink(delta)
 
 # Energy API (used by player taps and pickups)
 func add_energy(amount: int) -> void:
@@ -90,30 +119,30 @@ func update_energy_UI(value: int) -> void:
 	energy_points = value
 	_refresh_energy_ui()
 
-# Backward-compat: if anything still calls add_coins, route it to energy
-func add_coins(amount: int) -> void:
-	add_energy(amount)
-
 func _refresh_energy_ui() -> void:
-	# If UI.gd exists with set_energy, use it
+	# If UI script has set_energy(int), prefer it
 	if ui_root and ui_root.has_method("set_energy"):
 		ui_root.call("set_energy", energy_points)
 		return
-	# Fallback: try common label paths under UI (adjust if needed)
-	var lbl: Label = null
+	# Fallback: try to find an energy label under UI/Energy/Label
 	if ui_root:
-		lbl = ui_root.get_node_or_null("Energy/Label") as Label
-		if lbl == null:
-			lbl = ui_root.get_node_or_null("Label") as Label
-	if lbl:
-		lbl.text = str(energy_points)
+		if energy_label == null:
+			var node := ui_root.get_node_or_null("Energy/Label")
+			if node == null:
+				var energy_node := ui_root.get_node_or_null("Energy")
+				if energy_node:
+					energy_label = energy_node.find_child("Label", true, false) as Label
+			else:
+				energy_label = node as Label
+		if energy_label:
+			energy_label.text = str(energy_points)
 
 func _update_player_name_from_tree() -> void:
 	if not player_name_label:
 		return
 	var n := ""
-	if get_tree().has_meta("player_name"):
-		n = str(get_tree().get_meta("player_name"))
+	if get_tree().root.has_meta("player_name"):
+		n = str(get_tree().root.get_meta("player_name"))
 	if n != "":
 		player_name_label.text = n
 
@@ -126,6 +155,8 @@ func _start_round_timer() -> void:
 	game_timer.start()
 	if timer_label:
 		timer_label.text = _format_time(ROUND_TIME_SEC)
+		_set_timer_label_color(timer_normal_color)
+	_enable_timer_blink(false)
 
 func _finish_round() -> void:
 	if round_finished:
@@ -133,12 +164,102 @@ func _finish_round() -> void:
 	round_finished = true
 	if timer_label:
 		timer_label.text = "00:00"
+	_set_timer_label_color(timer_normal_color)
+	_enable_timer_blink(false)
+	_blink_due_to_inactivity = false
 	var won: bool = energy_points >= TARGET_ENERGY
 	_freeze_world()
 	emit_signal("round_over", won)
 	await _show_banner_overlay(won)
 	_show_result_screen_overlay(won, energy_points, TARGET_ENERGY)
 
+# Inactivity: setup and handling
+func _setup_inactivity_detection() -> void:
+	# Warning timer (fires after 5s of inactivity)
+	inactivity_warning_timer = Timer.new()
+	inactivity_warning_timer.one_shot = true
+	inactivity_warning_timer.wait_time = inactivity_warning_threshold_sec
+	add_child(inactivity_warning_timer)
+	inactivity_warning_timer.timeout.connect(_on_inactivity_warning_timeout)
+
+	# Game over timer (fires after 10s of inactivity)
+	inactivity_timer = Timer.new()
+	inactivity_timer.one_shot = true
+	inactivity_timer.wait_time = inactivity_timeout_sec
+	add_child(inactivity_timer)
+	inactivity_timer.timeout.connect(_on_inactivity_timeout)
+
+	# Start both from the beginning (player must keep pedaling)
+	inactivity_warning_timer.start()
+	inactivity_timer.start()
+
+	var radler := get_tree().get_first_node_in_group("radler")
+	if radler and radler.has_signal("pedal_tapped"):
+		radler.connect("pedal_tapped", Callable(self, "_on_player_pedaled"))
+
+func _on_player_pedaled() -> void:
+	if round_finished:
+		return
+	# Reset inactivity timers and stop inactivity blink
+	if inactivity_warning_timer:
+		inactivity_warning_timer.start()
+	if inactivity_timer:
+		inactivity_timer.start()
+	_blink_due_to_inactivity = false
+	# Recompute blink immediately in case round timer is not low
+	if game_timer and timer_label:
+		var t: int = max(0, int(ceil(game_timer.time_left)))
+		_enable_timer_blink((t <= timer_blink_threshold_sec) or _blink_due_to_inactivity)
+
+func _on_inactivity_warning_timeout() -> void:
+	# 5 seconds without pedaling reached → start blinking due to inactivity
+	if round_finished:
+		return
+	_blink_due_to_inactivity = true
+
+func _on_inactivity_timeout() -> void:
+	if round_finished:
+		return
+	_game_over_due_to_inactivity()
+
+func _game_over_due_to_inactivity() -> void:
+	round_finished = true
+	if game_timer:
+		game_timer.stop()
+	_set_timer_label_color(timer_normal_color)
+	_enable_timer_blink(false)
+	_blink_due_to_inactivity = false
+	show_popup_message("Du syklet ikke på 10 sekunder.\nGame Over!")
+	_freeze_world()
+	emit_signal("round_over", false)
+	await _show_banner_overlay(false)
+	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
+
+# Timer blink helpers
+func _enable_timer_blink(v: bool) -> void:
+	if _timer_blink_active == v:
+		return
+	_timer_blink_active = v
+	_timer_blink_accum = 0.0
+	_timer_blink_state = false
+	_set_timer_label_color(timer_normal_color)
+
+func _update_timer_blink(delta: float) -> void:
+	if not _timer_blink_active or timer_label == null:
+		return
+	_timer_blink_accum += delta
+	if _timer_blink_accum >= timer_blink_interval_sec:
+		_timer_blink_accum = 0.0
+		_timer_blink_state = not _timer_blink_state
+		_set_timer_label_color(timer_blink_color if _timer_blink_state else timer_normal_color)
+
+func _set_timer_label_color(col: Color) -> void:
+	if timer_label == null:
+		return
+	timer_label.add_theme_color_override("font_color", col) # reliable way for Label text
+	timer_label.modulate = col # fallback tint
+
+# Freeze world
 func _freeze_world() -> void:
 	get_tree().call_group("freezable", "freeze")
 	_freeze_recursive(self)
@@ -178,6 +299,7 @@ func _freeze_node(n: Node) -> void:
 	elif n is AudioStreamPlayer:
 		(n as AudioStreamPlayer).stop()
 
+# Overlays
 func _show_banner_overlay(won: bool) -> void:
 	_ensure_overlay_layer()
 	var scene: PackedScene = YOU_WON_SCENE if won else GAME_OVER_SCENE
@@ -192,8 +314,8 @@ func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
 	var rs: Control = RESULT_SCREEN_SCENE.instantiate() as Control
 	overlay_layer.add_child(rs)
 	var player_name_text := ""
-	if get_tree().has_meta("player_name"):
-		player_name_text = str(get_tree().get_meta("player_name"))
+	if get_tree().root.has_meta("player_name"):
+		player_name_text = str(get_tree().root.get_meta("player_name"))
 	rs.call_deferred("set_result", won, energy, target, player_name_text)
 
 func show_popup_message(text: String, id: String = "") -> void:
@@ -245,6 +367,17 @@ func show_popup_message(text: String, id: String = "") -> void:
 			panel.queue_free()
 	)
 
+# UI resolving
+func _resolve_ui_refs() -> void:
+	ui_root = get_node_or_null("UI") as CanvasLayer
+	if ui_root:
+		timer_label = ui_root.get_node_or_null("TimerLabel") as Label
+		if timer_label == null:
+			timer_label = ui_root.find_child("TimerLabel", true, false) as Label
+		player_name_label = ui_root.get_node_or_null("PlayerNameLabel") as Label
+		if player_name_label == null:
+			player_name_label = ui_root.find_child("PlayerNameLabel", true, false) as Label
+
 func _ensure_overlay_layer() -> void:
 	if overlay_layer == null:
 		overlay_layer = CanvasLayer.new()
@@ -257,7 +390,7 @@ func _format_time(t: int) -> String:
 	var s: int = t % 60
 	return "%02d:%02d" % [m, s]
 
-# --- Helpers -------------------------------------------------------------
+# Helpers
 func _resolve_node_safe(path: NodePath) -> Node:
 	if path.is_empty():
 		return null

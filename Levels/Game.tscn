@@ -421,3 +421,5 @@ texture = ExtResource("35_s0eh0")
 [node name="Vector6" type="Sprite2D" parent="elements" unique_id=456874883]
 position = Vector2(13918.999, 591)
 texture = ExtResource("29_hvkua")
+
+[editable path="UI"]

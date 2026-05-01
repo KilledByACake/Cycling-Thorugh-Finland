@@ -131,7 +131,7 @@ func _on_done_pressed() -> void:
 	if trimmed.length() < MIN_NAME_CHARACTERS:
 		_flash_name_label()
 		return
-	get_tree().set_meta("player_name", trimmed)
+	get_tree().root.set_meta("player_name", trimmed) 
 	emit_signal("name_confirmed", trimmed)
 	get_tree().change_scene_to_file(LEVEL1_SCENE_PATH)
 

@@ -7,12 +7,12 @@ const LEVEL1_SCENE_PATH: String = "res://Levels/Game.tscn"
 const MAIN_MENU_SCENE_PATH: String = "res://Levels/MainMenu.tscn"
 const SHOW_TOP_N: int = 5
 
-@onready var center: CenterContainer = $CenterContainer
-@onready var vbox: VBoxContainer = $CenterContainer/VBoxContainer
-@onready var title_label: Label = $CenterContainer/VBoxContainer/TitleLabel
-@onready var info_label: Label = $CenterContainer/VBoxContainer/InfoLabel
-@onready var retry_btn: Button = $CenterContainer/VBoxContainer/HBoxContainer/Retry
-@onready var main_btn: Button = get_node("CenterContainer/VBoxContainer/HBoxContainer/Main Menu") as Button
+@onready var center: CenterContainer = get_node_or_null("CenterContainer") as CenterContainer
+@onready var vbox: VBoxContainer = get_node_or_null("CenterContainer/VBoxContainer") as VBoxContainer
+@onready var title_label: Label = get_node_or_null("CenterContainer/VBoxContainer/VBoxContainer/TitleLabel") as Label
+@onready var info_label: Label = get_node_or_null("CenterContainer/VBoxContainer/VBoxContainer/InfoLabel") as Label
+@onready var retry_btn: Button = get_node_or_null("CenterContainer/VBoxContainer/HBoxContainer/Retry") as Button
+@onready var main_btn: Button = get_node_or_null("CenterContainer/VBoxContainer/HBoxContainer/Main Menu") as Button
 
 var _score_added: bool = false # prevents double insertion of the same round
 
@@ -42,8 +42,8 @@ func _ready() -> void:
 func set_result(_won: bool, energy: int, _target: int, player_name: String = "") -> void:
 	# Resolve player name (UI may pass empty).
 	var player_name_text := player_name
-	if player_name_text == "" and get_tree().has_meta("player_name"):
-		player_name_text = str(get_tree().get_meta("player_name"))
+	if player_name_text == "" and get_tree().root.has_meta("player_name"):
+		player_name_text = str(get_tree().root.get_meta("player_name"))
 	if player_name_text == "":
 		player_name_text = "Player"
 

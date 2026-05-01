@@ -1,13 +1,13 @@
 [gd_scene format=4 uid="uid://dy27ncb1fei4c"]
 
-[ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="1_xj426"]
-[ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_vn53a"]
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="3_l62vm"]
-[ext_resource type="StyleBox" uid="uid://c8r6f6hj78pi4" path="res://Style/button_pressed_hover_smaller.tres" id="4_l62vm"]
-[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_21dhm"]
+[ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="1_2ld8x"]
+[ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_ooo5j"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="3_gerv3"]
+[ext_resource type="StyleBox" uid="uid://c8r6f6hj78pi4" path="res://Style/button_pressed_hover_smaller.tres" id="4_17ajd"]
+[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_xun1b"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_3es34"]
-texture = ExtResource("2_vn53a")
+texture = ExtResource("2_ooo5j")
 modulate_color = Color(0.35305238, 0.35305238, 0.35305238, 1)
 
 [sub_resource type="Theme" id="Theme_l62vm"]
@@ -732,7 +732,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_xj426")
+script = ExtResource("1_2ld8x")
 
 [node name="Panel" type="Panel" parent="." unique_id=1829506493]
 layout_mode = 1
@@ -756,7 +756,7 @@ offset_right = 326.5
 offset_bottom = -254.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("3_l62vm")
+theme_override_fonts/font = ExtResource("3_gerv3")
 theme_override_font_sizes/font_size = 230
 text = "Cycle Through Finland"
 horizontal_alignment = 1
@@ -783,9 +783,9 @@ size_flags_horizontal = 2
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = SubResource("FontFile_58dv0")
 theme_override_font_sizes/font_size = 105
-theme_override_styles/normal = ExtResource("4_l62vm")
-theme_override_styles/pressed = ExtResource("5_21dhm")
-theme_override_styles/hover = ExtResource("5_21dhm")
+theme_override_styles/normal = ExtResource("4_17ajd")
+theme_override_styles/pressed = ExtResource("5_xun1b")
+theme_override_styles/hover = ExtResource("5_xun1b")
 text = "Dashboard"
 
 [node name="Start Game" type="Button" parent="HBoxContainer" unique_id=1564997854]
@@ -793,11 +793,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
-theme_override_fonts/font = ExtResource("3_l62vm")
+theme_override_fonts/font = ExtResource("3_gerv3")
 theme_override_font_sizes/font_size = 105
-theme_override_styles/normal = ExtResource("4_l62vm")
-theme_override_styles/pressed = ExtResource("5_21dhm")
-theme_override_styles/hover = ExtResource("5_21dhm")
+theme_override_styles/normal = ExtResource("4_17ajd")
+theme_override_styles/pressed = ExtResource("5_xun1b")
+theme_override_styles/hover = ExtResource("5_xun1b")
 text = "Start Game"
 
 [connection signal="pressed" from="HBoxContainer/Dashboard" to="." method="_on_dashboard_pressed"]

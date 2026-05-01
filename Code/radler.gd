@@ -1,5 +1,7 @@
 extends CharacterBody2D
 
+signal pedal_tapped
+
 # Tap = speed (tuning)
 @export var power_per_tap: float = 1.0      # tap power added per Space press
 @export var power_decay: float = 2.5        # tap power lost per second
@@ -60,7 +62,7 @@ func on_pedal_tap() -> void:
 	tap_power += power_per_tap
 	energy_points += energy_per_tap
 	_update_energy_ui()
-
+	emit_signal("pedal_tapped")
 
 func _update_animation() -> void:
 	# Speed drives animation rate.
