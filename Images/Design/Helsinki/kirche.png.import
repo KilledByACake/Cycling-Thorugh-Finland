@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://1capn2rkxpem"
-path="res://.godot/imported/7mADd Kopie 1.svg-3662ebcdd7e63cc5c9c8ae63655f75da.ctex"
+uid="uid://c60s2s06usegv"
+path="res://.godot/imported/kirche.png-ebf175c9259f4ddbed89450d31fe4c50.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Design/Helsinki/7mADd Kopie 1.svg"
-dest_files=["res://.godot/imported/7mADd Kopie 1.svg-3662ebcdd7e63cc5c9c8ae63655f75da.ctex"]
+source_file="res://Images/Design/Helsinki/kirche.png"
+dest_files=["res://.godot/imported/kirche.png-ebf175c9259f4ddbed89450d31fe4c50.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false
