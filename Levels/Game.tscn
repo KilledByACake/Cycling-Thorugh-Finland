@@ -12,22 +12,30 @@
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="15_demcn"]
 [ext_resource type="Texture2D" uid="uid://cvghpp4pk5buf" path="res://Images/Design/Helsinki/haeuser.png" id="15_f81n8"]
 [ext_resource type="Script" uid="uid://co1x31w7232x4" path="res://Code/path_2d.gd" id="16_dasy0"]
+[ext_resource type="Texture2D" uid="uid://vnhc70lowahm" path="res://Images/Design/Forest1/Vector.svg" id="16_dog5s"]
 [ext_resource type="PackedScene" uid="uid://begi8cpog3er3" path="res://Scenes/terrain.tscn" id="16_eca5b"]
 [ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/radler.tscn" id="16_n8fgn"]
 [ext_resource type="Texture2D" uid="uid://bjjf3pqs663ii" path="res://Images/Design/Helsinki/Vector-6.svg" id="16_pn5pt"]
 [ext_resource type="Texture2D" uid="uid://csof88shxr0po" path="res://Images/Design/Helsinki/Vecto-treegeenr.svg" id="16_skt5q"]
-[ext_resource type="Texture2D" uid="uid://b5avpxstaj1vy" path="res://Images/Design/Helsinki/Group 6.svg" id="17_skt5q"]
 [ext_resource type="Script" uid="uid://sleewu5x0dsi" path="res://Code/path_follow_2d.gd" id="18_dasy0"]
-[ext_resource type="Texture2D" uid="uid://cm4ipyfn0cosp" path="res://Images/Design/Helsinki/Group 29.svg" id="18_demcn"]
-[ext_resource type="Texture2D" uid="uid://bmj1v7am3wpfl" path="res://Images/Design/Helsinki/Subtract.svg" id="19_n8fgn"]
 [ext_resource type="Texture2D" uid="uid://dxbnk03bptunx" path="res://Images/Design/Helsinki/Vector-1.svg" id="20_8qbg5"]
-[ext_resource type="Texture2D" uid="uid://bihlcxxvt313e" path="res://Images/Design/Helsinki/Vector-2.svg" id="21_23asd"]
 [ext_resource type="Texture2D" uid="uid://1ek3mli1ijru" path="res://Images/Design/Helsinki/Vector-3.svg" id="22_luag7"]
 [ext_resource type="Texture2D" uid="uid://dr5421obq8lrc" path="res://Images/Design/Helsinki/Vector-4.svg" id="23_dog5s"]
-[ext_resource type="Texture2D" uid="uid://b5guwbir0hu4t" path="res://Images/Design/Helsinki/Vector-5.svg" id="24_3ft2d"]
+[ext_resource type="Texture2D" uid="uid://gc64fdw2iabw" path="res://Images/Design/Forest1/Vector-4.svg" id="24_3ft2d"]
 [ext_resource type="Texture2D" uid="uid://dhhqwl6rmfuxj" path="res://Images/Design/Helsinki/monumenthelsinki.png" id="24_demcn"]
 [ext_resource type="Texture2D" uid="uid://bqrmy810f2fdq" path="res://Images/Design/Helsinki/Vector.svg" id="25_ndlny"]
+[ext_resource type="Texture2D" uid="uid://cdvcvyc2vl0xy" path="res://Images/Design/Forest1/windwheel 2.png" id="26_3ft2d"]
 [ext_resource type="Texture2D" uid="uid://c60s2s06usegv" path="res://Images/Design/Helsinki/kirche.png" id="26_7g6g4"]
+[ext_resource type="Texture2D" uid="uid://dq4w8ytb0c31f" path="res://Images/Design/Forest1/Vector-1.svg" id="26_ndlny"]
+[ext_resource type="Texture2D" uid="uid://tr65v3ott1qv" path="res://Images/Design/Forest1/Vector-2.svg" id="27_7g6g4"]
+[ext_resource type="Texture2D" uid="uid://dyhtyjmn2wugs" path="res://Images/Design/Forest1/chanterelle.png" id="28_vtfa4"]
+[ext_resource type="Texture2D" uid="uid://cxfc658rxf81u" path="res://Images/Design/Forest1/Vector-6.svg" id="29_hvkua"]
+[ext_resource type="Texture2D" uid="uid://jjf5gqlxnlsi" path="res://Images/Design/Forest1/forest.png" id="30_rq0v3"]
+[ext_resource type="Texture2D" uid="uid://baer663kgrodv" path="res://Images/Design/Forest1/stein.svg" id="31_3chnd"]
+[ext_resource type="Texture2D" uid="uid://cqx6nf26xoyno" path="res://Images/Design/Forest1/Subtract.svg" id="32_6y4nr"]
+[ext_resource type="Texture2D" uid="uid://xeeuiixx3hdu" path="res://Images/Design/Forest1/baer.png" id="33_7tv8i"]
+[ext_resource type="Texture2D" uid="uid://g24pbic5bppk" path="res://Images/Design/Forest1/Vector-3.svg" id="34_i60at"]
+[ext_resource type="Texture2D" uid="uid://c6mf6plyp5xdh" path="res://Images/Design/Forest1/Vector-5.svg" id="35_s0eh0"]
 
 [sub_resource type="Gradient" id="Gradient_h107k"]
 offsets = PackedFloat32Array(0, 0.16468254, 0.31150794, 0.45436507, 0.609127, 0.7797619, 0.89484125, 1)
@@ -44,10 +52,10 @@ position = Vector2(-6, 0)
 script = ExtResource("1_eca5b")
 
 [node name="TextureRect2" type="TextureRect" parent="." unique_id=1456584679]
-offset_left = -1225.0
-offset_top = 723.0
-offset_right = 78788.0
-offset_bottom = 1953.0
+offset_left = -1455.0
+offset_top = 742.0
+offset_right = 78558.0
+offset_bottom = 1972.0
 texture = SubResource("GradientTexture2D_wndho")
 
 [node name="TextureRect" type="TextureRect" parent="." unique_id=17075844]
@@ -68,6 +76,136 @@ repeat_times = 2
 position = Vector2(-2881, -1407)
 scale = Vector2(1.9386667, 1.034)
 texture = ExtResource("2_qvq5f")
+
+[node name="bg2" type="Control" parent="." unique_id=426705419]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -3846.0
+offset_top = -771.0
+offset_right = -3806.0
+offset_bottom = -731.0
+
+[node name="helsinki" type="Control" parent="bg2" unique_id=2097453147]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Group28" type="Sprite2D" parent="bg2/helsinki" unique_id=1609684406]
+position = Vector2(10631.999, 1357)
+scale = Vector2(1.6914634, 1.6914634)
+texture = ExtResource("14_dlg5e")
+
+[node name="VectoTreegeenr" type="Sprite2D" parent="bg2/helsinki" unique_id=1352931133]
+position = Vector2(15211.999, 1296)
+scale = Vector2(1.0822057, 1.0229456)
+texture = ExtResource("16_skt5q")
+
+[node name="VectoTreegeenr2" type="Sprite2D" parent="bg2/helsinki" unique_id=397926752]
+position = Vector2(17127, 1328)
+scale = Vector2(1.0822057, 1.0229456)
+texture = ExtResource("16_skt5q")
+
+[node name="01-forest1" type="Control" parent="bg2" unique_id=1162641793]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Vector4" type="Sprite2D" parent="bg2/01-forest1" unique_id=2002197918]
+position = Vector2(18771, 1259.1937)
+scale = Vector2(0.34864864, 0.34864867)
+texture = ExtResource("16_dog5s")
+
+[node name="Vector7" type="Sprite2D" parent="bg2/01-forest1" unique_id=1876436361]
+position = Vector2(18996.5, 1298.6294)
+scale = Vector2(0.44729683, 0.44729686)
+texture = ExtResource("16_dog5s")
+
+[node name="Vector8" type="Sprite2D" parent="bg2/01-forest1" unique_id=2042011310]
+position = Vector2(27623, 1372.25)
+scale = Vector2(0.6666667, 0.71311474)
+texture = ExtResource("34_i60at")
+
+[node name="bg1" type="Control" parent="." unique_id=1791532912]
+layout_mode = 3
+anchors_preset = 0
+offset_left = -2564.0
+offset_top = -514.0
+offset_right = -2524.0
+offset_bottom = -474.0
+
+[node name="helsinki" type="Control" parent="bg1" unique_id=2135659402]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Vector4" type="Sprite2D" parent="bg1/helsinki" unique_id=1536344587]
+position = Vector2(14769.219, 1083.2142)
+scale = Vector2(1.0453117, 0.96476173)
+texture = ExtResource("22_luag7")
+
+[node name="Vector5" type="Sprite2D" parent="bg1/helsinki" unique_id=871769184]
+position = Vector2(16163, 1191)
+scale = Vector2(1.3940247, 1.2866036)
+texture = ExtResource("22_luag7")
+
+[node name="Haeuser" type="Sprite2D" parent="bg1/helsinki" unique_id=452832126]
+position = Vector2(3825, 1136)
+texture = ExtResource("15_f81n8")
+
+[node name="Vector" type="Sprite2D" parent="bg1/helsinki" unique_id=1515539767]
+position = Vector2(9194.32, 1181.9656)
+scale = Vector2(1.9373044, 1.9373043)
+texture = ExtResource("25_ndlny")
+
+[node name="Vector1" type="Sprite2D" parent="bg1/helsinki" unique_id=57883321]
+position = Vector2(11553, 1166)
+scale = Vector2(4.7578077, 4.7578077)
+texture = ExtResource("20_8qbg5")
+
+[node name="Kirche" type="Sprite2D" parent="bg1/helsinki" unique_id=2123456359]
+position = Vector2(6324.1255, 1029.2797)
+scale = Vector2(0.8820992, 0.8820992)
+texture = ExtResource("26_7g6g4")
+
+[node name="Vector9" type="Sprite2D" parent="bg1/helsinki" unique_id=1420534440]
+position = Vector2(7142.0005, 1153.0001)
+scale = Vector2(1.4510679, 1.451068)
+texture = ExtResource("23_dog5s")
+
+[node name="Vector10" type="Sprite2D" parent="bg1/helsinki" unique_id=1774554136]
+position = Vector2(5270.0005, 1110.0001)
+scale = Vector2(1.4510679, 1.451068)
+texture = ExtResource("23_dog5s")
+
+[node name="VectoTreegeenr2" type="Sprite2D" parent="bg1/helsinki" unique_id=1331416327]
+position = Vector2(14337.167, 1152.3281)
+scale = Vector2(2.2936628, 2.168065)
+texture = ExtResource("16_skt5q")
+
+[node name="Monumenthelsinki" type="Sprite2D" parent="bg1/helsinki" unique_id=833411166]
+position = Vector2(15398.793, 1165.5001)
+scale = Vector2(0.43918923, 0.43918926)
+texture = ExtResource("24_demcn")
+
+[node name="01-forest1" type="Control" parent="bg1" unique_id=1278848410]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Vector4" type="Sprite2D" parent="bg1/01-forest1" unique_id=1165274269]
+position = Vector2(16587, 1109)
+scale = Vector2(1.351529, 1.3515291)
+texture = ExtResource("24_3ft2d")
+
+[node name="Vector8" type="Sprite2D" parent="bg1/01-forest1" unique_id=2089246639]
+position = Vector2(16390, 1129)
+scale = Vector2(0.70202744, 0.70202756)
+texture = ExtResource("16_dog5s")
+
+[node name="Windwheel2" type="Sprite2D" parent="bg1/01-forest1" unique_id=936972398]
+position = Vector2(25673, 1153.0001)
+scale = Vector2(0.23333195, 0.23333195)
+texture = ExtResource("26_3ft2d")
 
 [node name="Terrain" parent="." unique_id=1830455226 instance=ExtResource("16_eca5b")]
 position = Vector2(-1231, 462)
@@ -130,116 +268,6 @@ position = Vector2(29038, 1191.8977)
 terrain_path = NodePath("../Terrain")
 snap_y_offset = -100.0
 
-[node name="bg2" type="Control" parent="." unique_id=426705419]
-layout_mode = 3
-anchors_preset = 0
-offset_left = -3846.0
-offset_top = -771.0
-offset_right = -3806.0
-offset_bottom = -731.0
-
-[node name="helsinki" type="Control" parent="bg2" unique_id=2097453147]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Group28" type="Sprite2D" parent="bg2/helsinki" unique_id=1609684406]
-position = Vector2(10631.999, 1357)
-scale = Vector2(1.6914634, 1.6914634)
-texture = ExtResource("14_dlg5e")
-
-[node name="Vector2" type="Sprite2D" parent="bg2/helsinki" unique_id=19311746]
-position = Vector2(12549, 4439)
-scale = Vector2(1.4472597, 1.4472595)
-texture = ExtResource("21_23asd")
-
-[node name="VectoTreegeenr" type="Sprite2D" parent="bg2/helsinki" unique_id=1352931133]
-position = Vector2(15211.999, 1296)
-scale = Vector2(1.0822057, 1.0229456)
-texture = ExtResource("16_skt5q")
-
-[node name="VectoTreegeenr2" type="Sprite2D" parent="bg2/helsinki" unique_id=397926752]
-position = Vector2(17127, 1328)
-scale = Vector2(1.0822057, 1.0229456)
-texture = ExtResource("16_skt5q")
-
-[node name="bg1" type="Control" parent="." unique_id=1791532912]
-layout_mode = 3
-anchors_preset = 0
-offset_left = -2564.0
-offset_top = -514.0
-offset_right = -2524.0
-offset_bottom = -474.0
-
-[node name="helsinki" type="Control" parent="bg1" unique_id=2135659402]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Vector4" type="Sprite2D" parent="bg1/helsinki" unique_id=1536344587]
-position = Vector2(14769.219, 1083.2142)
-scale = Vector2(1.0453117, 0.96476173)
-texture = ExtResource("22_luag7")
-
-[node name="Vector5" type="Sprite2D" parent="bg1/helsinki" unique_id=871769184]
-position = Vector2(16214.554, 1226.0304)
-scale = Vector2(1.3940247, 1.2866036)
-texture = ExtResource("22_luag7")
-
-[node name="Haeuser" type="Sprite2D" parent="bg1/helsinki" unique_id=452832126]
-position = Vector2(3825, 1136)
-texture = ExtResource("15_f81n8")
-
-[node name="Vector" type="Sprite2D" parent="bg1/helsinki" unique_id=1515539767]
-position = Vector2(9194.32, 1181.9656)
-scale = Vector2(1.9373044, 1.9373043)
-texture = ExtResource("25_ndlny")
-
-[node name="Vector1" type="Sprite2D" parent="bg1/helsinki" unique_id=57883321]
-position = Vector2(11553, 1166)
-scale = Vector2(4.7578077, 4.7578077)
-texture = ExtResource("20_8qbg5")
-
-[node name="Vector6" type="Sprite2D" parent="bg1/helsinki" unique_id=1179768366]
-position = Vector2(7805, 3806)
-scale = Vector2(1.8995678, 1.8995678)
-texture = ExtResource("24_3ft2d")
-
-[node name="Kirche" type="Sprite2D" parent="bg1/helsinki" unique_id=2123456359]
-position = Vector2(6324.1255, 1029.2797)
-scale = Vector2(0.8820992, 0.8820992)
-texture = ExtResource("26_7g6g4")
-
-[node name="Vector9" type="Sprite2D" parent="bg1/helsinki" unique_id=1420534440]
-position = Vector2(7142.0005, 1153.0001)
-scale = Vector2(1.4510679, 1.451068)
-texture = ExtResource("23_dog5s")
-
-[node name="Vector10" type="Sprite2D" parent="bg1/helsinki" unique_id=1774554136]
-position = Vector2(5270.0005, 1110.0001)
-scale = Vector2(1.4510679, 1.451068)
-texture = ExtResource("23_dog5s")
-
-[node name="Vector8" type="Sprite2D" parent="bg1/helsinki" unique_id=1355722385]
-position = Vector2(10789, 3278)
-scale = Vector2(2.0726027, 2.0726027)
-texture = ExtResource("21_23asd")
-
-[node name="Vector7" type="Sprite2D" parent="bg1/helsinki" unique_id=980750889]
-position = Vector2(3453.0002, 4972)
-scale = Vector2(2.4031007, 2.4031007)
-texture = ExtResource("23_dog5s")
-
-[node name="VectoTreegeenr2" type="Sprite2D" parent="bg1/helsinki" unique_id=1331416327]
-position = Vector2(14337.167, 1152.3281)
-scale = Vector2(2.2936628, 2.168065)
-texture = ExtResource("16_skt5q")
-
-[node name="Monumenthelsinki" type="Sprite2D" parent="bg1/helsinki" unique_id=833411166]
-position = Vector2(15398.793, 1165.5001)
-scale = Vector2(0.43918923, 0.43918926)
-texture = ExtResource("24_demcn")
-
 [node name="infront of cycler" type="Control" parent="." unique_id=1275373328]
 layout_mode = 3
 anchors_preset = 0
@@ -248,45 +276,148 @@ offset_top = -257.0
 offset_right = -1242.0
 offset_bottom = -217.0
 
-[node name="helsinki" type="Control" parent="infront of cycler" unique_id=1780912180]
+[node name="00-helsinki" type="Control" parent="infront of cycler" unique_id=1780912180]
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="Vector9" type="Sprite2D" parent="infront of cycler/helsinki" unique_id=215031622]
+[node name="Vector9" type="Sprite2D" parent="infront of cycler/00-helsinki" unique_id=215031622]
 position = Vector2(1566, 888.0001)
 scale = Vector2(2.1702971, 2.1702971)
 texture = ExtResource("16_pn5pt")
 
-[node name="Vector10" type="Sprite2D" parent="infront of cycler/helsinki" unique_id=205155187]
+[node name="Vector10" type="Sprite2D" parent="infront of cycler/00-helsinki" unique_id=205155187]
 position = Vector2(9483.5, 972.8667)
 scale = Vector2(1.115842, 1.115842)
 texture = ExtResource("16_pn5pt")
 
-[node name="Vector11" type="Sprite2D" parent="infront of cycler/helsinki" unique_id=2079287243]
+[node name="Vector11" type="Sprite2D" parent="infront of cycler/00-helsinki" unique_id=2079287243]
 position = Vector2(12192, -207)
 scale = Vector2(7.138702, 7.138702)
 texture = ExtResource("22_luag7")
 
-[node name="Helsinki" type="Container" parent="." unique_id=1744881328]
-offset_left = -1282.0
-offset_top = 2226.0
-offset_right = 9558.0
-offset_bottom = 2274.0
+[node name="01-forest1" type="Control" parent="infront of cycler" unique_id=863844580]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
 
-[node name="Group6" type="Sprite2D" parent="Helsinki" unique_id=620032507]
-position = Vector2(4314, 2176)
-texture = ExtResource("17_skt5q")
+[node name="Vector1" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=2084504177]
+position = Vector2(20572, 2016)
+scale = Vector2(0.34417865, 0.34417862)
+texture = ExtResource("26_ndlny")
 
-[node name="Group29" type="Sprite2D" parent="Helsinki" unique_id=322041444]
-position = Vector2(929, 3119)
-texture = ExtResource("18_demcn")
+[node name="Vector" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=2025030189]
+position = Vector2(17700, 1044)
+texture = ExtResource("16_dog5s")
 
-[node name="Subtract" type="Sprite2D" parent="Helsinki" unique_id=578331869]
-position = Vector2(3013, 3276)
-texture = ExtResource("19_n8fgn")
+[node name="Vector5" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=830772415]
+position = Vector2(17353, 954)
+scale = Vector2(0.3392748, 0.33927488)
+texture = ExtResource("27_7g6g4")
 
-[node name="Vector3" type="Sprite2D" parent="Helsinki" unique_id=316992104]
-position = Vector2(9942, 2776.0005)
-scale = Vector2(1.4326923, 1.4326923)
-texture = ExtResource("22_luag7")
+[node name="Chanterelle" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=1769601586]
+position = Vector2(17261.406, 2075.14)
+scale = Vector2(0.10425672, 0.10425674)
+texture = ExtResource("28_vtfa4")
+
+[node name="Chanterelle5" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=2046205651]
+position = Vector2(22681.002, 1865)
+scale = Vector2(0.046552036, 0.05009844)
+texture = ExtResource("28_vtfa4")
+
+[node name="Chanterelle2" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=310327335]
+position = Vector2(18373.79, 1970.2533)
+scale = Vector2(0.060873974, 0.06087399)
+texture = ExtResource("28_vtfa4")
+
+[node name="Chanterelle4" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=2047346255]
+position = Vector2(22663.002, 1883)
+scale = Vector2(0.046552036, 0.05009844)
+texture = ExtResource("28_vtfa4")
+
+[node name="Chanterelle3" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=645527555]
+position = Vector2(18339.502, 1938.254)
+scale = Vector2(0.062431224, 0.06718733)
+texture = ExtResource("28_vtfa4")
+
+[node name="Vector7" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=911949332]
+position = Vector2(15606.001, 837.00006)
+scale = Vector2(2.2963636, 2.2963636)
+texture = ExtResource("29_hvkua")
+
+[node name="Vector4" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=2078381270]
+position = Vector2(17110, 566)
+scale = Vector2(1.7801718, 1.7801719)
+texture = ExtResource("27_7g6g4")
+
+[node name="Forest" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=2096738405]
+position = Vector2(21493, -687)
+texture = ExtResource("30_rq0v3")
+
+[node name="Stein2" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=1228473403]
+position = Vector2(18532, 1927)
+scale = Vector2(1.5603448, 1.5603448)
+texture = ExtResource("31_3chnd")
+
+[node name="Stein3" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=1404456199]
+position = Vector2(22787.896, 1999.25)
+scale = Vector2(2.142241, 2.142241)
+texture = ExtResource("31_3chnd")
+
+[node name="Subtract2" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=1982862363]
+position = Vector2(17022, 2176)
+scale = Vector2(1.9039216, 1.525)
+texture = ExtResource("32_6y4nr")
+
+[node name="Baer" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=1182147227]
+position = Vector2(25527, 1702)
+texture = ExtResource("33_7tv8i")
+
+[node name="Vector8" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=67556214]
+position = Vector2(26872, 140)
+scale = Vector2(1.9376377, 1.9376382)
+texture = ExtResource("27_7g6g4")
+
+[node name="Vector6" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=135789524]
+position = Vector2(26109.998, -863)
+scale = Vector2(3.529096, 3.5290964)
+texture = ExtResource("27_7g6g4")
+
+[node name="Subtract3" type="Sprite2D" parent="infront of cycler/01-forest1" unique_id=1033328754]
+position = Vector2(18253.002, 2295)
+scale = Vector2(2.2940705, 1.8375009)
+texture = ExtResource("32_6y4nr")
+
+[node name="elements" type="Control" parent="." unique_id=654222150]
+layout_mode = 3
+anchors_preset = 0
+offset_left = 3263.001
+offset_top = 4295.0
+offset_right = 3303.001
+offset_bottom = 4335.0
+
+[node name="Stein" type="Sprite2D" parent="elements" unique_id=1972286053]
+position = Vector2(12995.999, -49)
+texture = ExtResource("31_3chnd")
+
+[node name="Subtract" type="Sprite2D" parent="elements" unique_id=1035763177]
+position = Vector2(13142.999, -1129)
+texture = ExtResource("32_6y4nr")
+
+[node name="Vector2" type="Sprite2D" parent="elements" unique_id=41367685]
+position = Vector2(15035.999, -1093)
+scale = Vector2(0.42564654, 0.42564657)
+texture = ExtResource("27_7g6g4")
+
+[node name="Vector3" type="Sprite2D" parent="elements" unique_id=439776147]
+position = Vector2(12491.999, 350)
+texture = ExtResource("34_i60at")
+
+[node name="Vector5" type="Sprite2D" parent="elements" unique_id=1991503216]
+position = Vector2(11976.999, -2637)
+scale = Vector2(1.0000004, 1.0000004)
+texture = ExtResource("35_s0eh0")
+
+[node name="Vector6" type="Sprite2D" parent="elements" unique_id=456874883]
+position = Vector2(13918.999, 591)
+texture = ExtResource("29_hvkua")
