@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://cax5lnaxyyuoj"]
+
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_8mwwj"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2jxwf"]
+bg_color = Color(0.49803922, 0.5411765, 0.31764707, 1)
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[node name="KpiCardRoot" type="Control" unique_id=1009210808]
+custom_minimum_size = Vector2(320, 0)
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="KpiCard" type="PanelContainer" parent="." unique_id=49888822]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_2jxwf")
+
+[node name="CardMargin" type="MarginContainer" parent="KpiCard" unique_id=1056447525]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="CardVBox" type="VBoxContainer" parent="KpiCard/CardMargin" unique_id=657496089]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="KpiCard/CardMargin/CardVBox" unique_id=608213718]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("1_8mwwj")
+theme_override_font_sizes/font_size = 20
+text = "Title"
+
+[node name="ValueRow" type="HBoxContainer" parent="KpiCard/CardMargin/CardVBox" unique_id=927770493]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ValueLabel" type="Label" parent="KpiCard/CardMargin/CardVBox/ValueRow" unique_id=1155000776]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8mwwj")
+theme_override_font_sizes/font_size = 56
+text = "20"
+
+[node name="UnitLabel" type="Label" parent="KpiCard/CardMargin/CardVBox/ValueRow" unique_id=864694093]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8mwwj")
+text = "Unit"
