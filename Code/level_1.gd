@@ -6,7 +6,7 @@ signal round_over(won: bool)
 @export var trigger_path_rebuild: bool = true
 @export var randomize_seed_on_play: bool = true
 
-const ROUND_TIME_SEC: int = 150
+const ROUND_TIME_SEC: int = 10
 const TARGET_ENERGY: int = 200
 const BANNER_DURATION_SEC: float = 2.0
 

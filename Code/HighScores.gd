@@ -1,5 +1,5 @@
 extends Node
-#TO RESET DAILY HIGH SCORE, FILL OUT _RESET
+# TO RESET DAILY HIGH SCORE, FILL OUT _RESET
 
 const FILE_PATH: String = "user://highscores.json"
 
@@ -55,6 +55,81 @@ func _idx_to_rank(idx: int, bucket: Array) -> Variant:
 		return null
 	return bucket.size() - idx # 1 = best
 
+func _save_store() -> void:
+	var f: FileAccess = FileAccess.open(FILE_PATH, FileAccess.WRITE)
+	if f:
+		f.store_string(JSON.stringify(store, "\t"))
+
+func _normalize_entry(entry: Dictionary) -> Dictionary:
+	return {
+		"name": str(entry.get("name", "Unknown")),
+		"score": float(entry.get("score", 0.0)),
+		"date": str(entry.get("date", _today_iso())),
+		"energy_kj": float(entry.get("energy_kj", entry.get("score", 0.0))),
+		"duration_sec": int(entry.get("duration_sec", 0)),
+		"avg_power_w": entry.get("avg_power_w", null),
+		"avg_speed": entry.get("avg_speed", null),
+	}
+
+# Case-sensitiv nøkkel (tastatur gir alltid store bokstaver).
+func _name_key(name: String) -> String:
+	return name.strip_edges(true, true)
+
+# Finn index for navn i en bucket (returnerer -1 hvis ikke funnet).
+func _index_of_name(arr: Array, name: String) -> int:
+	var k: String = _name_key(name)
+	for i in range(arr.size()):
+		var it: Dictionary = arr[i]
+		if _name_key(str(it.get("name", ""))) == k:
+			return i
+	return -1
+
+# Unik per navn pr. bucket:
+# - Beholder beste score per navn (høyere er bedre).
+# - Returnerer indeksen til ny oppføring, eller -1 hvis ny droppes (eksisterende var bedre/lik).
+func _upsert_unique_by_name(arr: Array, entry: Dictionary, cap: int) -> int:
+	var k: String = _name_key(str(entry.get("name", "")))
+	var existing_idx: int = -1
+	var existing_score: float = -1e30
+
+	for i in range(arr.size()):
+		var it: Dictionary = arr[i]
+		if _name_key(str(it.get("name", ""))) == k:
+			existing_idx = i
+			existing_score = float(it.get("score", 0.0))
+			break
+
+	var new_score: float = float(entry.get("score", 0.0))
+
+	# Keep best score pr. name 
+	if existing_idx >= 0 and existing_score >= new_score:
+		return -1
+
+	if existing_idx >= 0:
+		arr.remove_at(existing_idx)
+
+	return _asc_insert_cap(arr, entry, "score", cap)
+
+# Helper: compose the reset key for today’s active session.
+func _reset_key_for(day_key: String, sessions: Dictionary) -> String:
+	var sess: int = int(sessions.get(day_key, 0))
+	if sess <= 0:
+		return ""
+	return "%s#%d" % [day_key, sess]
+
+# Ensure a fresh session pointer when day changes.
+func _rollover_if_new_day() -> void:
+	var today: String = _today_iso()
+	var last: String = str(store.get("last_seen_date", ""))
+	if last != today:
+		store["last_seen_date"] = today
+		var sessions: Dictionary = (store.get("daily_reset_session", {}) as Dictionary)
+		var new_sessions: Dictionary = {}
+		if sessions.has(today):
+			new_sessions[today] = int(sessions[today]) # keep today only
+		store["daily_reset_session"] = new_sessions
+		_save_store()
+
 # Rebuild canonical buckets from history.
 func _load_store() -> Dictionary:
 	if not FileAccess.file_exists(FILE_PATH):
@@ -81,42 +156,6 @@ func _load_store() -> Dictionary:
 		return s2
 	return _empty_store()
 
-func _save_store() -> void:
-	var f: FileAccess = FileAccess.open(FILE_PATH, FileAccess.WRITE)
-	if f:
-		f.store_string(JSON.stringify(store, "\t"))
-
-func _normalize_entry(entry: Dictionary) -> Dictionary:
-	return {
-		"name": str(entry.get("name", "Unknown")),
-		"score": float(entry.get("score", 0.0)),
-		"date": str(entry.get("date", _today_iso())),
-		"energy_kj": float(entry.get("energy_kj", entry.get("score", 0.0))),
-		"duration_sec": int(entry.get("duration_sec", 0)),
-		"avg_power_w": entry.get("avg_power_w", null),
-		"avg_speed": entry.get("avg_speed", null),
-	}
-
-# Helper: compose the reset key for today’s active session.
-func _reset_key_for(day_key: String, sessions: Dictionary) -> String:
-	var sess: int = int(sessions.get(day_key, 0))
-	if sess <= 0:
-		return ""
-	return "%s#%d" % [day_key, sess]
-
-# Ensure a fresh session pointer when day changes.
-func _rollover_if_new_day() -> void:
-	var today: String = _today_iso()
-	var last: String = str(store.get("last_seen_date", ""))
-	if last != today:
-		store["last_seen_date"] = today
-		var sessions: Dictionary = (store.get("daily_reset_session", {}) as Dictionary)
-		var new_sessions: Dictionary = {}
-		if sessions.has(today):
-			new_sessions[today] = int(sessions[today]) # keep today only
-		store["daily_reset_session"] = new_sessions
-		_save_store()
-
 func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool) -> Dictionary:
 	var e: Dictionary = _normalize_entry(entry)
 	dst_store["history"].append(e)
@@ -129,19 +168,27 @@ func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool
 	# Canonical buckets
 	var daily: Array = (dst_store["daily"].get(day_key, []) as Array)
 	dst_store["daily"][day_key] = daily
-	var di: int = _asc_insert_cap(daily, e, "score", TOPN_DAILY)
+	var di: int = _upsert_unique_by_name(daily, e, TOPN_DAILY)
+	if di == -1:
+		di = _index_of_name(daily, e["name"])
 
 	var monthly: Array = (dst_store["monthly"].get(month_key, []) as Array)
 	dst_store["monthly"][month_key] = monthly
-	var mi: int = _asc_insert_cap(monthly, e, "score", TOPN_MONTHLY)
+	var mi: int = _upsert_unique_by_name(monthly, e, TOPN_MONTHLY)
+	if mi == -1:
+		mi = _index_of_name(monthly, e["name"])
 
 	var yearly: Array = (dst_store["yearly"].get(year_key, []) as Array)
 	dst_store["yearly"][year_key] = yearly
-	var yi: int = _asc_insert_cap(yearly, e, "score", TOPN_YEARLY)
+	var yi: int = _upsert_unique_by_name(yearly, e, TOPN_YEARLY)
+	if yi == -1:
+		yi = _index_of_name(yearly, e["name"])
 
 	var alltime: Array = (dst_store.get("alltime", []) as Array)
 	dst_store["alltime"] = alltime
-	var ai: int = _asc_insert_cap(alltime, e, "score", TOPN_ALLTIME)
+	var ai: int = _upsert_unique_by_name(alltime, e, TOPN_ALLTIME)
+	if ai == -1:
+		ai = _index_of_name(alltime, e["name"])
 
 	# Display-only: add to active reset session for that day if any
 	var daily_reset: Dictionary = (dst_store.get("daily_reset", {}) as Dictionary)
@@ -152,7 +199,7 @@ func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool
 	if reset_key != "":
 		var dr: Array = (daily_reset.get(reset_key, []) as Array)
 		daily_reset[reset_key] = dr
-		_asc_insert_cap(dr, e, "score", TOPN_DAILY)
+		_upsert_unique_by_name(dr, e, TOPN_DAILY)
 
 	if do_save:
 		_save_store()
