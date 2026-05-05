@@ -41,7 +41,22 @@ position = Vector2(-2881, -1407)
 scale = Vector2(1.9386667, 1.034)
 texture = ExtResource("2_qvq5f")
 
+[node name="TextureRect2" type="TextureRect" parent="." unique_id=1456584679]
+offset_left = -1354.0
+offset_top = 957.0
+offset_right = 158593.0
+offset_bottom = 1978.0
+texture = SubResource("GradientTexture2D_wndho")
+
+[node name="TextureRect" type="TextureRect" parent="." unique_id=17075844]
+offset_left = -1211.0
+offset_top = 1105.0
+offset_right = 158632.0
+offset_bottom = 2176.0
+texture = ExtResource("2_h107k")
+
 [node name="BG Design" type="Control" parent="." unique_id=1420385066]
+z_index = -10
 layout_mode = 3
 anchors_preset = 0
 offset_left = -1354.0
@@ -49,26 +64,12 @@ offset_top = 957.0
 offset_right = -1314.0
 offset_bottom = 997.0
 
-[node name="TextureRect2" type="TextureRect" parent="BG Design" unique_id=1456584679]
-layout_mode = 0
-offset_right = 159947.0
-offset_bottom = 1021.0
-texture = SubResource("GradientTexture2D_wndho")
-
 [node name="Layer3" type="Node2D" parent="BG Design" unique_id=1525394020 node_paths=PackedStringArray("camera")]
 position = Vector2(1354, -957)
 script = ExtResource("3_wndho")
 folder_path = "res://Images/Design/Layer3/"
 camera = NodePath("../../Path2D/PathFollow2D/Radler/Camera2D")
 start_y = -1050.0
-
-[node name="TextureRect" type="TextureRect" parent="BG Design" unique_id=17075844]
-layout_mode = 0
-offset_left = 143.0
-offset_top = 148.0
-offset_right = 159986.0
-offset_bottom = 1219.0
-texture = ExtResource("2_h107k")
 
 [node name="Layer2" type="Node2D" parent="BG Design" unique_id=1247409480 node_paths=PackedStringArray("camera")]
 position = Vector2(1354, -957)
@@ -150,6 +151,7 @@ offset_right = 15113.0
 offset_bottom = 1559.0
 
 [node name="Layer1" type="Node2D" parent="Front Design" unique_id=1807914782 node_paths=PackedStringArray("camera")]
+z_index = -9
 position = Vector2(-15073, -1519)
 script = ExtResource("3_wndho")
 camera = NodePath("../../Path2D/PathFollow2D/Radler/Camera2D")

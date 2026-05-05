@@ -11,10 +11,10 @@ extends Node2D
 @export var sample_step: int = 4
 @export var max_slope_deg: float = 18.0
 
-# How far down to close the ground polygon (pixels). Increase to avoid “air” below the ground.
+# How far down the polygon is closed below the surface
 @export var ground_thickness: float = 800.0
 
-# Editor button to force regeneration
+# Editor button to regenerate the terrain without running the game
 @export var regenerate: bool = false:
 	set(value):
 		regenerate = false
@@ -22,19 +22,18 @@ extends Node2D
 
 @onready var polygon: Polygon2D = get_node_or_null("Polygon2D")
 
+# Stores the top surface points of the terrain
 var _top_points: PackedVector2Array = PackedVector2Array()
 
 func _ready() -> void:
-	#$Polygon2D.uv = $Polygon2D.polygon
 	_generate()
 
 func _generate() -> void:
 	if polygon == null:
 		return
-
 	_top_points.clear()
-	_top_points.resize(0)
 
+	# Set up RNG with fixed seed so terrain is always the same
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 	rng.seed = rng_seed
 	var off1: float = rng.randf_range(0.0, 1000.0)
@@ -44,13 +43,13 @@ func _generate() -> void:
 	var prev_y: float = base_y
 	var slope_limit: float = tan(deg_to_rad(max_slope_deg))
 
+	# Generate surface points using layered sine waves
 	while x <= length:
-		# Simple layered sines (cheap and deterministic)
 		var y: float = sin((x * noise_frequency) + off1) * amplitude
 		y += sin((x * noise_frequency) * 2.1 + off2) * (amplitude * 0.35 * (0.7 + difficulty * 0.6))
 		var target_y: float = base_y + y
 
-		# Optional slope limiting
+		# Limit steep slopes between consecutive points
 		if _top_points.size() > 0:
 			var dy: float = target_y - prev_y
 			var dx: float = float(sample_step)
@@ -62,40 +61,23 @@ func _generate() -> void:
 		prev_y = target_y
 		x += sample_step
 
-	# Close the polygon deeper using ground_thickness (avoid “air” below ground)
+	# Close the polygon at the bottom to form a solid shape
 	var bottom_y: float = base_y + abs(amplitude) + ground_thickness
-
 	var poly: PackedVector2Array = PackedVector2Array(_top_points)
 	poly.append(Vector2(length, bottom_y))
 	poly.append(Vector2(0.0, bottom_y))
 	polygon.polygon = poly
 
-	# Simple UVs for gradient 
-	var uvs: PackedVector2Array = PackedVector2Array()
-	#var y_min: float = base_y - amplitude
-	#var y_range: float = (bottom_y - y_min)
-		
-	#actual length of terrain	
-	var actual_length: float = _top_points[-1].x
-	# Und die UVs anpassen:
-	for p in _top_points:
-		var u: float = (p.x / float(actual_length) * 255)
-		uvs.append(Vector2(u, 0.0))
+	# Pass the terrain width to the shader so the gradient stretches correctly
+	if polygon.material:
+		polygon.material.set_shader_parameter("terrain_start", 0.0)
+		polygon.material.set_shader_parameter("terrain_end", float(length))
 
-	uvs.append(Vector2(0.0, 0.0))    # bottom left
-	uvs.append(Vector2(255.0, 0.0	))  # bottom right
-	print(_top_points[0], _top_points[-1])
-	
-	polygon.uv = uvs
-	
-	if polygon.texture is GradientTexture2D:
-		polygon.texture.width = 256
-		polygon.texture.height = 1	
-			
+# Returns a copy of the top surface points for other nodes to use
 func get_top_points() -> PackedVector2Array:
 	return _top_points.duplicate()
 
-# Height on the ground at a given X (local space)
+# Returns the surface Y position at a given X in local space
 func get_surface_y(x_pos: float) -> float:
 	if _top_points.is_empty():
 		return base_y
