@@ -1,8 +1,0 @@
-[gd_scene format=3 uid="uid://bw5myf5a28yon"]
-
-[ext_resource type="Material" uid="uid://bo4l5i3vj10ow" path="res://Style/shader_hill_gradient.tres" id="1_kqvyp"]
-
-[node name="CreatingShader" type="Node2D" unique_id=223407644]
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1501382052]
-material = ExtResource("1_kqvyp")

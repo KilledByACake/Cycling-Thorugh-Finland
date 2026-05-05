@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://cpnl0xtu7w1mc" path="res://Code/level_1.gd" id="1_eca5b"]
 [ext_resource type="Texture2D" uid="uid://d0cf7c6iyefxk" path="res://Style/bg_gradient.tres" id="2_h107k"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="2_qvq5f"]
+[ext_resource type="Texture2D" uid="uid://x6frcpu8h5x1" path="res://Images/Design/sprite objects/nothernlights.png" id="3_3upoy"]
 [ext_resource type="Script" uid="uid://bs2bpjciuqc4l" path="res://Code/LayerScroller.gd" id="3_wndho"]
 [ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Items/Blueberry.tscn" id="7_i12b1"]
 [ext_resource type="PackedScene" uid="uid://yy2svaa57xus" path="res://Scenes/Items/Strawberry.tscn" id="10_i12b1"]
@@ -10,10 +11,17 @@
 [ext_resource type="PackedScene" uid="uid://b50sjm3kawb5w" path="res://Scenes/Items/Apple.tscn" id="12_h107k"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Screen/UI.tscn" id="14_skt5q"]
 [ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="15_demcn"]
+[ext_resource type="Texture2D" uid="uid://cr8odhe5s5nrj" path="res://Images/Design/sprite objects/Vector-2.png" id="15_eca5b"]
 [ext_resource type="Script" uid="uid://co1x31w7232x4" path="res://Code/path_2d.gd" id="16_dasy0"]
 [ext_resource type="PackedScene" uid="uid://begi8cpog3er3" path="res://Scenes/terrain.tscn" id="16_eca5b"]
 [ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/radler.tscn" id="16_n8fgn"]
+[ext_resource type="Texture2D" uid="uid://by6evqrtbxn1u" path="res://Images/Design/sprite objects/reindeer.png" id="16_qvq5f"]
+[ext_resource type="Texture2D" uid="uid://dae5ckc2x4e1f" path="res://Images/Design/sprite objects/Vector.png" id="16_wy6ri"]
+[ext_resource type="Texture2D" uid="uid://cvy0uq448op8u" path="res://Images/Design/sprite objects/train.png" id="17_qvq5f"]
 [ext_resource type="Script" uid="uid://sleewu5x0dsi" path="res://Code/path_follow_2d.gd" id="18_dasy0"]
+[ext_resource type="Texture2D" uid="uid://b7egq5606webl" path="res://Images/Design/sprite objects/Vector-1.png" id="19_wy6ri"]
+[ext_resource type="Texture2D" uid="uid://bth5nibf3dvic" path="res://Images/Design/sprite objects/Vector-3.png" id="20_nlly1"]
+[ext_resource type="Texture2D" uid="uid://q5oebr5hwo1v" path="res://Images/Design/sprite objects/Vector-4.png" id="21_3jjjg"]
 
 [sub_resource type="Gradient" id="Gradient_h107k"]
 offsets = PackedFloat32Array(0, 0.16468254, 0.31150794, 0.45436507, 0.609127, 0.7797619, 0.89484125, 1)
@@ -51,9 +59,14 @@ offset_bottom = 997.0
 
 [node name="TextureRect2" type="TextureRect" parent="BG Design" unique_id=1456584679]
 layout_mode = 0
-offset_right = 118764.0
+offset_right = 117228.0
 offset_bottom = 1021.0
 texture = SubResource("GradientTexture2D_wndho")
+
+[node name="Train" type="Sprite2D" parent="BG Design" unique_id=390962039]
+position = Vector2(25171, -56)
+scale = Vector2(0.45328292, 0.45328295)
+texture = ExtResource("17_qvq5f")
 
 [node name="Layer3" type="Node2D" parent="BG Design" unique_id=1525394020 node_paths=PackedStringArray("camera")]
 position = Vector2(1354, -957)
@@ -62,11 +75,16 @@ folder_path = "res://Images/Design/Layer3/"
 camera = NodePath("../../Path2D/PathFollow2D/Radler/Camera2D")
 start_y = -1050.0
 
+[node name="Nothernlights" type="Sprite2D" parent="BG Design" unique_id=224098486]
+position = Vector2(115173.01, -836)
+scale = Vector2(0.84792465, 0.8479247)
+texture = ExtResource("3_3upoy")
+
 [node name="TextureRect" type="TextureRect" parent="BG Design" unique_id=17075844]
 layout_mode = 0
 offset_left = 143.0
 offset_top = 148.0
-offset_right = 118766.0
+offset_right = 117222.0
 offset_bottom = 1219.0
 texture = ExtResource("2_h107k")
 
@@ -79,7 +97,7 @@ start_y = -1060.0
 
 [node name="Terrain" parent="." unique_id=1830455226 instance=ExtResource("16_eca5b")]
 position = Vector2(-1231, 462)
-length = 118623
+length = 117079
 base_y = 820.0
 
 [node name="Path2D" type="Path2D" parent="." unique_id=1771067717]
@@ -141,6 +159,21 @@ snap_y_offset = -100.0
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1298348767]
 visible = false
 
+[node name="windwheels" type="Sprite2D" parent="." unique_id=1898166529]
+position = Vector2(27492, 911.00006)
+scale = Vector2(0.2729747, 0.2478465)
+texture = ExtResource("16_wy6ri")
+
+[node name="windwhils bakc" type="Sprite2D" parent="." unique_id=862196808]
+position = Vector2(91420, 901)
+scale = Vector2(0.3050173, 0.30501732)
+texture = ExtResource("16_wy6ri")
+
+[node name="Momin" type="Sprite2D" parent="." unique_id=835447483]
+position = Vector2(46662, 1666)
+scale = Vector2(0.5014323, 0.50143236)
+texture = ExtResource("19_wy6ri")
+
 [node name="Front Design" type="Control" parent="." unique_id=1437214444]
 layout_mode = 3
 anchors_preset = 0
@@ -153,5 +186,55 @@ offset_bottom = 1559.0
 position = Vector2(-15073, -1519)
 script = ExtResource("3_wndho")
 camera = NodePath("../../Path2D/PathFollow2D/Radler/Camera2D")
+
+[node name="objects" type="Control" parent="Front Design" unique_id=1943926401]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="whindwheel" type="Sprite2D" parent="Front Design/objects" unique_id=631782927]
+position = Vector2(4070, -777)
+scale = Vector2(0.8266055, 0.8266055)
+texture = ExtResource("15_eca5b")
+
+[node name="Beaer" type="Sprite2D" parent="Front Design/objects" unique_id=1388673154]
+position = Vector2(4530.248, 108.11963)
+scale = Vector2(0.42421603, 0.42421603)
+texture = ExtResource("16_qvq5f")
+
+[node name="Vector2" type="Sprite2D" parent="Front Design/objects" unique_id=1276666068]
+position = Vector2(45008.004, -750.99994)
+scale = Vector2(0.4619334, 0.46193337)
+texture = ExtResource("15_eca5b")
+
+[node name="Vector3" type="Sprite2D" parent="Front Design/objects" unique_id=1958102794]
+position = Vector2(47671.004, -1209)
+scale = Vector2(0.15806645, 0.15806642)
+texture = ExtResource("20_nlly1")
+
+[node name="Reindeer" type="Sprite2D" parent="Front Design/objects" unique_id=90305403]
+position = Vector2(85251, 18.000122)
+scale = Vector2(0.17726488, 0.17726487)
+texture = ExtResource("16_qvq5f")
+
+[node name="Reindeer2" type="Sprite2D" parent="Front Design/objects" unique_id=1680012975]
+position = Vector2(85126.25, 319.19897)
+scale = Vector2(0.27395654, 0.27395654)
+texture = ExtResource("16_qvq5f")
+
+[node name="Reindeer3" type="Sprite2D" parent="Front Design/objects" unique_id=2125594531]
+position = Vector2(85957.25, 283.19897)
+scale = Vector2(0.34799817, 0.34799814)
+texture = ExtResource("16_qvq5f")
+
+[node name="Reindeer4" type="Sprite2D" parent="Front Design/objects" unique_id=2139771315]
+position = Vector2(85498.26, 183.1991)
+scale = Vector2(0.23432055, 0.23432055)
+texture = ExtResource("16_qvq5f")
+
+[node name="Vector4" type="Sprite2D" parent="Front Design/objects" unique_id=1829542909]
+position = Vector2(89286.01, -584)
+scale = Vector2(0.20678337, 0.20678335)
+texture = ExtResource("21_3jjjg")
 
 [editable path="UI"]
