@@ -54,6 +54,7 @@ var _blink_due_to_inactivity: bool = false
 var overlay_layer: CanvasLayer
 
 func _ready():
+	
 	_ensure_overlay_layer()
 	_scan_and_fix_nodepaths(self, true)
 	_spawn_terrain()
@@ -63,6 +64,7 @@ func _ready():
 	_update_player_name_from_tree()
 	_start_round_timer()
 	_setup_inactivity_detection()
+
 
 func _spawn_terrain() -> void:
 	if hill_scene == null:
