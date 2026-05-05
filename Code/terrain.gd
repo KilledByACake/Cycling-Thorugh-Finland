@@ -5,14 +5,14 @@ extends Node2D
 @export var rng_seed: int = 42
 @export var length: int = 125500
 @export var base_y: float = 420.0
-@export var amplitude: float = 80.0
+@export var amplitude: float = 1000.0 #80.0
 @export var noise_frequency: float = 0.0018
 @export_range(0.0, 1.0, 0.01) var difficulty: float = 0.4
-@export var sample_step: int = 4
-@export var max_slope_deg: float = 18.0
+@export var sample_step: int = 4.0
+@export var max_slope_deg: float =100 #18.0
 
 # How far down the polygon is closed below the surface
-@export var ground_thickness: float = 800.0
+@export var ground_thickness: float = 400.0 #800.0
 
 # Editor button to regenerate the terrain without running the game
 @export var regenerate: bool = false:
@@ -38,6 +38,8 @@ func _generate() -> void:
 	rng.seed = rng_seed
 	var off1: float = rng.randf_range(0.0, 1000.0)
 	var off2: float = rng.randf_range(0.0, 1000.0)
+	var off3: float = rng.randf_range(0.0, 1000.0) #for more random
+	#var off4: float = rng.randf_range(0.0, 1000.0) #for more random
 
 	var x: int = 0
 	var prev_y: float = base_y
@@ -45,8 +47,12 @@ func _generate() -> void:
 
 	# Generate surface points using layered sine waves
 	while x <= length:
+		
+		
 		var y: float = sin((x * noise_frequency) + off1) * amplitude
 		y += sin((x * noise_frequency) * 2.1 + off2) * (amplitude * 0.35 * (0.7 + difficulty * 0.6))
+		y += sin((x * noise_frequency) * 0.47 + off3) * (amplitude * 0.6)   # for more random - langsame große Wellen
+		#y += sin((x * noise_frequency) * 5.3 + off4) * (amplitude * 0.15)   # for more random - schnelle kleine Unebenheiten
 		var target_y: float = base_y + y
 
 		# Limit steep slopes between consecutive points

@@ -83,9 +83,9 @@ texture = ExtResource("3_3upoy")
 [node name="TextureRect" type="TextureRect" parent="BG Design" unique_id=17075844]
 layout_mode = 0
 offset_left = 143.0
-offset_top = 148.0
+offset_top = 134.0
 offset_right = 117222.0
-offset_bottom = 1219.0
+offset_bottom = 1205.0
 texture = ExtResource("2_h107k")
 
 [node name="Layer2" type="Node2D" parent="BG Design" unique_id=1247409480 node_paths=PackedStringArray("camera")]
@@ -99,6 +99,9 @@ start_y = -1060.0
 position = Vector2(-1231, 462)
 length = 117079
 base_y = 820.0
+amplitude = 80.0
+max_slope_deg = 18.0
+ground_thickness = 800.0
 
 [node name="Path2D" type="Path2D" parent="." unique_id=1771067717]
 curve = SubResource("Curve2D_y58dp")
@@ -136,23 +139,23 @@ autoscroll = Vector2(0.4, 0)
 texture = ExtResource("15_demcn")
 
 [node name="Blueberry" parent="." unique_id=288817796 instance=ExtResource("7_i12b1")]
-position = Vector2(17499, 1280.7081)
+position = Vector2(17499, 1274.6338)
 terrain_path = NodePath("../Terrain")
 snap_y_offset = -100.0
 message = "A fist of blueberries gives ≈ 180 kJ. In Finland you can pick “mustikka” thanks to jokamiehenoikeus (everyman’s right)!"
 award_energy_kj = 180
 
 [node name="Strawberry" parent="." unique_id=1629111315 instance=ExtResource("10_i12b1")]
-position = Vector2(4254, 1248.9894)
+position = Vector2(4254, 1294.2959)
 terrain_path = NodePath("../Terrain")
 snap_y_offset = -100.0
 
 [node name="Raspberry" parent="." unique_id=658099648 instance=ExtResource("11_tx4co")]
-position = Vector2(11735, 1191.133)
+position = Vector2(11735, 1237.1171)
 terrain_path = NodePath("../Terrain")
 
 [node name="Strawberry2" parent="." unique_id=825299681 instance=ExtResource("12_h107k")]
-position = Vector2(29038, 1191.8977)
+position = Vector2(29038, 1181.8762)
 terrain_path = NodePath("../Terrain")
 snap_y_offset = -100.0
 
@@ -170,8 +173,8 @@ scale = Vector2(0.3050173, 0.30501732)
 texture = ExtResource("16_wy6ri")
 
 [node name="Momin" type="Sprite2D" parent="." unique_id=835447483]
-position = Vector2(46662, 1666)
-scale = Vector2(0.5014323, 0.50143236)
+position = Vector2(46743.125, 1562.4271)
+scale = Vector2(0.65624964, 0.65624976)
 texture = ExtResource("19_wy6ri")
 
 [node name="Front Design" type="Control" parent="." unique_id=1437214444]
