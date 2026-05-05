@@ -3,10 +3,10 @@ extends CharacterBody2D
 signal pedal_tapped
 
 # Tap = speed (tuning)
-@export var power_per_tap: float = 1.0      # tap power added per Space press
+@export var power_per_tap: float = 4.0      # 1.0 tap power added per Space press
 @export var power_decay: float = 2.5        # tap power lost per second
 @export var speed_per_power: float = 200.0  # horizontal speed per 1.0 tap power
-@export var max_speed: float = 2000.0       # speed clamp
+@export var max_speed: float = 20000.0       #2000.0 speed clamp
 
 # Ground follow (tuning)
 # (PathFollow2D now handles ground following; these are no longer used.)
