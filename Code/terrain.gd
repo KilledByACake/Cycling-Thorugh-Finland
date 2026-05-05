@@ -3,7 +3,7 @@ extends Node2D
 
 # ---- Terrain settings ----
 @export var rng_seed: int = 42
-@export var length: int = 8000
+@export var length: int = 160000
 @export var base_y: float = 420.0
 @export var amplitude: float = 80.0
 @export var noise_frequency: float = 0.0018

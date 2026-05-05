@@ -4,7 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://d0cf7c6iyefxk" path="res://Style/bg_gradient.tres" id="2_h107k"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="2_qvq5f"]
 [ext_resource type="Texture2D" uid="uid://c04wuudk5guvp" path="res://Images/Design/BG2.png" id="3_vtfa4"]
+[ext_resource type="Texture2D" uid="uid://cevl1lu4lhmbx" path="res://Images/Design/BG2-3.png" id="4_3chnd"]
 [ext_resource type="Texture2D" uid="uid://cmsap56wesk3" path="res://Images/Design/BG1.png" id="5_hvkua"]
+[ext_resource type="Texture2D" uid="uid://du08hq4ikrtkc" path="res://Images/Design/BG1-4.png" id="6_6y4nr"]
 [ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Items/Blueberry.tscn" id="7_i12b1"]
 [ext_resource type="PackedScene" uid="uid://yy2svaa57xus" path="res://Scenes/Items/Strawberry.tscn" id="10_i12b1"]
 [ext_resource type="PackedScene" uid="uid://bx30rwu2g1mrc" path="res://Scenes/Items/Raspberry.tscn" id="11_tx4co"]
@@ -19,6 +21,8 @@
 [ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/radler.tscn" id="16_n8fgn"]
 [ext_resource type="Texture2D" uid="uid://bjjf3pqs663ii" path="res://Images/Design/Helsinki/Vector-6.svg" id="16_pn5pt"]
 [ext_resource type="Texture2D" uid="uid://csof88shxr0po" path="res://Images/Design/Helsinki/Vecto-treegeenr.svg" id="16_skt5q"]
+[ext_resource type="Texture2D" uid="uid://rek5jlx5mjat" path="res://Images/Design/Infront of cycler.png" id="16_vtfa4"]
+[ext_resource type="Texture2D" uid="uid://br1dwynlxw67b" path="res://Images/Design/Infront of cycler-3.png" id="18_7tv8i"]
 [ext_resource type="Script" uid="uid://sleewu5x0dsi" path="res://Code/path_follow_2d.gd" id="18_dasy0"]
 [ext_resource type="Texture2D" uid="uid://dxbnk03bptunx" path="res://Images/Design/Helsinki/Vector-1.svg" id="20_8qbg5"]
 [ext_resource type="Texture2D" uid="uid://1ek3mli1ijru" path="res://Images/Design/Helsinki/Vector-3.svg" id="22_luag7"]
@@ -38,7 +42,6 @@
 [ext_resource type="Texture2D" uid="uid://xeeuiixx3hdu" path="res://Images/Design/Forest1/baer.png" id="33_7tv8i"]
 [ext_resource type="Texture2D" uid="uid://g24pbic5bppk" path="res://Images/Design/Forest1/Vector-3.svg" id="34_i60at"]
 [ext_resource type="Texture2D" uid="uid://c6mf6plyp5xdh" path="res://Images/Design/Forest1/Vector-5.svg" id="35_s0eh0"]
-[ext_resource type="Texture2D" uid="uid://bhmjm5nhuyh5m" path="res://Images/Design/Infront of cycler#.png" id="39_rq0v3"]
 
 [sub_resource type="Gradient" id="Gradient_h107k"]
 offsets = PackedFloat32Array(0, 0.16468254, 0.31150794, 0.45436507, 0.609127, 0.7797619, 0.89484125, 1)
@@ -77,30 +80,42 @@ offset_bottom = 1145.0
 [node name="TextureRect2" type="TextureRect" parent="DONT MOVE - Design - BG" unique_id=1456584679]
 layout_mode = 0
 offset_left = -143.0
-offset_top = -154.0
-offset_right = 79769.0
-offset_bottom = 867.0
+offset_top = -148.0
+offset_right = 159804.0
+offset_bottom = 873.0
 texture = SubResource("GradientTexture2D_wndho")
 
 [node name="Bg2" type="Sprite2D" parent="DONT MOVE - Design - BG" unique_id=1511321010]
+visible = false
 position = Vector2(72521.6, -60.599976)
 scale = Vector2(4.4, 4.4)
 texture = ExtResource("3_vtfa4")
 
+[node name="Bg23" type="Sprite2D" parent="DONT MOVE - Design - BG" unique_id=1009092828]
+position = Vector2(77614.8, -861.8999)
+scale = Vector2(4.7, 4.7)
+texture = ExtResource("4_3chnd")
+
 [node name="TextureRect" type="TextureRect" parent="DONT MOVE - Design - BG" unique_id=17075844]
 layout_mode = 0
-offset_right = 79999.0
+offset_right = 159843.0
 offset_bottom = 1071.0
 texture = ExtResource("2_h107k")
 
+[node name="Bg14" type="Sprite2D" parent="DONT MOVE - Design - BG" unique_id=614352525]
+visible = false
+position = Vector2(77614.8, -861.8999)
+scale = Vector2(4.7, 4.7)
+texture = ExtResource("6_6y4nr")
+
 [node name="Bg1" type="Sprite2D" parent="DONT MOVE - Design - BG" unique_id=794938832]
-position = Vector2(72521.6, -60.599976)
+position = Vector2(72731, -809)
 scale = Vector2(4.4, 4.4)
 texture = ExtResource("5_hvkua")
 
 [node name="Terrain" parent="." unique_id=1830455226 instance=ExtResource("16_eca5b")]
 position = Vector2(-1231, 462)
-length = 80000
+length = 160000
 base_y = 820.0
 
 [node name="Path2D" type="Path2D" parent="." unique_id=1771067717]
@@ -108,7 +123,7 @@ curve = SubResource("Curve2D_y58dp")
 script = ExtResource("16_dasy0")
 
 [node name="PathRight" type="Node2D" parent="Path2D" unique_id=2010174335]
-position = Vector2(73623, 1498)
+position = Vector2(149522, 1156)
 
 [node name="PathLeft" type="Node2D" parent="Path2D" unique_id=187768649]
 position = Vector2(1783, 1389)
@@ -167,9 +182,15 @@ offset_top = 1044.4
 offset_right = 71350.6
 offset_bottom = 1084.4
 
+[node name="InfrontOfCycler3" type="Sprite2D" parent="DONT MOVE - design -front" unique_id=2019835553]
+position = Vector2(5093.1953, -801.2999)
+scale = Vector2(4.7, 4.7)
+texture = ExtResource("18_7tv8i")
+
 [node name="InfrontOfCycler#" type="Sprite2D" parent="DONT MOVE - design -front" unique_id=1232701488]
+visible = false
 scale = Vector2(4.4, 4.4)
-texture = ExtResource("39_rq0v3")
+texture = ExtResource("16_vtfa4")
 
 [node name="Design - old - but leave here" type="Control" parent="." unique_id=266280231]
 visible = false
