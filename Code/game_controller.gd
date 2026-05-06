@@ -6,6 +6,10 @@ signal round_over(won: bool)
 @export var trigger_path_rebuild: bool = true
 @export var randomize_seed_on_play: bool = true
 
+# Win when the player reaches PathRight (configure these to match your scene).
+@export_node_path("Area2D") var goal_area_path: NodePath = NodePath("Path2D/PathRight")  # If PathRight is an Area2D
+@export_node_path("Node2D") var goal_node_path: NodePath = NodePath("Path2D/PathRight")  # Fallback if PathRight is Node2D
+
 const ROUND_TIME_SEC: int = 100
 const TARGET_ENERGY: int = 200
 const BANNER_DURATION_SEC: float = 2.0
@@ -53,7 +57,7 @@ var _blink_due_to_inactivity: bool = false
 # Overlay
 var overlay_layer: CanvasLayer
 
-# Called when the node enters the scene tree; sets up terrain, UI, and timers.
+# Called when the node enters the scene tree; sets up terrain, UI, timers, and goal trigger.
 func _ready() -> void:
 	_ensure_overlay_layer()
 	_scan_and_fix_nodepaths(self, true)
@@ -66,6 +70,7 @@ func _ready() -> void:
 	_update_player_name_from_tree()
 	_start_round_timer()
 	_setup_inactivity_detection()
+	_connect_goal_area()  # Connect PathRight (Area2D) if available
 
 # Spawns terrain instance and configures its exported properties.
 func _spawn_terrain() -> void:
@@ -97,7 +102,7 @@ func _spawn_terrain() -> void:
 		elif p2d != null and p2d.has_method("_rebuild_from_terrain"):
 			p2d.call("_rebuild_from_terrain")
 
-# Per-frame update; updates timer label and blinking.
+# Per-frame update; updates timer UI and checks goal (fallback for Node2D goal).
 func _process(delta: float) -> void:
 	if round_finished:
 		return
@@ -108,6 +113,15 @@ func _process(delta: float) -> void:
 		var should_blink: bool = (t <= timer_blink_threshold_sec) or _blink_due_to_inactivity
 		_enable_timer_blink(should_blink)
 		_update_timer_blink(delta)
+
+	# Fallback win: if PathRight is a Node2D, finish when the player crosses its X.
+	var goal_node: Node2D = _resolve_node_safe(goal_node_path) as Node2D
+	if not round_finished and goal_node != null:
+		var player_nd: Node2D = get_tree().get_first_node_in_group("player") as Node2D
+		if player_nd == null:
+			player_nd = get_tree().get_first_node_in_group("radler") as Node2D
+		if player_nd != null and player_nd.global_position.x >= goal_node.global_position.x:
+			_finish_as_victory()
 
 # Increases energy by amount and refreshes UI.
 func add_energy(amount: int) -> void:
@@ -163,7 +177,7 @@ func _start_round_timer() -> void:
 		_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 
-# Called when the round timer finishes; freezes world and shows results.
+# Called when the round timer finishes; freezes world and shows results (win by energy).
 func _finish_round() -> void:
 	if round_finished:
 		return
@@ -239,6 +253,40 @@ func _game_over_due_to_inactivity() -> void:
 	emit_signal("round_over", false)
 	await _show_banner_overlay(false)
 	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
+
+# Connects to PathRight (Area2D) once; safe if PathRight is not an Area2D.
+func _connect_goal_area() -> void:
+	var area: Area2D = _resolve_node_safe(goal_area_path) as Area2D
+	if area != null and not area.body_entered.is_connected(_on_goal_area_body_entered):
+		area.body_entered.connect(_on_goal_area_body_entered)
+
+# Called when the player enters PathRight (Area2D); finishes as victory.
+func _on_goal_area_body_entered(body: Node) -> void:
+	if round_finished:
+		return
+	if body != null and (body.is_in_group("player") or body.is_in_group("radler")):
+		_finish_as_victory()
+
+# Ends the round immediately as a win and shows Victory.
+func _finish_as_victory() -> void:
+	if round_finished:
+		return
+	round_finished = true
+	# Stop timers/blink and reset colors.
+	if game_timer:
+		game_timer.stop()
+	if inactivity_warning_timer:
+		inactivity_warning_timer.stop()
+	if inactivity_timer:
+		inactivity_timer.stop()
+	_set_timer_label_color(timer_normal_color)
+	_enable_timer_blink(false)
+	_blink_due_to_inactivity = false
+	# Freeze world and show overlays.
+	_freeze_world()
+	emit_signal("round_over", true)
+	await _show_banner_overlay(true)
+	_show_result_screen_overlay(true, energy_points, TARGET_ENERGY)
 
 # Enables or disables timer blinking and resets blink state.
 func _enable_timer_blink(v: bool) -> void:
