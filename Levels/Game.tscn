@@ -10,7 +10,6 @@
 [ext_resource type="PackedScene" uid="uid://bx30rwu2g1mrc" path="res://Scenes/Items/Raspberry.tscn" id="11_tx4co"]
 [ext_resource type="PackedScene" uid="uid://b50sjm3kawb5w" path="res://Scenes/Items/Apple.tscn" id="12_h107k"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Screen/UI.tscn" id="14_skt5q"]
-[ext_resource type="Texture2D" uid="uid://dq5tw53hg3b7k" path="res://Images/Other/Clouds.png" id="15_demcn"]
 [ext_resource type="Texture2D" uid="uid://cr8odhe5s5nrj" path="res://Images/Design/sprite objects/Vector-2.png" id="15_eca5b"]
 [ext_resource type="Script" uid="uid://co1x31w7232x4" path="res://Code/path_2d.gd" id="16_dasy0"]
 [ext_resource type="PackedScene" uid="uid://begi8cpog3er3" path="res://Scenes/terrain.tscn" id="16_eca5b"]
@@ -152,14 +151,6 @@ position = Vector2(254, -266)
 drag_horizontal_enabled = true
 
 [node name="UI" parent="." unique_id=482392122 instance=ExtResource("14_skt5q")]
-
-[node name="Clouds" type="Parallax2D" parent="." unique_id=1041042698]
-scroll_offset = Vector2(-1418, 560)
-repeat_size = Vector2(3000, 0)
-autoscroll = Vector2(0.4, 0)
-
-[node name="Sprite2D" type="Sprite2D" parent="Clouds" unique_id=1084387943]
-texture = ExtResource("15_demcn")
 
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1298348767]
 visible = false
