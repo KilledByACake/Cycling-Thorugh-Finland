@@ -5,12 +5,12 @@ const MIN_NAME_CHARACTERS: int = 3
 const MAX_NAME_CHARACTERS: int = 15
 
 const MAIN_MENU_SCENE_PATH: String = "res://Levels/MainMenu.tscn"
-const LEVEL1_SCENE_PATH: String = "res://Levels/Game.tscn"
+const LOADING_SCENE_PATH: String = "res://Levels/Loading.tscn"
 
 # Dialog sizing used only when "_RESET" is typed
 const DIALOG_LABEL_SIZE: int = 72
 const DIALOG_BUTTON_SIZE: int = 64
-const DIALOG_MIN_SIZE: Vector2i = Vector2i(900, 420) # smaller = buttons sit higher
+const DIALOG_MIN_SIZE: Vector2i = Vector2i(900, 420)
 const DIALOG_BTN_MIN: Vector2i = Vector2i(320, 130)
 const DIALOG_BUTTONS_SEP: int = 40
 
@@ -131,9 +131,10 @@ func _on_done_pressed() -> void:
 	if trimmed.length() < MIN_NAME_CHARACTERS:
 		_flash_name_label()
 		return
-	get_tree().root.set_meta("player_name", trimmed) 
+	# Store player name and go to the Loading scene
+	get_tree().root.set_meta("player_name", trimmed)
 	emit_signal("name_confirmed", trimmed)
-	get_tree().change_scene_to_file(LEVEL1_SCENE_PATH)
+	get_tree().change_scene_to_file(LOADING_SCENE_PATH)
 
 # --- styling used only when "_RESET" is typed ---
 
@@ -188,13 +189,12 @@ func _show_reset_confirm() -> void:
 		_confirm_reset_dlg.get_ok_button().text = "Yes"
 		_confirm_reset_dlg.get_cancel_button().text = "No"
 		_style_confirm_dialog(_confirm_reset_dlg)
-	# Center and clamp size so it stays centered on any display
 	_confirm_reset_dlg.popup_centered_clamped(DIALOG_MIN_SIZE, 0.9)
 
 func _on_reset_confirmed() -> void:
 	var hs := get_node_or_null("/root/HighScores")
 	if hs:
-		hs.call("reset_today_view") # clears today's display-only list
+		hs.call("reset_today_view")
 	_show_info_and_return()
 
 func _on_reset_canceled() -> void:
@@ -213,7 +213,6 @@ func _show_info_and_return() -> void:
 		if not _info_dlg.confirmed.is_connected(_on_info_ok):
 			_info_dlg.confirmed.connect(_on_info_ok)
 		_style_info_dialog(_info_dlg)
-	# Center and clamp size (matches the confirm dialog)
 	_info_dlg.popup_centered_clamped(DIALOG_MIN_SIZE, 0.9)
 
 func _on_info_ok() -> void:
