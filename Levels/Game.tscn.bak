@@ -6,9 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://x6frcpu8h5x1" path="res://Images/Design/sprite objects/nothernlights.png" id="3_3upoy"]
 [ext_resource type="Script" uid="uid://bs2bpjciuqc4l" path="res://Code/layer_scroller.gd" id="3_wndho"]
 [ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Items/Blueberry.tscn" id="7_i12b1"]
-[ext_resource type="Script" uid="uid://cthog1pmieh2u" path="res://Code/terrain.gd" id="8_dlg5e"]
 [ext_resource type="PackedScene" uid="uid://yy2svaa57xus" path="res://Scenes/Items/Strawberry.tscn" id="10_i12b1"]
-[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="11_f81n8"]
 [ext_resource type="PackedScene" uid="uid://bx30rwu2g1mrc" path="res://Scenes/Items/Raspberry.tscn" id="11_tx4co"]
 [ext_resource type="PackedScene" uid="uid://b50sjm3kawb5w" path="res://Scenes/Items/Apple.tscn" id="12_h107k"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Screen/UI.tscn" id="14_skt5q"]
@@ -18,12 +16,9 @@
 [ext_resource type="PackedScene" uid="uid://brftna4btfksp" path="res://Scenes/Player.tscn" id="16_n8fgn"]
 [ext_resource type="Texture2D" uid="uid://by6evqrtbxn1u" path="res://Images/Design/sprite objects/reindeer.png" id="16_qvq5f"]
 [ext_resource type="Texture2D" uid="uid://dae5ckc2x4e1f" path="res://Images/Design/sprite objects/Vector.png" id="16_wy6ri"]
-[ext_resource type="Script" uid="uid://dyhv3tos08ovr" path="res://Code/player.gd" id="17_pn5pt"]
 [ext_resource type="Texture2D" uid="uid://cvy0uq448op8u" path="res://Images/Design/sprite objects/train.png" id="17_qvq5f"]
 [ext_resource type="Script" uid="uid://sleewu5x0dsi" path="res://Code/path_follow_2d.gd" id="18_dasy0"]
-[ext_resource type="Texture2D" uid="uid://cx4iyso3jru3y" path="res://Images/Other/EnergySymbol2.png" id="19_skt5q"]
 [ext_resource type="Texture2D" uid="uid://b7egq5606webl" path="res://Images/Design/sprite objects/Vector-1.png" id="19_wy6ri"]
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="20_demcn"]
 [ext_resource type="Texture2D" uid="uid://bth5nibf3dvic" path="res://Images/Design/sprite objects/Vector-3.png" id="20_nlly1"]
 [ext_resource type="Texture2D" uid="uid://q5oebr5hwo1v" path="res://Images/Design/sprite objects/Vector-4.png" id="21_3jjjg"]
 
@@ -103,9 +98,8 @@ folder_path = "res://Images/Design/Layer2/"
 camera = NodePath("../../Path2D/PathFollow2D/Radler/Camera2D")
 start_y = -1060.0
 
-[node name="Terrain" type="Node2D" parent="." unique_id=2028652745 instance=ExtResource("16_eca5b")]
+[node name="Terrain" parent="." unique_id=2028652745 instance=ExtResource("16_eca5b")]
 position = Vector2(-1231, 462)
-script = ExtResource("8_dlg5e")
 rng_seed = -5805746178815559295
 length = 117079
 base_y = 820.0
@@ -126,39 +120,24 @@ position = Vector2(1783, 1389)
 
 [node name="Items" type="Node2D" parent="Path2D" unique_id=164772678]
 
-[node name="Blueberry" type="Area2D" parent="Path2D/Items" unique_id=288817796 instance=ExtResource("7_i12b1")]
+[node name="Blueberry" parent="Path2D/Items" unique_id=288817796 instance=ExtResource("7_i12b1")]
 position = Vector2(17499, 1304.0848)
-script = ExtResource("11_f81n8")
 terrain_path = NodePath("../../../Terrain")
 message = "A fist of blueberries gives ≈ 180 kJ. In Finland you can pick “mustikka” thanks to jokamiehenoikeus (everyman’s right)!"
-collector_groups = PackedStringArray("player", "radler")
 award_energy_kj = 180
 
-[node name="Strawberry" type="Area2D" parent="Path2D/Items" unique_id=1629111315 instance=ExtResource("10_i12b1")]
+[node name="Strawberry" parent="Path2D/Items" unique_id=1629111315 instance=ExtResource("10_i12b1")]
 position = Vector2(4254, 1138.8867)
-script = ExtResource("11_f81n8")
 terrain_path = NodePath(".")
 snap_y_offset = -100.0
-message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
-collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 135
 
-[node name="Raspberry" type="Area2D" parent="Path2D/Items" unique_id=658099648 instance=ExtResource("11_tx4co")]
+[node name="Raspberry" parent="Path2D/Items" unique_id=658099648 instance=ExtResource("11_tx4co")]
 position = Vector2(11735, 1187.9827)
-script = ExtResource("11_f81n8")
 terrain_path = NodePath("../../../Terrain")
-message = "Raspberries ≈ 165 kJ per handful, small berries, big flavor."
-collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 165
 
-[node name="Apple" type="Area2D" parent="Path2D/Items" unique_id=825299681 instance=ExtResource("12_h107k")]
+[node name="Apple" parent="Path2D/Items" unique_id=825299681 instance=ExtResource("12_h107k")]
 position = Vector2(29038, 1152.2319)
-script = ExtResource("11_f81n8")
 terrain_path = NodePath("../../../Terrain")
-message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
-collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 330
-pickup_animation_name = &"Apple ≈ 330 kJ. Finnish gardens brim with “omena” in autumn."
 
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1236212940]
 position = Vector2(-1202.4233, 1128.0006)
@@ -168,60 +147,14 @@ script = ExtResource("18_dasy0")
 start_marker_path = NodePath("../PathLeft")
 end_marker_path = NodePath("../PathRight")
 
-[node name="Radler" type="CharacterBody2D" parent="Path2D/PathFollow2D" unique_id=801071611 instance=ExtResource("16_n8fgn")]
+[node name="Radler" parent="Path2D/PathFollow2D" unique_id=801071611 instance=ExtResource("16_n8fgn")]
 position = Vector2(-10.505859, 18.911133)
-script = ExtResource("17_pn5pt")
 
 [node name="Camera2D" type="Camera2D" parent="Path2D/PathFollow2D/Radler" unique_id=974620558]
 position = Vector2(254, -266)
 drag_horizontal_enabled = true
 
-[node name="UI" parent="." unique_id=482392122 groups=["ui"] instance=ExtResource("14_skt5q")]
-
-[node name="Energy" parent="UI" index="0" unique_id=1524677923]
-offset_left = 16.0
-offset_top = 188.0
-offset_right = 416.0
-offset_bottom = 538.0
-texture = ExtResource("19_skt5q")
-expand_mode = 1
-
-[node name="Label" parent="UI/Energy" index="0" unique_id=216446171]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.1170001
-anchor_top = 0.18400002
-anchor_right = 1.9070001
-anchor_bottom = 0.86700004
-offset_left = -16.197021
-offset_top = -1.5840034
-offset_right = -20.197021
-offset_bottom = 7.8159943
-theme_override_fonts/font = ExtResource("20_demcn")
-theme_override_font_sizes/font_size = 150
-text = "0"
-
-[node name="PlayerNameLabel" parent="UI" index="1" unique_id=967513957]
-offset_left = 39.0
-offset_top = -1.0
-offset_right = 959.0
-offset_bottom = 182.0
-theme_override_fonts/font = ExtResource("20_demcn")
-theme_override_font_sizes/font_size = 150
-text = "Player Name"
-
-[node name="TimerLabel" parent="UI" index="2" unique_id=192753063]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -587.0
-offset_right = -53.0
-offset_bottom = 243.0
-grow_horizontal = 0
-theme_override_fonts/font = ExtResource("20_demcn")
-theme_override_font_sizes/font_size = 200
-text = "02:00"
-horizontal_alignment = 2
+[node name="UI" parent="." unique_id=482392122 instance=ExtResource("14_skt5q")]
 
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1298348767]
 visible = false

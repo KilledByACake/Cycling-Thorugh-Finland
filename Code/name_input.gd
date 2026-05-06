@@ -4,7 +4,7 @@ signal name_confirmed(name: String)
 const MIN_NAME_CHARACTERS: int = 3
 const MAX_NAME_CHARACTERS: int = 15
 
-const MAIN_MENU_SCENE_PATH: String = "res://Levels/MainMenu.tscn"
+const MAIN_MENU_SCENE_PATH: String = "res://Levels/Main.tscn"
 const LOADING_SCENE_PATH: String = "res://Levels/Loading.tscn"
 
 # Dialog sizing used only when "_RESET" is typed

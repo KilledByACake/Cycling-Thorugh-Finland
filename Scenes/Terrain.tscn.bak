@@ -6,6 +6,7 @@
 [node name="Terrain" type="Node2D" unique_id=1830455226]
 script = ExtResource("1_13aae")
 length = 8000
+noise_frequency = 0.0018
 
 [node name="Polygon2D" type="Polygon2D" parent="." unique_id=1822135357]
 texture_filter = 2

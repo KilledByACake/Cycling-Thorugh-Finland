@@ -15,7 +15,7 @@ ss2d/version="3.3.1"
 [application]
 
 config/name="Cycling through Finland - Pedal Project"
-run/main_scene="uid://dy27ncb1fei4c"
+run/main_scene="uid://dg1halhkihrb6"
 config/features=PackedStringArray("4.6", "GL Compatibility")
 config/icon="res://icon.svg"
 

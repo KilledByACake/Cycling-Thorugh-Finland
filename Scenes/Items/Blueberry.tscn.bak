@@ -1,0 +1,98 @@
+[gd_scene format=3 uid="uid://c4u2wq7pdwgjm"]
+
+[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_vwcqu"]
+[ext_resource type="Texture2D" uid="uid://cffp1bpev0igo" path="res://Images/Pickups/blueberry.png" id="2_g86ho"]
+[ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_g86ho"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]
+radius = 81.0
+
+[sub_resource type="Animation" id="Animation_h2p6v"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="Animation" id="Animation_ffmqm"]
+resource_name = "pickup"
+length = 5.6
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Sprite2D:position:y")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, -50, -1.7333333, -101, 0, 0),
+"times": PackedFloat32Array(0, 1.2)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sprite2D:modulate:a")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(2, 0),
+"points": PackedFloat32Array(1, 0, 0, 0.2888889, -0.16666667, 0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0, 1.2)
+}
+tracks/2/type = "audio"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Pickup")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"clips": [{
+"end_offset": 0.0,
+"start_offset": 0.0,
+"stream": ExtResource("3_g86ho")
+}],
+"times": PackedFloat32Array(0)
+}
+tracks/2/use_blend = true
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_gxi26"]
+_data = {
+&"RESET": SubResource("Animation_h2p6v"),
+&"pickup": SubResource("Animation_ffmqm")
+}
+
+[node name="Blueberry" type="Area2D" unique_id=658099648]
+script = ExtResource("1_vwcqu")
+collector_groups = PackedStringArray("player", "radler")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
+position = Vector2(-0.49999678, 0)
+scale = Vector2(0.20622568, 0.21423371)
+texture = ExtResource("2_g86ho")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1885821890]
+position = Vector2(-1, 7)
+shape = SubResource("CircleShape2D_vwcqu")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=1342139366]
+libraries/ = SubResource("AnimationLibrary_gxi26")
+
+[node name="Pickup" type="AudioStreamPlayer" parent="." unique_id=569350202]
