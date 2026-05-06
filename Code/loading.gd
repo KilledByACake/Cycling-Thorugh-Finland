@@ -1,8 +1,10 @@
 extends Node
 
-@export var game_scene_path: String = "res://Levels/Game.tscn"     # path to your game scene
-@export var words: PackedStringArray = ["Ready?", "Set..", "Go!"]
-@export var step_time: float = 1.0
+# Asynchronously loads the main game scene, shows a short countdown, then starts the game.
+
+@export var game_scene_path: String = "res://Levels/Game.tscn"     # Path to the game scene
+@export var words: PackedStringArray = ["Ready?", "Set..", "Go!"]  # Countdown words
+@export var step_time: float = 1.0                                 # Delay between words
 
 @onready var overlay: CanvasLayer = $Overlay
 @onready var word_label: Label = $Overlay/CountdownTimer
@@ -11,26 +13,29 @@ var game_inst: Node = null
 var ui_layer: CanvasLayer = null
 var player: Node = null
 
+# Called on enter tree; loads the game scene in a background thread and runs a countdown.
 func _ready() -> void:
-	# Show "Loading..." immediately
+	# Show initial loading text
 	word_label.text = "Loading..."
 	await get_tree().process_frame
 
-	# Threaded load of Game.tscn (keeps UI responsive)
-	var err := ResourceLoader.load_threaded_request(game_scene_path)
+	# Start threaded load (keeps UI responsive)
+	var err: int = ResourceLoader.load_threaded_request(game_scene_path)
 	if err != OK:
 		push_error("Failed to start threaded load: " + game_scene_path)
 		return
 
+	# Wait until the load finishes
 	while ResourceLoader.load_threaded_get_status(game_scene_path) == ResourceLoader.THREAD_LOAD_IN_PROGRESS:
 		await get_tree().process_frame
 
-	var packed := ResourceLoader.load_threaded_get(game_scene_path) as PackedScene
+	# Retrieve the loaded scene
+	var packed: PackedScene = ResourceLoader.load_threaded_get(game_scene_path) as PackedScene
 	if packed == null:
 		push_error("Threaded load returned null: " + game_scene_path)
 		return
 
-	# Instance the game under the Loader (overlay stays on top as it’s a CanvasLayer)
+	# Instance the game under this loader (overlay stays on top as it's a CanvasLayer)
 	game_inst = packed.instantiate()
 	add_child(game_inst)
 
@@ -67,4 +72,4 @@ func _ready() -> void:
 	if ui_layer:
 		ui_layer.visible = true
 
-	overlay.queue_free()  # remove loading/countdown overlay
+	overlay.queue_free()  # Remove loading/countdown overlay

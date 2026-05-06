@@ -1,6 +1,8 @@
 @tool
 extends Area2D
 
+# Pickup that can snap to terrain, award energy, play SFX/animation, then disappear.
+
 # Terrain snapping setup
 @export_node_path("Node2D") var terrain_path: NodePath
 @export var auto_find_terrain: bool = true
@@ -24,6 +26,7 @@ extends Area2D
 @export var disappear_scale: float = 0.6
 @export var disappear_time: float = 0.15
 
+# Called when the node enters the scene; sets monitoring and signal connections.
 func _ready() -> void:
 	if not Engine.is_editor_hint():
 		monitoring = true
@@ -31,6 +34,7 @@ func _ready() -> void:
 		area_entered.connect(_on_area_entered)
 		body_entered.connect(_on_body_entered)
 
+# Per-frame; optionally finds terrain and snaps to ground.
 func _process(_dt: float) -> void:
 	if auto_find_terrain and terrain_path.is_empty():
 		var t: Node2D = _find_terrain_in_tree()
@@ -41,15 +45,17 @@ func _process(_dt: float) -> void:
 	if do_snap:
 		_snap_to_ground()
 
+# Handles Area2D overlaps; collects if the collider is allowed.
 func _on_area_entered(a: Area2D) -> void:
 	if a != null and _is_allowed_collector(a):
 		_collect()
 
+# Handles PhysicsBody2D overlaps; collects if the collider is allowed.
 func _on_body_entered(b: PhysicsBody2D) -> void:
 	if b != null and _is_allowed_collector(b):
 		_collect()
 
-# Applies energy, plays VFX/SFX, and removes the pickup
+# Applies energy, plays SFX/animation, shows message, and optionally frees this node.
 func _collect() -> void:
 	if not is_inside_tree():
 		return
@@ -97,9 +103,7 @@ func _collect() -> void:
 			if auto_free_on_pick and is_inside_tree():
 				queue_free()
 
-# --- Helpers ---
-
-# Accept only nodes in allowed groups
+# Returns true if the node belongs to any allowed collector group.
 func _is_allowed_collector(n: Node) -> bool:
 	if collector_groups.is_empty():
 		return true
@@ -108,7 +112,7 @@ func _is_allowed_collector(n: Node) -> bool:
 			return true
 	return false
 
-# Find the nearest level node that implements add_energy
+# Finds the nearest ancestor (or scene root) that implements add_energy.
 func _find_level() -> Node:
 	var n: Node = self
 	while n != null and not n.has_method("add_energy"):
@@ -117,7 +121,7 @@ func _find_level() -> Node:
 		return n
 	return get_tree().current_scene
 
-# Snap vertically to the terrain, storing position parent-local so items move with Path2D
+# Snaps the pickup to the terrain surface (and optionally aligns to slope).
 func _snap_to_ground() -> void:
 	var terrain: Node2D = _resolve_node(terrain_path) as Node2D
 	if terrain == null or not terrain.has_method("get_surface_y"):
@@ -139,7 +143,7 @@ func _snap_to_ground() -> void:
 		var y_r: float = float(terrain.call("get_surface_y", x_in_terrain.x + 2.0))
 		global_rotation = atan2(y_r - y_l, 4.0)
 
-# Get AnimationPlayer on this node or first child
+# Returns an AnimationPlayer on this node or the first child one.
 func _get_animation_player() -> AnimationPlayer:
 	var ap: AnimationPlayer = get_node_or_null("AnimationPlayer") as AnimationPlayer
 	if ap != null:
@@ -149,7 +153,7 @@ func _get_animation_player() -> AnimationPlayer:
 			return c as AnimationPlayer
 	return null
 
-# Get explicit CollisionShape2D or first child shape
+# Returns an explicit CollisionShape2D (by path) or the first child shape.
 func _get_collision_shape() -> CollisionShape2D:
 	if not collision_shape_path.is_empty():
 		var s: CollisionShape2D = _resolve_node(collision_shape_path) as CollisionShape2D
@@ -160,7 +164,7 @@ func _get_collision_shape() -> CollisionShape2D:
 			return c as CollisionShape2D
 	return null
 
-# Resolve a NodePath relative to this node
+# Resolves a NodePath relative to this node (supports absolute paths).
 func _resolve_node(p: NodePath) -> Node:
 	if p.is_empty() or not is_inside_tree():
 		return null
@@ -168,7 +172,7 @@ func _resolve_node(p: NodePath) -> Node:
 		return get_tree().root.get_node_or_null(p)
 	return get_node_or_null(p)
 
-# Find a terrain node by scanning the current scene
+# Scans the current scene tree to find a terrain-like node.
 func _find_terrain_in_tree() -> Node2D:
 	var root: Node = get_tree().current_scene
 	if root == null:

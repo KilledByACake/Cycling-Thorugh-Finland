@@ -1,6 +1,8 @@
 @tool
 extends Node2D
 
+# Generates a 2D terrain polygon and provides surface sampling utilities.
+
 # ---- Terrain settings ----
 @export var rng_seed: int = 42
 @export var length: int = 125500
@@ -25,9 +27,11 @@ extends Node2D
 # Stores the top surface points of the terrain
 var _top_points: PackedVector2Array = PackedVector2Array()
 
+# Called when the node enters the scene; builds terrain once.
 func _ready() -> void:
 	_generate()
 
+# Builds top surface points and the filled ground polygon.
 func _generate() -> void:
 	if polygon == null:
 		return
@@ -80,16 +84,16 @@ func _generate() -> void:
 		polygon.material.set_shader_parameter("terrain_start", 0.0)
 		polygon.material.set_shader_parameter("terrain_end", float(length))
 
-# Returns a copy of the top surface points for other nodes to use
+# Returns a copy of the top surface points for other nodes to use.
 func get_top_points() -> PackedVector2Array:
 	return _top_points.duplicate()
 
-# Returns the surface Y position at a given X in local space
+# Returns the surface Y position at a given X in local space (linear interpolation).
 func get_surface_y(x_pos: float) -> float:
 	if _top_points.is_empty():
 		return base_y
 	x_pos = clamp(x_pos, 0.0, float(length))
-	var step := float(max(1, sample_step))
+	var step: float = float(max(1, sample_step))
 	var idx: int = int(floor(x_pos / step))
 	idx = clamp(idx, 0, _top_points.size() - 2)
 	var p0: Vector2 = _top_points[idx]

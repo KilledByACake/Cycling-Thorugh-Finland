@@ -14,8 +14,9 @@ const SHOW_TOP_N: int = 5
 @onready var retry_btn: Button = get_node_or_null("CenterContainer/VBoxContainer/HBoxContainer/Retry") as Button
 @onready var main_btn: Button = get_node_or_null("CenterContainer/VBoxContainer/HBoxContainer/Main Menu") as Button
 
-var _score_added: bool = false # prevents double insertion of the same round
+var _score_added: bool = false # Prevents double insertion of the same round
 
+# Called when the node enters the scene; ensures a single instance and wires UI.
 func _ready() -> void:
 	# Ensure a single Result instance to avoid overlapping labels.
 	add_to_group("ResultScreen")
@@ -39,18 +40,19 @@ func _ready() -> void:
 		if not main_btn.pressed.is_connected(_on_Main_Menu_pressed):
 			main_btn.pressed.connect(_on_Main_Menu_pressed)
 
+# Receives result data, submits score once, and renders today's top list.
 func set_result(_won: bool, energy: int, _target: int, player_name: String = "") -> void:
 	# Resolve player name (UI may pass empty).
-	var player_name_text := player_name
+	var player_name_text: String = player_name
 	if player_name_text == "" and get_tree().root.has_meta("player_name"):
 		player_name_text = str(get_tree().root.get_meta("player_name"))
 	if player_name_text == "":
 		player_name_text = "Player"
 
-	# Add score only once and ignore zero energy (avoids duplicate/placeholder entries).
-	var hs := get_node_or_null("/root/HighScores")
+	# Add score only once and ignore zero energy (avoid duplicate/placeholder entries).
+	var hs: Node = get_node_or_null("/root/HighScores")
 	if hs and energy > 0 and not _score_added:
-		var entry := {
+		var entry: Dictionary = {
 			"name": player_name_text,
 			"score": float(energy),
 			"date": _today_iso(),
@@ -67,19 +69,20 @@ func set_result(_won: bool, energy: int, _target: int, player_name: String = "")
 		title_label.text = "DAILY HIGH SCORES"
 
 	# Prefer today's reset-view list; fallback to canonical daily.
-	var list_txt := "No scores yet today."
+	var list_txt: String = "No scores yet today."
 	if hs:
-		var top: Array = hs.call("top_today_reset", SHOW_TOP_N, true)
+		var top: Array = hs.call("top_today_reset", SHOW_TOP_N, true) as Array
 		if top.size() == 0:
-			top = hs.call("top_today", SHOW_TOP_N, true)
+			top = hs.call("top_today", SHOW_TOP_N, true) as Array
 		if top.size() > 0:
 			var lines: Array[String] = []
 			for i in range(top.size()):
-				var e: Dictionary = top[i]
+				var e: Dictionary = top[i] as Dictionary
 				lines.append("%d. %s — %d" % [i + 1, str(e.get("name", "?")), int(e.get("score", 0))])
-			var txt := ""
-			for i in lines.size():
-				if i > 0: txt += "\n"
+			var txt: String = ""
+			for i in range(lines.size()):
+				if i > 0:
+					txt += "\n"
 				txt += lines[i]
 			list_txt = txt
 
@@ -89,12 +92,15 @@ func set_result(_won: bool, energy: int, _target: int, player_name: String = "")
 		info_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		info_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 
+# Button handler: restarts the game scene.
 func _on_Retry_pressed() -> void:
 	get_tree().change_scene_to_file(LEVEL1_SCENE_PATH)
 
+# Button handler: returns to the main menu.
 func _on_Main_Menu_pressed() -> void:
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
 
+# Utility: returns today's date as YYYY-MM-DD.
 func _today_iso() -> String:
 	var d: Dictionary = Time.get_date_dict_from_system()
 	return "%04d-%02d-%02d" % [d.year, d.month, d.day]
