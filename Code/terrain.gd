@@ -33,13 +33,16 @@ func _generate() -> void:
 		return
 	_top_points.clear()
 
-	# Set up RNG with fixed seed so terrain is always the same
 	var rng: RandomNumberGenerator = RandomNumberGenerator.new()
-	rng.seed = rng_seed
+	# Use system entropy so the seed is different each run
+	rng.randomize()
+	# Optional: store the actual seed used (handy for debugging/repro later)
+	rng_seed = int(rng.seed)
+
 	var off1: float = rng.randf_range(0.0, 1000.0)
 	var off2: float = rng.randf_range(0.0, 1000.0)
-	var off3: float = rng.randf_range(0.0, 1000.0) #for more random
-	#var off4: float = rng.randf_range(0.0, 1000.0) #for more random
+	var off3: float = rng.randf_range(0.0, 1000.0)
+	# var off4: float = rng.randf_range(0.0, 1000.0) # for even more variation
 
 	var x: int = 0
 	var prev_y: float = base_y

@@ -1,6 +1,6 @@
 [gd_resource type="ShaderMaterial" format=3 uid="uid://bo4l5i3vj10ow"]
 
-[ext_resource type="Shader" uid="uid://cb13620hroky6" path="res://Style/gradient_shader.gdshader" id="1_placx"]
+[ext_resource type="Shader" path="res://Style/gradient_shader.gdshader" id="1_placx"]
 
 [resource]
 shader = ExtResource("1_placx")
@@ -12,3 +12,5 @@ shader_parameter/color_5 = Color(0.416, 0.353, 0.212, 1)
 shader_parameter/color_6 = Color(0.486, 0.224, 0.192, 1)
 shader_parameter/color_7 = Color(0.357, 0.231, 0.361, 1)
 shader_parameter/color_8 = Color(0.157, 0.196, 0.275, 1)
+shader_parameter/terrain_start = 0.0
+shader_parameter/terrain_end = 10000.0

@@ -4,7 +4,7 @@
 [ext_resource type="Texture2D" uid="uid://d0cf7c6iyefxk" path="res://Style/bg_gradient.tres" id="2_h107k"]
 [ext_resource type="Texture2D" uid="uid://e0fgux5x3ckn" path="res://Images/Other/SceneBG.png" id="2_qvq5f"]
 [ext_resource type="Texture2D" uid="uid://x6frcpu8h5x1" path="res://Images/Design/sprite objects/nothernlights.png" id="3_3upoy"]
-[ext_resource type="Script" uid="uid://bs2bpjciuqc4l" path="res://Code/LayerScroller.gd" id="3_wndho"]
+[ext_resource type="Script" path="res://Code/LayerScroller.gd" id="3_wndho"]
 [ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Items/Blueberry.tscn" id="7_i12b1"]
 [ext_resource type="PackedScene" uid="uid://yy2svaa57xus" path="res://Scenes/Items/Strawberry.tscn" id="10_i12b1"]
 [ext_resource type="PackedScene" uid="uid://bx30rwu2g1mrc" path="res://Scenes/Items/Raspberry.tscn" id="11_tx4co"]
