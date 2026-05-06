@@ -53,11 +53,13 @@ var _blink_due_to_inactivity: bool = false
 # Overlay
 var overlay_layer: CanvasLayer
 
-func _ready():
-	
+# Called when the node enters the scene tree; sets up terrain, UI, and timers.
+func _ready() -> void:
 	_ensure_overlay_layer()
 	_scan_and_fix_nodepaths(self, true)
-	_spawn_terrain()
+	# Only spawn terrain if a scene is provided to avoid warnings.
+	if hill_scene != null:
+		_spawn_terrain()
 	await get_tree().process_frame
 	_resolve_ui_refs()
 	_refresh_energy_ui()
@@ -65,10 +67,9 @@ func _ready():
 	_start_round_timer()
 	_setup_inactivity_detection()
 
-
+# Spawns terrain instance and configures its exported properties.
 func _spawn_terrain() -> void:
 	if hill_scene == null:
-		push_warning("hill_scene is not set.")
 		return
 	var hill: Node2D = hill_scene.instantiate() as Node2D
 	hill.position = Vector2(0, 0)
@@ -80,7 +81,7 @@ func _spawn_terrain() -> void:
 	_set_if_has_property(hill, "max_slope_deg", terrain_max_slope_deg)
 	_set_if_has_property(hill, "sample_step", terrain_sample_step)
 	if randomize_seed_on_play:
-		var rng := RandomNumberGenerator.new()
+		var rng: RandomNumberGenerator = RandomNumberGenerator.new()
 		rng.randomize()
 		if _has_property(hill, "rng_seed"):
 			hill.set("rng_seed", rng.randi())
@@ -96,42 +97,42 @@ func _spawn_terrain() -> void:
 		elif p2d != null and p2d.has_method("_rebuild_from_terrain"):
 			p2d.call("_rebuild_from_terrain")
 
+# Per-frame update; updates timer label and blinking.
 func _process(delta: float) -> void:
 	if round_finished:
 		return
 	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		timer_label.text = _format_time(t)
-
-		# Blink if either round timer is low, or inactivity warning is active
-		var should_blink := (t <= timer_blink_threshold_sec) or _blink_due_to_inactivity
+		# Blink if round timer is low or inactivity warning is active.
+		var should_blink: bool = (t <= timer_blink_threshold_sec) or _blink_due_to_inactivity
 		_enable_timer_blink(should_blink)
 		_update_timer_blink(delta)
 
-# Energy API (used by player taps and pickups)
+# Increases energy by amount and refreshes UI.
 func add_energy(amount: int) -> void:
 	if round_finished:
 		return
 	energy_points += amount
 	_refresh_energy_ui()
 
+# Sets energy to a specific value and refreshes UI.
 func update_energy_UI(value: int) -> void:
 	if round_finished:
 		return
 	energy_points = value
 	_refresh_energy_ui()
 
+# Updates the energy UI (via UI script method or fallback label).
 func _refresh_energy_ui() -> void:
-	# If UI script has set_energy(int), prefer it
 	if ui_root and ui_root.has_method("set_energy"):
 		ui_root.call("set_energy", energy_points)
 		return
-	# Fallback: try to find an energy label under UI/Energy/Label
 	if ui_root:
 		if energy_label == null:
-			var node := ui_root.get_node_or_null("Energy/Label")
+			var node: Node = ui_root.get_node_or_null("Energy/Label")
 			if node == null:
-				var energy_node := ui_root.get_node_or_null("Energy")
+				var energy_node: Node = ui_root.get_node_or_null("Energy")
 				if energy_node:
 					energy_label = energy_node.find_child("Label", true, false) as Label
 			else:
@@ -139,15 +140,17 @@ func _refresh_energy_ui() -> void:
 		if energy_label:
 			energy_label.text = str(energy_points)
 
+# Pulls the player name from the tree metadata into the label.
 func _update_player_name_from_tree() -> void:
 	if not player_name_label:
 		return
-	var n := ""
+	var n: String = ""
 	if get_tree().root.has_meta("player_name"):
 		n = str(get_tree().root.get_meta("player_name"))
 	if n != "":
 		player_name_label.text = n
 
+# Starts the round timer and initializes UI for the countdown.
 func _start_round_timer() -> void:
 	game_timer = Timer.new()
 	game_timer.one_shot = true
@@ -160,6 +163,7 @@ func _start_round_timer() -> void:
 		_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 
+# Called when the round timer finishes; freezes world and shows results.
 func _finish_round() -> void:
 	if round_finished:
 		return
@@ -175,55 +179,54 @@ func _finish_round() -> void:
 	await _show_banner_overlay(won)
 	_show_result_screen_overlay(won, energy_points, TARGET_ENERGY)
 
-# Inactivity: setup and handling
+# Sets up inactivity timers and connects to pedaling signal.
 func _setup_inactivity_detection() -> void:
-	# Warning timer (fires after 5s of inactivity)
 	inactivity_warning_timer = Timer.new()
 	inactivity_warning_timer.one_shot = true
 	inactivity_warning_timer.wait_time = inactivity_warning_threshold_sec
 	add_child(inactivity_warning_timer)
 	inactivity_warning_timer.timeout.connect(_on_inactivity_warning_timeout)
 
-	# Game over timer (fires after 10s of inactivity)
 	inactivity_timer = Timer.new()
 	inactivity_timer.one_shot = true
 	inactivity_timer.wait_time = inactivity_timeout_sec
 	add_child(inactivity_timer)
 	inactivity_timer.timeout.connect(_on_inactivity_timeout)
 
-	# Start both from the beginning (player must keep pedaling)
+	# Start both timers; pedaling will keep resetting them.
 	inactivity_warning_timer.start()
 	inactivity_timer.start()
 
-	var radler := get_tree().get_first_node_in_group("radler")
+	var radler: Node = get_tree().get_first_node_in_group("radler")
 	if radler and radler.has_signal("pedal_tapped"):
 		radler.connect("pedal_tapped", Callable(self, "_on_player_pedaled"))
 
+# Handles player pedaling; resets inactivity timers and updates blink state.
 func _on_player_pedaled() -> void:
 	if round_finished:
 		return
-	# Reset inactivity timers and stop inactivity blink
 	if inactivity_warning_timer:
 		inactivity_warning_timer.start()
 	if inactivity_timer:
 		inactivity_timer.start()
 	_blink_due_to_inactivity = false
-	# Recompute blink immediately in case round timer is not low
 	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		_enable_timer_blink((t <= timer_blink_threshold_sec) or _blink_due_to_inactivity)
 
+# Called when inactivity warning threshold elapses; enables blink.
 func _on_inactivity_warning_timeout() -> void:
-	# 5 seconds without pedaling reached → start blinking due to inactivity
 	if round_finished:
 		return
 	_blink_due_to_inactivity = true
 
+# Called when inactivity timeout elapses; ends the round as a loss.
 func _on_inactivity_timeout() -> void:
 	if round_finished:
 		return
 	_game_over_due_to_inactivity()
 
+# Ends the round due to inactivity and shows overlays.
 func _game_over_due_to_inactivity() -> void:
 	round_finished = true
 	if game_timer:
@@ -237,7 +240,7 @@ func _game_over_due_to_inactivity() -> void:
 	await _show_banner_overlay(false)
 	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
 
-# Timer blink helpers
+# Enables or disables timer blinking and resets blink state.
 func _enable_timer_blink(v: bool) -> void:
 	if _timer_blink_active == v:
 		return
@@ -246,6 +249,7 @@ func _enable_timer_blink(v: bool) -> void:
 	_timer_blink_state = false
 	_set_timer_label_color(timer_normal_color)
 
+# Updates blink timer and toggles label color.
 func _update_timer_blink(delta: float) -> void:
 	if not _timer_blink_active or timer_label == null:
 		return
@@ -255,17 +259,19 @@ func _update_timer_blink(delta: float) -> void:
 		_timer_blink_state = not _timer_blink_state
 		_set_timer_label_color(timer_blink_color if _timer_blink_state else timer_normal_color)
 
+# Sets the timer label color (with theme override and tint).
 func _set_timer_label_color(col: Color) -> void:
 	if timer_label == null:
 		return
-	timer_label.add_theme_color_override("font_color", col) # reliable way for Label text
-	timer_label.modulate = col # fallback tint
+	timer_label.add_theme_color_override("font_color", col)
+	timer_label.modulate = col
 
-# Freeze world
+# Freezes the entire world except UI layers.
 func _freeze_world() -> void:
 	get_tree().call_group("freezable", "freeze")
 	_freeze_recursive(self)
 
+# Recursively freezes nodes, skipping UI layers.
 func _freeze_recursive(n: Node) -> void:
 	if n == null:
 		return
@@ -275,13 +281,14 @@ func _freeze_recursive(n: Node) -> void:
 	for c in n.get_children():
 		_freeze_recursive(c)
 
+# Applies freeze behavior to a single node.
 func _freeze_node(n: Node) -> void:
 	if n is CharacterBody2D:
-		var cb := n as CharacterBody2D
+		var cb: CharacterBody2D = n as CharacterBody2D
 		cb.velocity = Vector2.ZERO
 		cb.set_physics_process(false)
 	elif n is RigidBody2D:
-		var rb := n as RigidBody2D
+		var rb: RigidBody2D = n as RigidBody2D
 		rb.linear_velocity = Vector2.ZERO
 		rb.angular_velocity = 0.0
 		rb.sleeping = true
@@ -301,7 +308,7 @@ func _freeze_node(n: Node) -> void:
 	elif n is AudioStreamPlayer:
 		(n as AudioStreamPlayer).stop()
 
-# Overlays
+# Shows a brief banner overlay (win/lose) then hides it.
 func _show_banner_overlay(won: bool) -> void:
 	_ensure_overlay_layer()
 	var scene: PackedScene = YOU_WON_SCENE if won else GAME_OVER_SCENE
@@ -311,23 +318,25 @@ func _show_banner_overlay(won: bool) -> void:
 	if is_instance_valid(banner):
 		banner.queue_free()
 
+# Shows the result screen overlay and passes result data.
 func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
 	_ensure_overlay_layer()
 	var rs: Control = RESULT_SCREEN_SCENE.instantiate() as Control
 	overlay_layer.add_child(rs)
-	var player_name_text := ""
+	var player_name_text: String = ""
 	if get_tree().root.has_meta("player_name"):
 		player_name_text = str(get_tree().root.get_meta("player_name"))
 	rs.call_deferred("set_result", won, energy, target, player_name_text)
 
-func show_popup_message(text: String, id: String = "") -> void:
+# Shows a temporary popup message near the right side of the screen.
+func show_popup_message(text: String, _id: String = "") -> void:
 	_ensure_overlay_layer()
 	var panel_size: Vector2 = Vector2(520, 140)
 	var right_offset_px: float = 200.0
 	var font_size_px: int = 36
 	var padding_px: int = 16
-	var panel := Panel.new()
-	var sb := StyleBoxFlat.new()
+	var panel: Panel = Panel.new()
+	var sb: StyleBoxFlat = StyleBoxFlat.new()
 	sb.bg_color = Color(0, 0, 0, 0.45)
 	sb.corner_radius_top_left = 12
 	sb.corner_radius_top_right = 12
@@ -343,7 +352,7 @@ func show_popup_message(text: String, id: String = "") -> void:
 	panel.offset_top = -panel_size.y * 0.5
 	panel.offset_right = right_offset_px + panel_size.x
 	panel.offset_bottom = -panel_size.y * 0.5 + panel_size.y
-	var lbl := RichTextLabel.new()
+	var lbl: RichTextLabel = RichTextLabel.new()
 	lbl.bbcode_enabled = true
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.scroll_active = false
@@ -360,16 +369,16 @@ func show_popup_message(text: String, id: String = "") -> void:
 	lbl.offset_bottom = -padding_px
 	panel.add_child(lbl)
 	overlay_layer.add_child(panel)
-	var tw := create_tween()
+	var tw: Tween = create_tween()
 	tw.tween_property(panel, "modulate", Color(1, 1, 1, 1), 0.18)
 	tw.tween_interval(1.6)
 	tw.tween_property(panel, "modulate", Color(1, 1, 1, 0), 0.25)
-	tw.finished.connect(func():
+	tw.finished.connect(func() -> void:
 		if is_instance_valid(panel):
 			panel.queue_free()
 	)
 
-# UI resolving
+# Finds and stores UI nodes (labels) for later updates.
 func _resolve_ui_refs() -> void:
 	ui_root = get_node_or_null("UI") as CanvasLayer
 	if ui_root:
@@ -380,6 +389,7 @@ func _resolve_ui_refs() -> void:
 		if player_name_label == null:
 			player_name_label = ui_root.find_child("PlayerNameLabel", true, false) as Label
 
+# Ensures there is a layer to host transient overlays.
 func _ensure_overlay_layer() -> void:
 	if overlay_layer == null:
 		overlay_layer = CanvasLayer.new()
@@ -387,12 +397,13 @@ func _ensure_overlay_layer() -> void:
 		overlay_layer.layer = 10
 		add_child(overlay_layer)
 
+# Formats seconds as MM:SS.
 func _format_time(t: int) -> String:
 	var m: int = int(t / 60.0)
 	var s: int = t % 60
 	return "%02d:%02d" % [m, s]
 
-# Helpers
+# Safely resolves a NodePath to a node (handles absolute/relative).
 func _resolve_node_safe(path: NodePath) -> Node:
 	if path.is_empty():
 		return null
@@ -402,25 +413,30 @@ func _resolve_node_safe(path: NodePath) -> Node:
 		return get_tree().root.get_node_or_null(path)
 	return get_node_or_null(path)
 
+# Checks if an object has a property by name.
 func _has_property(obj: Object, prop: StringName) -> bool:
 	for d in obj.get_property_list():
 		if typeof(d) == TYPE_DICTIONARY and d.has("name") and StringName(d["name"]) == prop:
 			return true
 	return false
 
+# Sets a property if it exists on the object.
 func _set_if_has_property(obj: Object, prop: StringName, value) -> void:
 	if _has_property(obj, prop):
 		obj.set(prop, value)
 
+# Scans tree for absolute NodePaths and converts them to relative.
 func _scan_and_fix_nodepaths(root: Node, auto_fix: bool = true) -> void:
 	_scan_np_recursive(root, auto_fix)
 
+# Recursive helper: rewrite absolute NodePaths on a node (and its children) to relative paths.
 func _scan_np_recursive(n: Node, auto_fix: bool) -> void:
+	# Check all properties; if a property is a NodePath and absolute, try to make it relative.
 	for d in n.get_property_list():
 		if typeof(d) == TYPE_DICTIONARY and d.has("type") and int(d["type"]) == TYPE_NODE_PATH:
 			var pname: StringName = StringName(d["name"])
-			var np: NodePath = n.get(pname)
-			if np is NodePath and not np.is_empty() and np.is_absolute():
+			var np: NodePath = n.get(pname) as NodePath
+			if np != null and not np.is_empty() and np.is_absolute():
 				var target: Node = get_tree().root.get_node_or_null(np)
 				if target != null:
 					var rel: NodePath = n.get_path_to(target)
@@ -429,6 +445,7 @@ func _scan_np_recursive(n: Node, auto_fix: bool) -> void:
 					print("Fixed absolute NodePath: ", n.get_path(), ".", String(pname), " -> ", String(rel))
 				else:
 					print("Found absolute NodePath but target missing: ", n.get_path(), ".", String(pname), " = ", String(np))
+	# Recurse into children.
 	for c in n.get_children():
 		if c is Node:
 			_scan_np_recursive(c, auto_fix)

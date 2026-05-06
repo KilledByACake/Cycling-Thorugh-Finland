@@ -4,7 +4,7 @@ extends Control
 # Adding a score here does not modify how lists are chosen; HighScores controls that.
 
 const LEVEL1_SCENE_PATH: String = "res://Levels/Game.tscn"
-const MAIN_MENU_SCENE_PATH: String = "res://Levels/MainMenu.tscn"
+const MAIN_MENU_SCENE_PATH: String = "res://Levels/Main.tscn"
 const SHOW_TOP_N: int = 5
 
 @onready var center: CenterContainer = get_node_or_null("CenterContainer") as CenterContainer

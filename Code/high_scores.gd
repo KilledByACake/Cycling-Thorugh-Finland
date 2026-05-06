@@ -71,22 +71,22 @@ func _normalize_entry(entry: Dictionary) -> Dictionary:
 		"avg_speed": entry.get("avg_speed", null),
 	}
 
-# Case-sensitiv nøkkel (tastatur gir alltid store bokstaver).
-func _name_key(name: String) -> String:
-	return name.strip_edges(true, true)
+# Normalize a name key (trim whitespace).
+func _name_key(raw_name: String) -> String:
+	return raw_name.strip_edges(true, true)
 
-# Finn index for navn i en bucket (returnerer -1 hvis ikke funnet).
-func _index_of_name(arr: Array, name: String) -> int:
-	var k: String = _name_key(name)
+# Find the index for a name in a bucket (returns -1 if not found).
+func _index_of_name(arr: Array, player_name: String) -> int:
+	var k: String = _name_key(player_name)
 	for i in range(arr.size()):
 		var it: Dictionary = arr[i]
 		if _name_key(str(it.get("name", ""))) == k:
 			return i
 	return -1
 
-# Unik per navn pr. bucket:
-# - Beholder beste score per navn (høyere er bedre).
-# - Returnerer indeksen til ny oppføring, eller -1 hvis ny droppes (eksisterende var bedre/lik).
+# Unique per name per bucket:
+# - Keep the best score per name (higher is better).
+# - Returns the index of the new entry, or -1 if dropped (existing was better/equal).
 func _upsert_unique_by_name(arr: Array, entry: Dictionary, cap: int) -> int:
 	var k: String = _name_key(str(entry.get("name", "")))
 	var existing_idx: int = -1
@@ -101,7 +101,7 @@ func _upsert_unique_by_name(arr: Array, entry: Dictionary, cap: int) -> int:
 
 	var new_score: float = float(entry.get("score", 0.0))
 
-	# Keep best score pr. name 
+	# Keep best score per name
 	if existing_idx >= 0 and existing_score >= new_score:
 		return -1
 
@@ -117,7 +117,7 @@ func _reset_key_for(day_key: String, sessions: Dictionary) -> String:
 		return ""
 	return "%s#%d" % [day_key, sess]
 
-# Ensure a fresh session pointer when day changes.
+# Ensure a fresh session pointer when the day changes.
 func _rollover_if_new_day() -> void:
 	var today: String = _today_iso()
 	var last: String = str(store.get("last_seen_date", ""))
@@ -265,7 +265,7 @@ func alltime_count() -> int:
 	return (store.get("alltime", []) as Array).size()
 
 func _top_from_bucket(bucket: Array, n: int, highest_first: bool) -> Array:
-	var take: int = mini(n, bucket.size())
+	var take: int = min(n, bucket.size())
 	var tail: Array = []
 	for i in range(bucket.size() - take, bucket.size()):
 		tail.append(bucket[i])
