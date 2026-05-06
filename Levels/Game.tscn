@@ -113,6 +113,29 @@ position = Vector2(149522, 1156)
 [node name="PathLeft" type="Node2D" parent="Path2D" unique_id=187768649]
 position = Vector2(1783, 1389)
 
+[node name="Items" type="Node2D" parent="Path2D" unique_id=164772678]
+
+[node name="Blueberry" parent="Path2D/Items" unique_id=288817796 instance=ExtResource("7_i12b1")]
+position = Vector2(17499, 1274.6338)
+terrain_path = NodePath("../../../Terrain")
+snap_y_offset = -100.0
+message = "A fist of blueberries gives ≈ 180 kJ. In Finland you can pick “mustikka” thanks to jokamiehenoikeus (everyman’s right)!"
+award_energy_kj = 180
+
+[node name="Strawberry" parent="Path2D/Items" unique_id=1629111315 instance=ExtResource("10_i12b1")]
+position = Vector2(4254, 1294.2959)
+terrain_path = NodePath("../../../Terrain")
+snap_y_offset = -100.0
+
+[node name="Raspberry" parent="Path2D/Items" unique_id=658099648 instance=ExtResource("11_tx4co")]
+position = Vector2(11735, 1237.1171)
+terrain_path = NodePath("../../../Terrain")
+
+[node name="Strawberry2" parent="Path2D/Items" unique_id=825299681 instance=ExtResource("12_h107k")]
+position = Vector2(29038, 1181.8762)
+terrain_path = NodePath("../../../Terrain")
+snap_y_offset = -100.0
+
 [node name="PathFollow2D" type="PathFollow2D" parent="Path2D" unique_id=1236212940]
 position = Vector2(1778, 1281.0002)
 rotation = 0.08092459
@@ -137,27 +160,6 @@ autoscroll = Vector2(0.4, 0)
 
 [node name="Sprite2D" type="Sprite2D" parent="Clouds" unique_id=1084387943]
 texture = ExtResource("15_demcn")
-
-[node name="Blueberry" parent="." unique_id=288817796 instance=ExtResource("7_i12b1")]
-position = Vector2(17499, 1274.6338)
-terrain_path = NodePath("../Terrain")
-snap_y_offset = -100.0
-message = "A fist of blueberries gives ≈ 180 kJ. In Finland you can pick “mustikka” thanks to jokamiehenoikeus (everyman’s right)!"
-award_energy_kj = 180
-
-[node name="Strawberry" parent="." unique_id=1629111315 instance=ExtResource("10_i12b1")]
-position = Vector2(4254, 1294.2959)
-terrain_path = NodePath("../Terrain")
-snap_y_offset = -100.0
-
-[node name="Raspberry" parent="." unique_id=658099648 instance=ExtResource("11_tx4co")]
-position = Vector2(11735, 1237.1171)
-terrain_path = NodePath("../Terrain")
-
-[node name="Strawberry2" parent="." unique_id=825299681 instance=ExtResource("12_h107k")]
-position = Vector2(29038, 1181.8762)
-terrain_path = NodePath("../Terrain")
-snap_y_offset = -100.0
 
 [node name="Parallax2D" type="Parallax2D" parent="." unique_id=1298348767]
 visible = false
