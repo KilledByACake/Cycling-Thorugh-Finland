@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dkyrby5xrvete"]
+[gd_scene format=3 uid="uid://dgj3tk6nktcfo"]
 
 [ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/dashboard.gd" id="1_5uo6a"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_fjx2l"]
@@ -139,7 +139,7 @@ text = "20"
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_fjx2l")
 theme_override_font_sizes/font_size = 80
-text = "watts/h"
+text = "watts"
 
 [node name="Back" type="Button" parent="." unique_id=904147690]
 layout_mode = 1
