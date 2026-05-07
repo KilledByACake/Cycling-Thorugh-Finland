@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://cnn8b1akf1flx"]
 
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_tyydf"]
-[ext_resource type="Script" uid="uid://7hyj28nttlxl" path="res://Code/character_input_button.gd" id="2_re82h"]
+[ext_resource type="Script" uid="uid://7hyj28nttlxl" path="res://Code/Screens/character_input_button.gd" id="2_re82h"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_5x3k7"]
 

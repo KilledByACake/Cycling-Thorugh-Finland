@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://3b3rascp4kst"]
 
-[ext_resource type="Script" uid="uid://ddmyeee3qgkf7" path="res://Code/result.gd" id="1_l2t1i"]
+[ext_resource type="Script" uid="uid://ddmyeee3qgkf7" path="res://Code/Screens/result.gd" id="1_l2t1i"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_b23m6"]
 [ext_resource type="StyleBox" uid="uid://csn6mu6bm258" path="res://Style/button_design.tres" id="3_b23m6"]
 [ext_resource type="StyleBox" uid="uid://br4l54domtmsh" path="res://Style/button_pressed.tres" id="4_jehiq"]
