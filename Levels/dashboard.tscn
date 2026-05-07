@@ -10,7 +10,7 @@ content_margin_left = 60.0
 content_margin_top = 60.0
 content_margin_right = 60.0
 content_margin_bottom = 60.0
-bg_color = Color(0.49803922, 0.5411765, 0.31764707, 1)
+bg_color = Color(9.877248, 10.651967, 6.637515, 0.42745098)
 corner_radius_top_left = 24
 corner_radius_top_right = 24
 corner_radius_bottom_right = 24
@@ -32,6 +32,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+color = Color(0.46038902, 0.654788, 0.43261766, 1)
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1197755579]
 layout_mode = 1
