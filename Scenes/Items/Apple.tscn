@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://b50sjm3kawb5w"]
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_6fv38"]
-[ext_resource type="Texture2D" uid="uid://cylaongjfnxaq" path="res://Images/Pickups/apple.png" id="2_6fv38"]
+[ext_resource type="Texture2D" uid="uid://cylaongjfnxaq" path="res://Images/Pickups/Apple.png" id="2_6fv38"]
 [ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_5ivrd"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]

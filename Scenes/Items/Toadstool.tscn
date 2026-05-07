@@ -1,8 +1,8 @@
-[gd_scene format=3 uid="uid://bx30rwu2g1mrc"]
+[gd_scene format=3 uid="uid://62dotpdoxww3"]
 
-[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_wrmad"]
-[ext_resource type="Texture2D" uid="uid://kc10fstyboyj" path="res://Images/Pickups/Raspberry.png" id="2_wrmad"]
-[ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_ap8tr"]
+[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_ds1xf"]
+[ext_resource type="Texture2D" uid="uid://cxttt4gfgbvxh" path="res://Images/Pickups/Toadstool.png" id="2_ds1xf"]
+[ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_fc8h2"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mwnru"]
 radius = 72.0
@@ -68,7 +68,7 @@ tracks/2/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
-"stream": ExtResource("3_ap8tr")
+"stream": ExtResource("3_fc8h2")
 }],
 "times": PackedFloat32Array(0)
 }
@@ -80,16 +80,16 @@ _data = {
 &"pickup": SubResource("Animation_ffmqm")
 }
 
-[node name="Raspberry" type="Area2D" unique_id=658099648]
-script = ExtResource("1_wrmad")
-message = "Raspberries ≈ 165 kJ per handful, small berries, big flavor."
+[node name="Toadstool" type="Area2D" unique_id=658099648]
+script = ExtResource("1_ds1xf")
+message = "Poisonous “kärpässieni”: -10 kJ for you — admire, don’t bite. ≈ 45 kJ per handful — big aroma, small kJ."
 collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 165
+award_energy_kj = -10
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
-position = Vector2(-5, 0)
-scale = Vector2(0.20622568, 0.21423371)
-texture = ExtResource("2_wrmad")
+position = Vector2(-4.949895, 0)
+scale = Vector2(0.3155697, 0.29986838)
+texture = ExtResource("2_ds1xf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1885821890]
 position = Vector2(-1, 7)

@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://3do4824qrilo"
-path="res://.godot/imported/DirtBG.png-5784d8c7dbbc7d89e4f67a258bd7f2ec.ctex"
+uid="uid://cxttt4gfgbvxh"
+path="res://.godot/imported/Toadstool.png-70bfaa80f78ab55e444f9e8d2247e302.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Terrain/DirtBG.png"
-dest_files=["res://.godot/imported/DirtBG.png-5784d8c7dbbc7d89e4f67a258bd7f2ec.ctex"]
+source_file="res://Images/Pickups/Toadstool.png"
+dest_files=["res://.godot/imported/Toadstool.png-70bfaa80f78ab55e444f9e8d2247e302.ctex"]
 
 [params]
 
