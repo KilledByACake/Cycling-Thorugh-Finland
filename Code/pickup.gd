@@ -1,8 +1,9 @@
-# res://Code/pickup.gd
 @tool
 extends Area2D
 
-# --- Ground snapping (so you can place in editor easily) ---
+# Pickup that can snap to terrain, award energy, play SFX/animation, then disappear.
+
+# Terrain snapping setup
 @export_node_path("Node2D") var terrain_path: NodePath
 @export var auto_find_terrain: bool = true
 @export var snap_y_offset: float = -40.0
@@ -10,24 +11,22 @@ extends Area2D
 @export var snap_in_editor: bool = true
 @export var snap_in_game: bool = false
 
-# --- Pickup behavior (ENERGY only) ---
+# Pickup behavior (energy only)
 @export var pickup_id: String = "generic"
 @export var message: String = "Picked up something!"
 @export var play_sound_on_pick: AudioStream = null
 @export var auto_free_on_pick: bool = true
-
 @export var collector_groups: PackedStringArray = ["player", "radler"]
-
-# ENERGY to add to the shared total (level.add_energy)
 @export var award_energy_kj: int = 0
 
+# Visuals/collision
 @export var pickup_animation_name: StringName = &"pickup"
 @export_node_path("CollisionShape2D") var collision_shape_path: NodePath
 @export var disable_collision_on_pick: bool = true
-
 @export var disappear_scale: float = 0.6
 @export var disappear_time: float = 0.15
 
+# Called when the node enters the scene; sets monitoring and signal connections.
 func _ready() -> void:
 	if not Engine.is_editor_hint():
 		monitoring = true
@@ -35,6 +34,7 @@ func _ready() -> void:
 		area_entered.connect(_on_area_entered)
 		body_entered.connect(_on_body_entered)
 
+# Per-frame; optionally finds terrain and snaps to ground.
 func _process(_dt: float) -> void:
 	if auto_find_terrain and terrain_path.is_empty():
 		var t: Node2D = _find_terrain_in_tree()
@@ -45,14 +45,17 @@ func _process(_dt: float) -> void:
 	if do_snap:
 		_snap_to_ground()
 
+# Handles Area2D overlaps; collects if the collider is allowed.
 func _on_area_entered(a: Area2D) -> void:
 	if a != null and _is_allowed_collector(a):
 		_collect()
 
+# Handles PhysicsBody2D overlaps; collects if the collider is allowed.
 func _on_body_entered(b: PhysicsBody2D) -> void:
 	if b != null and _is_allowed_collector(b):
 		_collect()
 
+# Applies energy, plays SFX/animation, shows message, and optionally frees this node.
 func _collect() -> void:
 	if not is_inside_tree():
 		return
@@ -100,7 +103,7 @@ func _collect() -> void:
 			if auto_free_on_pick and is_inside_tree():
 				queue_free()
 
-# ---------- helpers ----------
+# Returns true if the node belongs to any allowed collector group.
 func _is_allowed_collector(n: Node) -> bool:
 	if collector_groups.is_empty():
 		return true
@@ -109,6 +112,7 @@ func _is_allowed_collector(n: Node) -> bool:
 			return true
 	return false
 
+# Finds the nearest ancestor (or scene root) that implements add_energy.
 func _find_level() -> Node:
 	var n: Node = self
 	while n != null and not n.has_method("add_energy"):
@@ -117,20 +121,29 @@ func _find_level() -> Node:
 		return n
 	return get_tree().current_scene
 
+# Snaps the pickup to the terrain surface (and optionally aligns to slope).
 func _snap_to_ground() -> void:
 	var terrain: Node2D = _resolve_node(terrain_path) as Node2D
 	if terrain == null or not terrain.has_method("get_surface_y"):
 		return
-	var local: Vector2 = terrain.to_local(global_position)
-	var y: float = float(terrain.call("get_surface_y", local.x))
-	var snapped_local: Vector2 = Vector2(local.x, y + snap_y_offset)
-	global_position = terrain.to_global(snapped_local)
-	if snap_align_to_slope:
-		var dy_left: float = float(terrain.call("get_surface_y", local.x - 2.0))
-		var dy_right: float = float(terrain.call("get_surface_y", local.x + 2.0))
-		var angle: float = atan2(dy_right - dy_left, 4.0)
-		global_rotation = angle
 
+	var world_x: float = global_position.x
+	var x_in_terrain: Vector2 = terrain.to_local(Vector2(world_x, 0.0))
+	var y: float = float(terrain.call("get_surface_y", x_in_terrain.x))
+	var desired_world: Vector2 = terrain.to_global(Vector2(x_in_terrain.x, y + snap_y_offset))
+
+	var parent_nd: Node2D = get_parent() as Node2D
+	if parent_nd != null:
+		position = parent_nd.to_local(desired_world)
+	else:
+		global_position = desired_world
+
+	if snap_align_to_slope:
+		var y_l: float = float(terrain.call("get_surface_y", x_in_terrain.x - 2.0))
+		var y_r: float = float(terrain.call("get_surface_y", x_in_terrain.x + 2.0))
+		global_rotation = atan2(y_r - y_l, 4.0)
+
+# Returns an AnimationPlayer on this node or the first child one.
 func _get_animation_player() -> AnimationPlayer:
 	var ap: AnimationPlayer = get_node_or_null("AnimationPlayer") as AnimationPlayer
 	if ap != null:
@@ -140,6 +153,7 @@ func _get_animation_player() -> AnimationPlayer:
 			return c as AnimationPlayer
 	return null
 
+# Returns an explicit CollisionShape2D (by path) or the first child shape.
 func _get_collision_shape() -> CollisionShape2D:
 	if not collision_shape_path.is_empty():
 		var s: CollisionShape2D = _resolve_node(collision_shape_path) as CollisionShape2D
@@ -150,6 +164,7 @@ func _get_collision_shape() -> CollisionShape2D:
 			return c as CollisionShape2D
 	return null
 
+# Resolves a NodePath relative to this node (supports absolute paths).
 func _resolve_node(p: NodePath) -> Node:
 	if p.is_empty() or not is_inside_tree():
 		return null
@@ -157,6 +172,7 @@ func _resolve_node(p: NodePath) -> Node:
 		return get_tree().root.get_node_or_null(p)
 	return get_node_or_null(p)
 
+# Scans the current scene tree to find a terrain-like node.
 func _find_terrain_in_tree() -> Node2D:
 	var root: Node = get_tree().current_scene
 	if root == null:

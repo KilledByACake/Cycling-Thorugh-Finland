@@ -1,0 +1,117 @@
+[gd_scene format=3 uid="uid://brftna4btfksp"]
+
+[ext_resource type="Script" uid="uid://dyhv3tos08ovr" path="res://Code/player.gd" id="1_1u43k"]
+[ext_resource type="Texture2D" uid="uid://bxbfst5o5guqg" path="res://Images/Characters/Magdalena-cycling.png" id="2_wbbc8"]
+[ext_resource type="AudioStream" uid="uid://bq84lwo73rgxr" path="res://Audio/EngineSound.ogg" id="3_kllh3"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nrt54"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(0, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u1aki"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(512, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5huxm"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(1024, 0, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fqots"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(256, 256, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_chy07"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(768, 256, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yit1m"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(0, 512, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bpgfk"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(512, 512, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n0n3f"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(1024, 512, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vb1mi"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(256, 768, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4x5i4"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(768, 768, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_th5bf"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(0, 1024, 256, 256)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ki7h0"]
+atlas = ExtResource("2_wbbc8")
+region = Rect2(512, 1024, 256, 256)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_ap03w"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nrt54")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u1aki")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5huxm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fqots")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_chy07")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yit1m")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bpgfk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n0n3f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vb1mi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4x5i4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_th5bf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ki7h0")
+}],
+"loop": true,
+"name": &"rollen",
+"speed": 6.0
+}]
+
+[node name="Radler" type="CharacterBody2D" unique_id=50299590]
+script = ExtResource("1_1u43k")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=857657351]
+position = Vector2(-0.49996948, 8.299988)
+scale = Vector2(1.4570313, 1.5664063)
+sprite_frames = SubResource("SpriteFrames_ap03w")
+animation = &"rollen"
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="." unique_id=1014135267]
+position = Vector2(-138.49998, 205.29999)
+polygon = PackedVector2Array(0, -34, 39, -17, 90, -39, 101, -52, 141, -39, 184, -56, 211, -25, 243, -18, 286, -30, 307, -66, 308, -113, 283, -145, 255, -156, 255, -168, 270, -167, 276, -207, 275, -244, 245, -232, 233, -215, 209, -214, 206, -243, 163, -263, 155, -309, 154, -354, 143, -377, 114, -378, 95, -360, 94, -346, 36, -347, 19, -298, 40, -271, 77, -281, 52, -207, 85, -178, 78, -168, 5, -169, -23, -126, -27, -82, -12, -45)
+
+[node name="EngineSFX" type="AudioStreamPlayer" parent="." unique_id=245767930]
+stream = ExtResource("3_kllh3")
+autoplay = true
+
+[node name="GameOverTimer" type="Timer" parent="." unique_id=1623834036]
+wait_time = 5.0

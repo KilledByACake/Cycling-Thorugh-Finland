@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b1gm0fd8yyr00"]
 
-[ext_resource type="Script" uid="uid://bs2bpjciuqc4l" path="res://Code/layer_scroller.gd" id="1_npqah"]
+[ext_resource type="Script" uid="uid://bs2bpjciuqc4l" path="res://Code/LayerScroller.gd" id="1_npqah"]
 
 [node name="Layer3" type="Node2D" unique_id=1430400839]
 script = ExtResource("1_npqah")

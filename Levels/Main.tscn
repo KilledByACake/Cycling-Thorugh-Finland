@@ -1,0 +1,92 @@
+[gd_scene format=3 uid="uid://dg1halhkihrb6"]
+
+[ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="1_bl2xt"]
+[ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="2_yy7ei"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="3_b7uiw"]
+[ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="4_bl2xt"]
+[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_r6vcu"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_6hska"]
+texture = ExtResource("1_bl2xt")
+modulate_color = Color(0.35305238, 0.35305238, 0.35305238, 1)
+
+[sub_resource type="Theme" id="Theme_qjlnc"]
+
+[node name="Main" type="Control" unique_id=1401071238]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_yy7ei")
+
+[node name="Panel" type="Panel" parent="." unique_id=160796617]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_6hska")
+
+[node name="Label" type="Label" parent="." unique_id=1566016174]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -326.5
+offset_top = -328.0
+offset_right = 326.5
+offset_bottom = -254.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("3_b7uiw")
+theme_override_font_sizes/font_size = 230
+text = "Cycle Through Finland"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=149146580]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.57900006
+anchor_right = 0.5
+anchor_bottom = 0.57900006
+offset_left = -843.0
+offset_top = -64.64014
+offset_right = 865.0
+offset_bottom = 63.359863
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_qjlnc")
+theme_override_constants/separation = 200
+
+[node name="Dashboard" type="Button" parent="HBoxContainer" unique_id=1385432774]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("3_b7uiw")
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = ExtResource("4_bl2xt")
+theme_override_styles/pressed = ExtResource("5_r6vcu")
+theme_override_styles/hover = ExtResource("5_r6vcu")
+text = "Dashboard"
+
+[node name="Start Game" type="Button" parent="HBoxContainer" unique_id=669158430]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("3_b7uiw")
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = ExtResource("4_bl2xt")
+theme_override_styles/pressed = ExtResource("5_r6vcu")
+theme_override_styles/hover = ExtResource("5_r6vcu")
+text = "Start Game"
+
+[connection signal="pressed" from="HBoxContainer/Dashboard" to="." method="_on_dashboard_pressed"]
+[connection signal="pressed" from="HBoxContainer/Start Game" to="." method="_on_start_game_pressed"]

@@ -1,0 +1,51 @@
+[gd_scene format=3 uid="uid://b2ycyacnpu5bc"]
+
+[ext_resource type="Script" uid="uid://c652mw6f2vd7u" path="res://Code/loading.gd" id="1_4oe1i"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_kcpon"]
+
+[node name="Loader" type="Node" unique_id=1667388029]
+script = ExtResource("1_4oe1i")
+
+[node name="Overlay" type="CanvasLayer" parent="." unique_id=339756671]
+
+[node name="ColorRect" type="ColorRect" parent="Overlay" unique_id=586636180]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Text" type="Label" parent="Overlay" unique_id=2136164313]
+unique_name_in_owner = true
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -1709.0
+offset_top = 359.0
+offset_right = 1710.0
+offset_bottom = 1079.0
+grow_horizontal = 2
+theme_override_fonts/font = ExtResource("2_kcpon")
+theme_override_font_sizes/font_size = 200
+text = "Cycle as much as far north you can,
+ and reach the notheren light!"
+horizontal_alignment = 1
+
+[node name="CountdownTimer" type="Label" parent="Overlay" unique_id=138467882]
+unique_name_in_owner = true
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -550.5
+offset_top = -121.5
+offset_right = 550.5
+offset_bottom = 121.5
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_kcpon")
+theme_override_font_sizes/font_size = 200
+text = "Ready?"
+horizontal_alignment = 1

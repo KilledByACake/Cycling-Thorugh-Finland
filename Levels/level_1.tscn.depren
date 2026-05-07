@@ -1,7 +1,7 @@
 [gd_scene format=4 uid="uid://bs4h48jlc54y3"]
 
-[ext_resource type="Script" uid="uid://cpnl0xtu7w1mc" path="res://Code/level_1.gd" id="1_77l7m"]
-[ext_resource type="PackedScene" uid="uid://begi8cpog3er3" path="res://Scenes/terrain.tscn" id="2_77l7m"]
+[ext_resource type="Script" uid="uid://cpnl0xtu7w1mc" path="res://Code/game_controller.gd" id="1_77l7m"]
+[ext_resource type="PackedScene" uid="uid://begi8cpog3er3" path="res://Scenes/Terrain.tscn" id="2_77l7m"]
 [ext_resource type="Script" uid="uid://dhdc4b8yddyej" path="res://addons/rmsmartshape/shapes/shape.gd" id="2_77x7w"]
 [ext_resource type="Script" uid="uid://bwcf4pjgprn0k" path="res://addons/rmsmartshape/shapes/point.gd" id="3_xoyoh"]
 [ext_resource type="Script" uid="uid://bo5f7qe27jfje" path="res://addons/rmsmartshape/shapes/point_array.gd" id="4_f4pg2"]
