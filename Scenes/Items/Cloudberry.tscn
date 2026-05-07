@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://crup3nieb8gbj"]
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_60vhm"]
-[ext_resource type="Texture2D" uid="uid://1m4y6st4o1nb" path="res://Images/Pickups/Strawberry.png" id="2_wbtoe"]
+[ext_resource type="Texture2D" uid="uid://vmr43caji3yi" path="res://Images/Pickups/Cloudberry.png" id="2_60vhm"]
 [ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_3rdmp"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]
@@ -79,16 +79,16 @@ _data = {
 &"pickup": SubResource("Animation_ffmqm")
 }
 
-[node name="Strawberry" type="Area2D" unique_id=658099648]
+[node name="Cloudberry" type="Area2D" unique_id=658099648]
 script = ExtResource("1_60vhm")
-message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
+message = "The gold of the forst, Cloudberry! A handful of cloudberries gives you 160 ener"
 collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 135
+award_energy_kj = 160
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
-position = Vector2(4, 0)
-scale = Vector2(0.20622568, 0.21423371)
-texture = ExtResource("2_wbtoe")
+position = Vector2(-1.0000001, 0)
+scale = Vector2(0.42118835, 0.3898947)
+texture = ExtResource("2_60vhm")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1885821890]
 position = Vector2(-1, 7)
