@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cjol5qesv7tc2"
-path="res://.godot/imported/Layer3_Slice_20.png-d3389eb0358d27404c0e26757f33905b.ctex"
+uid="uid://k34xjxo5na16"
+path="res://.godot/imported/cloudberr2.png-2d0001616d4dcf9671c9ae0cb7529568.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Design/Layer3/Layer3_Slice_20.png"
-dest_files=["res://.godot/imported/Layer3_Slice_20.png-d3389eb0358d27404c0e26757f33905b.ctex"]
+source_file="res://Images/Pickups/cloudberr2.png"
+dest_files=["res://.godot/imported/cloudberr2.png-2d0001616d4dcf9671c9ae0cb7529568.ctex"]
 
 [params]
 
