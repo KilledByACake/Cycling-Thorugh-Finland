@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b6gd72pf6jajq"]
 
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_m8yab"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="1_m8yab"]
 
 [node name="GameOver" type="Control" unique_id=298656905]
 layout_mode = 3

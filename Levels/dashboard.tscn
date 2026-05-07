@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dgj3tk6nktcfo"]
 
-[ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/Screens/dashboard.gd" id="1_5uo6a"]
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_fjx2l"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="1_fjx2l"]
+[ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/Screens/dashboard.gd" id="1_xjshm"]
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="3_xjshm"]
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="4_xjshm"]
 
@@ -23,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_5uo6a")
+script = ExtResource("1_xjshm")
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=309210946]
 layout_mode = 1

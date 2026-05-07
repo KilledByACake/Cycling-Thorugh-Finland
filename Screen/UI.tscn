@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cppeck65bvb3k"]
 
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_nf4gj"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_nf4gj"]
 [ext_resource type="Texture2D" uid="uid://cx4iyso3jru3y" path="res://Images/Other/EnergySymbol2.png" id="3_2246s"]
 
 [node name="UI" type="CanvasLayer" unique_id=482392122 groups=["ui"]]

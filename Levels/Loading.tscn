@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://c652mw6f2vd7u" path="res://Code/Screens/loading.gd" id="1_4oe1i"]
 [ext_resource type="Material" uid="uid://cp4yijtp6hg33" path="res://Style/bg_moving_gradient.tres" id="2_2vi0w"]
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_kcpon"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_kcpon"]
 [ext_resource type="Texture2D" uid="uid://dr258l5mh52a8" path="res://Images/Design/transparent_hills/hills_50.png" id="3_2vi0w"]
 
 [node name="Loader" type="Node" unique_id=1667388029]

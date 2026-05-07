@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cax5lnaxyyuoj"]
 
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_8mwwj"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="1_8mwwj"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2jxwf"]
 bg_color = Color(0.49803922, 0.5411765, 0.31764707, 1)

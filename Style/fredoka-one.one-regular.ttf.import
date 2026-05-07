@@ -3,12 +3,12 @@
 importer="font_data_dynamic"
 type="FontFile"
 uid="uid://cljnie40osirv"
-path="res://.godot/imported/fredoka-one.one-regular.ttf-7c49321b61a1f119894c7fab4e5b4c76.fontdata"
+path="res://.godot/imported/fredoka-one.one-regular.ttf-83091fe8397374a33f393535bc0b3513.fontdata"
 
 [deps]
 
-source_file="res://Code/fredoka-one.one-regular.ttf"
-dest_files=["res://.godot/imported/fredoka-one.one-regular.ttf-7c49321b61a1f119894c7fab4e5b4c76.fontdata"]
+source_file="res://Style/fredoka-one.one-regular.ttf"
+dest_files=["res://.godot/imported/fredoka-one.one-regular.ttf-83091fe8397374a33f393535bc0b3513.fontdata"]
 
 [params]
 

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b60tfgqwx3g4f"]
 
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="1_omhrl"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="1_omhrl"]
 
 [node name="YouWon" type="Control" unique_id=1836959824]
 layout_mode = 3
