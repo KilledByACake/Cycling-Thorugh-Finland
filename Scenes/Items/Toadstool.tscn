@@ -82,6 +82,7 @@ _data = {
 
 [node name="Toadstool" type="Area2D" unique_id=658099648]
 script = ExtResource("1_ds1xf")
+snap_in_game = true
 message = "Poisonous “kärpässieni”: -10 kJ for you — admire, don’t bite. ≈ 45 kJ per handful — big aroma, small kJ."
 collector_groups = PackedStringArray("player", "radler")
 award_energy_kj = -10

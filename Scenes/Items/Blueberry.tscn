@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_vwcqu"]
 [ext_resource type="Texture2D" uid="uid://cffp1bpev0igo" path="res://Images/Pickups/Blueberry.png" id="2_g86ho"]
-[ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_g86ho"]
+[ext_resource type="AudioStream" uid="uid://bhy87wbee4rpo" path="res://Audio/Apple.wav" id="3_60d37"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]
 radius = 81.0
@@ -67,7 +67,7 @@ tracks/2/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
-"stream": ExtResource("3_g86ho")
+"stream": ExtResource("3_60d37")
 }],
 "times": PackedFloat32Array(0)
 }
@@ -81,6 +81,7 @@ _data = {
 
 [node name="Blueberry" type="Area2D" unique_id=658099648]
 script = ExtResource("1_vwcqu")
+snap_in_game = true
 message = "A fist of blueberries gives ≈ 180 kJ. In Finland you can pick “mustikka” thanks to jokamiehenoikeus (everyman’s right)"
 collector_groups = PackedStringArray("player", "radler")
 award_energy_kj = 180
