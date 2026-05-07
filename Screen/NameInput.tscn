@@ -4,7 +4,9 @@
 [ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_x4mlx"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Code/fredoka-one.one-regular.ttf" id="2_xncxv"]
 [ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/main_menu.gd" id="3_x4mlx"]
+[ext_resource type="Material" uid="uid://cp4yijtp6hg33" path="res://Style/bg_moving_gradient.tres" id="4_qpl1d"]
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="5_8gsew"]
+[ext_resource type="Texture2D" uid="uid://dr258l5mh52a8" path="res://Images/Design/transparent_hills/hills_50.png" id="5_j1nqe"]
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="6_8gsew"]
 [ext_resource type="StyleBox" uid="uid://c8r6f6hj78pi4" path="res://Style/button_pressed_hover_smaller.tres" id="6_g0jiq"]
 
@@ -26,6 +28,7 @@ grow_vertical = 2
 script = ExtResource("1_xncxv")
 
 [node name="Panel" type="Panel" parent="." unique_id=737065188]
+visible = false
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -34,6 +37,19 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_x4mlx")
 script = ExtResource("3_x4mlx")
+
+[node name="movingGradient" type="ColorRect" parent="." unique_id=1574845212]
+z_index = -1
+material = ExtResource("4_qpl1d")
+layout_mode = 0
+offset_left = -89.0
+offset_top = -47.0
+offset_right = 3882.0
+offset_bottom = 2207.0
+
+[node name="Hills50" type="Sprite2D" parent="." unique_id=257696453]
+position = Vector2(1735, 2088)
+texture = ExtResource("5_j1nqe")
 
 [node name="Label" type="Label" parent="." unique_id=1974430479]
 layout_mode = 1

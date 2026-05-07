@@ -10,7 +10,7 @@ uniform vec4 color_7 : source_color = vec4(0.357, 0.231, 0.361, 1.0);
 uniform vec4 color_8 : source_color = vec4(0.157, 0.196, 0.275, 1.0);
      
 uniform float terrain_start : hint_range(-10000, 0)   = 0.0;
-uniform float terrain_end   : hint_range(0, 20000)    = 10000.0;
+uniform float terrain_end   : hint_range(0, 200000)    = 20000.0;
 
 // Weltposition vom vertex() an fragment() übergeben
 varying float world_x;
