@@ -82,13 +82,14 @@ _data = {
 
 [node name="Toadstool" type="Area2D" unique_id=658099648]
 script = ExtResource("1_ds1xf")
+snap_in_game = true
 message = "Poisonous “kärpässieni”: -10 kJ for you — admire, don’t bite. ≈ 45 kJ per handful — big aroma, small kJ."
 collector_groups = PackedStringArray("player", "radler")
 award_energy_kj = -10
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
-position = Vector2(-4.949895, 0)
-scale = Vector2(0.3155697, 0.29986838)
+position = Vector2(-4.474945, 0)
+scale = Vector2(0.3003287, 0.29986838)
 texture = ExtResource("2_ds1xf")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1885821890]

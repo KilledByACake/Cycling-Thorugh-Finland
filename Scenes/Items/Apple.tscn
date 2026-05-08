@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_6fv38"]
 [ext_resource type="Texture2D" uid="uid://cylaongjfnxaq" path="res://Images/Pickups/Apple.png" id="2_6fv38"]
-[ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_5ivrd"]
+[ext_resource type="AudioStream" uid="uid://bhy87wbee4rpo" path="res://Audio/Apple.wav" id="3_6fv38"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]
-radius = 77.41447
+radius = 81.0
 
 [sub_resource type="Animation" id="Animation_h2p6v"]
 length = 0.001
@@ -67,7 +67,7 @@ tracks/2/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
-"stream": ExtResource("3_5ivrd")
+"stream": ExtResource("3_6fv38")
 }],
 "times": PackedFloat32Array(0)
 }
@@ -81,12 +81,13 @@ _data = {
 
 [node name="Apple" type="Area2D" unique_id=658099648]
 script = ExtResource("1_6fv38")
-message = "A handful of strawberries gives ≈ 135 kJ. “Mansikka” is a Finnish summer favorite!"
+snap_in_game = true
+message = "A fist of blueberries gives ≈ 180 kJ. In Finland you can pick “mustikka” thanks to jokamiehenoikeus (everyman’s right)"
 collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 330
-pickup_animation_name = &"Apple ≈ 330 kJ. Finnish gardens brim with “omena” in autumn."
+award_energy_kj = 180
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
+position = Vector2(-0.49999678, 0)
 scale = Vector2(0.20622568, 0.21423371)
 texture = ExtResource("2_6fv38")
 
