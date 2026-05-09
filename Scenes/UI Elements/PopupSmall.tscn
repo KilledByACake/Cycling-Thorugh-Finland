@@ -13,7 +13,7 @@ corner_radius_top_right = 18
 corner_radius_bottom_right = 18
 corner_radius_bottom_left = 18
 
-[node name="PopupBig" type="Node2D" unique_id=233661423]
+[node name="PopupSmall" type="Node2D" unique_id=233661423]
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=414621424]
 offset_right = 590.0

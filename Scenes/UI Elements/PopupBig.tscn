@@ -17,7 +17,7 @@ corner_radius_bottom_left = 32
 
 [node name="PanelContainer" type="PanelContainer" parent="." unique_id=414621424]
 offset_right = 1010.0
-offset_bottom = 173.0
+offset_bottom = 267.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_3280r")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1418876313]
