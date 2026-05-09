@@ -1,0 +1,52 @@
+[gd_scene format=3 uid="uid://rda1orsbbrdm"]
+
+[ext_resource type="Script" uid="uid://c2qumgobmscg1" path="res://Code/popup_big.gd" id="1_cwj4v"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="1_yuud4"]
+
+[sub_resource type="Theme" id="Theme_r0o8i"]
+default_font = ExtResource("1_yuud4")
+default_font_size = 30
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3280r"]
+content_margin_left = 25.0
+content_margin_top = 25.0
+content_margin_right = 25.0
+content_margin_bottom = 25.0
+bg_color = Color(0.9371796, 0.9371796, 0.9371796, 0.70000005)
+corner_radius_top_left = 35
+corner_radius_top_right = 35
+corner_radius_bottom_right = 35
+corner_radius_bottom_left = 35
+
+[node name="PopupBig" type="Control" unique_id=1639870094]
+custom_minimum_size = Vector2(100, 0)
+layout_mode = 3
+anchors_preset = 0
+offset_right = 452.0
+offset_bottom = 101.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme = SubResource("Theme_r0o8i")
+script = ExtResource("1_cwj4v")
+popup_text = "Hello! You passed the trigger.sdfsdfsadfs sdfsdf
+"
+regenerate = null
+trigger_once = null
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=414621424]
+layout_mode = 0
+offset_right = 450.0
+offset_bottom = 88.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3280r")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1418876313]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer" unique_id=598734304]
+custom_minimum_size = Vector2(400, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19215687, 0.25882354, 0.09803922, 1)
+text = "sdfsdfsadfsdfs"
+autowrap_mode = 2

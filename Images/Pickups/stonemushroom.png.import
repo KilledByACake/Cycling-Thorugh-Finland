@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vmr43caji3yi"
-path="res://.godot/imported/cloudberr.png-06fc685a04c166245b44918c066ee170.ctex"
+uid="uid://clyvnpnjbsl2u"
+path="res://.godot/imported/stonemushroom.png-13b2d7f4f7080f15278611dfae1da430.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Pickups/cloudberr.png"
-dest_files=["res://.godot/imported/cloudberr.png-06fc685a04c166245b44918c066ee170.ctex"]
+source_file="res://Images/Pickups/stonemushroom.png"
+dest_files=["res://.godot/imported/stonemushroom.png-13b2d7f4f7080f15278611dfae1da430.ctex"]
 
 [params]
 

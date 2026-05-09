@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://rda1orsbbrdm"]
+
+[ext_resource type="Script" uid="uid://c2qumgobmscg1" path="res://Code/popup_big.gd" id="1_cwj4v"]
+
+[node name="PopupBig" type="Control" unique_id=1639870094]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_cwj4v")
+
+[node name="Panel" type="Panel" parent="." unique_id=1311680190]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1418876313]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/MarginContainer" unique_id=1432880861]
+layout_mode = 2
