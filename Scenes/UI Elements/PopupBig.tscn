@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://rda1orsbbrdm"]
+
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="1_cwj4v"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_3280r"]
+content_margin_left = 30.0
+content_margin_top = 30.0
+content_margin_right = 30.0
+content_margin_bottom = 30.0
+bg_color = Color(0.9371796, 0.9371796, 0.9371796, 0.70000005)
+corner_radius_top_left = 32
+corner_radius_top_right = 32
+corner_radius_bottom_right = 32
+corner_radius_bottom_left = 32
+
+[node name="PopupBig" type="Node2D" unique_id=233661423]
+
+[node name="PanelContainer" type="PanelContainer" parent="." unique_id=414621424]
+offset_right = 1010.0
+offset_bottom = 267.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_3280r")
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer" unique_id=1418876313]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="Label" type="Label" parent="PanelContainer/MarginContainer" unique_id=598734304]
+custom_minimum_size = Vector2(950, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19215687, 0.25882354, 0.09803922, 1)
+theme_override_fonts/font = ExtResource("1_cwj4v")
+theme_override_font_sizes/font_size = 55
+text = "Default Text Hier ist noch mehr bsp text und Informaitonen die wichtig sein könnten"
+autowrap_mode = 2

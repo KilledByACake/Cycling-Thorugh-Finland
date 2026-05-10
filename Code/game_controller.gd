@@ -379,17 +379,17 @@ func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
 # Shows a temporary popup message near the right side of the screen.
 func show_popup_message(text: String, _id: String = "") -> void:
 	_ensure_overlay_layer()
-	var panel_size: Vector2 = Vector2(520, 140)
+	var panel_size: Vector2 = Vector2(720, 140)
 	var right_offset_px: float = 200.0
 	var font_size_px: int = 36
-	var padding_px: int = 16
+	var padding_px: int = 20
 	var panel: Panel = Panel.new()
 	var sb: StyleBoxFlat = StyleBoxFlat.new()
-	sb.bg_color = Color(0, 0, 0, 0.45)
-	sb.corner_radius_top_left = 12
-	sb.corner_radius_top_right = 12
-	sb.corner_radius_bottom_left = 12
-	sb.corner_radius_bottom_right = 12
+	sb.bg_color = Color(1.0, 1.0, 1.0, 0.9) # BG Color
+	sb.corner_radius_top_left = 18
+	sb.corner_radius_top_right = 18
+	sb.corner_radius_bottom_left = 18
+	sb.corner_radius_bottom_right = 18
 	panel.add_theme_stylebox_override("panel", sb)
 	panel.modulate = Color(1, 1, 1, 0)
 	panel.anchor_left = 0.5
@@ -404,9 +404,10 @@ func show_popup_message(text: String, _id: String = "") -> void:
 	lbl.bbcode_enabled = true
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.scroll_active = false
-	lbl.fit_content = false
+	lbl.fit_content = true  # box expands in height so text fits
 	lbl.add_theme_font_size_override("normal_font_size", font_size_px)
-	lbl.text = "[center]" + text + "[/center]"
+	lbl.add_theme_color_override("default_color", Color("#314219"))  # Font Color
+	lbl.text = "[left]" + text + "[/left]"
 	lbl.anchor_left = 0.0
 	lbl.anchor_right = 1.0
 	lbl.anchor_top = 0.0
@@ -417,6 +418,14 @@ func show_popup_message(text: String, _id: String = "") -> void:
 	lbl.offset_bottom = -padding_px
 	panel.add_child(lbl)
 	overlay_layer.add_child(panel)
+	
+	#auto height calculation
+	await get_tree().process_frame
+	var actual_height: float = lbl.get_content_height() + padding_px * 2
+	panel.offset_top = -actual_height * 0.5
+	panel.offset_bottom = actual_height * 0.5
+	panel.offset_right = right_offset_px + 720.0
+	
 	var tw: Tween = create_tween()
 	tw.tween_property(panel, "modulate", Color(1, 1, 1, 1), 0.18)
 	tw.tween_interval(1.6)

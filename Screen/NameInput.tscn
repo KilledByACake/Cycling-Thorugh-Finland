@@ -1,0 +1,158 @@
+[gd_scene format=3 uid="uid://bshjb6rfdwq50"]
+
+[ext_resource type="Script" path="res://Code/name_input.gd" id="1_xncxv"]
+[ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_x4mlx"]
+[ext_resource type="FontFile" path="res://Code/fredoka-one.one-regular.ttf" id="2_xncxv"]
+[ext_resource type="Script" path="res://Code/main_menu.gd" id="3_x4mlx"]
+[ext_resource type="Material" uid="uid://cp4yijtp6hg33" path="res://Style/bg_moving_gradient.tres" id="4_qpl1d"]
+[ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="5_8gsew"]
+[ext_resource type="Texture2D" uid="uid://dr258l5mh52a8" path="res://Images/Design/transparent_hills/hills_50.png" id="5_j1nqe"]
+[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="6_8gsew"]
+[ext_resource type="StyleBox" uid="uid://c8r6f6hj78pi4" path="res://Style/button_pressed_hover_smaller.tres" id="6_g0jiq"]
+
+[sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x4mlx"]
+texture = ExtResource("2_x4mlx")
+modulate_color = Color(0.35305238, 0.35305238, 0.35305238, 1)
+
+[sub_resource type="Theme" id="Theme_xncxv"]
+default_font = ExtResource("2_xncxv")
+default_font_size = 140
+
+[node name="NameInput" type="Control" unique_id=1964198822]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_xncxv")
+
+[node name="Panel" type="Panel" parent="." unique_id=737065188]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxTexture_x4mlx")
+script = ExtResource("3_x4mlx")
+
+[node name="movingGradient" type="ColorRect" parent="." unique_id=1574845212]
+z_index = -1
+material = ExtResource("4_qpl1d")
+layout_mode = 0
+offset_left = -89.0
+offset_top = -47.0
+offset_right = 3882.0
+offset_bottom = 2207.0
+
+[node name="Hills50" type="Sprite2D" parent="." unique_id=257696453]
+position = Vector2(1735, 2088)
+texture = ExtResource("5_j1nqe")
+
+[node name="Label" type="Label" parent="." unique_id=1974430479]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.50100005
+anchor_top = 0.21100001
+anchor_right = 0.50100005
+anchor_bottom = 0.21100001
+offset_left = -526.8402
+offset_top = -100.76001
+offset_right = 543.1598
+offset_bottom = 179.23999
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 180
+text = "Nickname"
+horizontal_alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="." unique_id=147362238]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+theme = SubResource("Theme_xncxv")
+theme_override_constants/h_separation = 25
+theme_override_constants/v_separation = 25
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=313721407]
+layout_direction = 2
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -354.0
+offset_top = 537.0
+offset_right = 328.0
+offset_bottom = 598.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 400
+alignment = 1
+
+[node name="quit" type="Button" parent="HBoxContainer" unique_id=1364312027]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = ExtResource("5_8gsew")
+theme_override_styles/pressed = ExtResource("6_8gsew")
+theme_override_styles/hover = ExtResource("6_8gsew")
+text = "Quit"
+
+[node name="backspace" type="Button" parent="HBoxContainer" unique_id=782151137]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = ExtResource("6_g0jiq")
+theme_override_styles/pressed = ExtResource("6_8gsew")
+theme_override_styles/hover = ExtResource("6_8gsew")
+text = "Backspace"
+
+[node name="done" type="Button" parent="HBoxContainer" unique_id=127716656]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 120
+theme_override_styles/normal = ExtResource("5_8gsew")
+theme_override_styles/pressed = ExtResource("6_8gsew")
+theme_override_styles/hover = ExtResource("6_8gsew")
+text = "Done"
+
+[node name="Txt" type="Label" parent="." unique_id=2109215096]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -937.0
+offset_top = -959.0
+offset_right = 976.0
+offset_bottom = -679.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_font_sizes/font_size = 200
+text = "Fill out Nickname"
+horizontal_alignment = 1
+
+[connection signal="pressed" from="HBoxContainer/quit" to="." method="_on_quit_pressed"]
+[connection signal="pressed" from="HBoxContainer/backspace" to="." method="_on_backspace_pressed"]
+[connection signal="pressed" from="HBoxContainer/done" to="." method="_on_done_pressed"]
