@@ -1,5 +1,6 @@
 # En wahoo_controller.gd
-extends Node
+class_name WahooController
+extends Node 
 
 signal power_updated(watts: int)
 signal speed_updated(kmh: float)
@@ -8,7 +9,6 @@ signal speed_updated(kmh: float)
 var current_speed: float = 0.0
 var current_power: int = 0
 # ----------------------------------
-
 
 var udp_server := UDPServer.new()
 var udp_peer : PacketPeerUDP

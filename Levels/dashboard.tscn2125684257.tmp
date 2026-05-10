@@ -379,4 +379,9 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 23.0
 
+[node name="ButtonResistencia" type="Button" parent="Wahoo" unique_id=1969568157]
+layout_mode = 0
+offset_right = 8.0
+offset_bottom = 8.0
+
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]
