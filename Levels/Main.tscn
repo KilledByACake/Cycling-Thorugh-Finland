@@ -5,7 +5,7 @@
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="3_b7uiw"]
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="4_bl2xt"]
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_r6vcu"]
-[ext_resource type="Script" uid="uid://bh16u6ah1m4rb" path="res://Code/polygon_to_path.gd" id="6_yy7ei"]
+[ext_resource type="Script" path="res://Code/polygon_to_path.gd" id="6_yy7ei"]
 [ext_resource type="Texture2D" uid="uid://dr258l5mh52a8" path="res://Images/Design/transparent_hills/hills_50.png" id="7_b7uiw"]
 
 [sub_resource type="Curve2D" id="Curve2D_r6vcu"]
@@ -52,13 +52,12 @@ theme_override_font_sizes/font_size = 230
 text = "Cycle Through Finland"
 horizontal_alignment = 1
 
-[node name="Polygon2D" type="Polygon2D" parent="." unique_id=544999636 node_paths=PackedStringArray("path")]
+[node name="Polygon2D" type="Polygon2D" parent="." unique_id=544999636]
 visible = false
 color = Color(0, 0, 0, 0.75686276)
 offset = Vector2(0, -1100)
 polygon = PackedVector2Array(-305, 3041, -261.47498, 2984.5303, -209.23431, 2926.846, -138.59991, 2860.9976, -51.015533, 2795.587, -1.3182678, 2765.734, 52.07509, 2739.216, 108.98406, 2717.1084, 169.22818, 2700.4863, 232.62698, 2690.4253, 299, 2688, 363.84772, 2692.6047, 423.24298, 2702.4077, 477.8639, 2716.6455, 528.38855, 2734.555, 619.86145, 2778.3352, 783.4879, 2876.3682, 866.49097, 2918.4077, 910.6632, 2935.0115, 957.52, 2947.6538, 1007.7396, 2955.571, 1062, 2958, 1116.8531, 2954.261, 1168.6146, 2944.732, 1217.6085, 2930.2346, 1264.1584, 2911.5925, 1351.222, 2865.1636, 1587.4348, 2711.9453, 1626.561, 2693.015, 1666.4814, 2678.1655, 1707.5198, 2668.2197, 1728.5594, 2665.3425, 1750, 2664, 1791.6072, 2664.5823, 1830.1427, 2668.203, 1866.1046, 2674.4263, 1899.9911, 2682.8174, 2087.609, 2754.2822, 2156.119, 2775.6953, 2234.255, 2790.0962, 2278.1772, 2793.5781, 2326, 2794, 2350.693, 2792.4873, 2374.857, 2789.279, 2421.7407, 2778.2393, 2466.9365, 2761.8052, 2510.731, 2740.9016, 2760.0728, 2573.398, 2844.934, 2523.7239, 2888.9788, 2504.2031, 2934.4805, 2489.459, 2981.7258, 2480.4165, 3006.0913, 2478.322, 3031, 2478, 3127.7236, 2486.9944, 3217.5608, 2506.6511, 3544.1282, 2616.7231, 3626.595, 2633.3076, 3669.1924, 2637.3752, 3713, 2638, 3804.0637, 2629.9028, 3898.8535, 2612.6587, 4301.759, 2513.2449, 4405.0435, 2496.041, 4508, 2488, 4574.841, 2487.0757, 4581.4272, 2487.2703, 4583.3745, 2487.4233, 4584.4644, 2487.612, 4584.7295, 2487.8345, 4584.201, 2488.089, 4580.888, 2488.6902, 4474.5674, 2496.5579, 4236, 2510, 4214, 3470, -166, 3513, -372, 3117, -305, 3041)
 script = ExtResource("6_yy7ei")
-path = NodePath("../Path2D")
 
 [node name="Path2D" type="Path2D" parent="." unique_id=1411038592]
 visible = false
