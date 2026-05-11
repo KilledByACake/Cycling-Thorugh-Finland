@@ -7,8 +7,6 @@
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="4_yiku2"]
 [ext_resource type="Script" uid="uid://bcyuokv2cftbc" path="res://Levels/control.gd" id="5_sqkkj"]
 [ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_yiku2"]
-[ext_resource type="Script" uid="uid://d3p4qf603waln" path="res://Levels/wahoo.gd" id="8_4xj3r"]
-[ext_resource type="Script" uid="uid://i58q88nh23li" path="res://Levels/gestor_wahoo.gd" id="9_2jnnk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gacrx"]
 content_margin_left = 130.0
@@ -118,6 +116,13 @@ theme_override_fonts/font = ExtResource("2_ym0tl")
 theme_override_font_sizes/font_size = 50
 text = "km/t"
 
+[node name="LabelSpeed" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox/ValueRow" unique_id=784942824]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "speed
+"
+
 [node name="EnergyCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1556425741]
 clip_contents = true
 custom_minimum_size = Vector2(700, 0)
@@ -157,6 +162,13 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_ym0tl")
 theme_override_font_sizes/font_size = 50
 text = "500 watts"
+
+[node name="LabelPower" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/HBoxContainer" unique_id=1702608269]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 100
+text = "power
+"
 
 [node name="Charge" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=673532160]
 layout_mode = 2
@@ -359,24 +371,5 @@ offset_top = 1643.0
 offset_right = 780.0
 offset_bottom = 1817.0
 text = "Wind power"
-
-[node name="Wahoo" type="Control" parent="." unique_id=1652378617]
-anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-script = ExtResource("8_4xj3r")
-
-[node name="GestorWahoo" type="Node" parent="Wahoo" unique_id=1788925715]
-script = ExtResource("9_2jnnk")
-
-[node name="LabelPower" type="Label" parent="Wahoo" unique_id=2108113661]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
-
-[node name="LabelSpeed" type="Label" parent="Wahoo" unique_id=2050128331]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 23.0
 
 [connection signal="pressed" from="Back" to="." method="_on_back_pressed"]

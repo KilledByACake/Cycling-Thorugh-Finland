@@ -26,6 +26,7 @@ buses/default_bus_layout="uid://27c47l767ugy"
 [autoload]
 
 HighScores="*uid://qfh87rfpe5hu"
+GlobalWahoo="*uid://cgsdxh1baaa4v"
 
 [display]
 

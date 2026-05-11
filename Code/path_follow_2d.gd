@@ -18,6 +18,10 @@ extends PathFollow2D
 # Energy per tap (adds to the shared total via level.add_energy)
 @export var energy_per_tap: int = 5
 
+# --- Wahoo Sensor Configuration (Añade esto) ---
+@export var power_to_speed_multiplier: float = 5.0 
+var energy_points: int = 0  # También necesitaremos esta para que no te dé el siguiente error
+
 # Curve readiness and update behavior
 @export var wait_frames_for_curve: int = 5
 @export var auto_recompute_on_curve_change: bool = true
@@ -60,28 +64,49 @@ func _ready() -> void:
 	input_locked = false
 
 func _physics_process(delta: float) -> void:
-	if not input_locked and not frozen and Input.is_action_just_pressed("ui_accept"):
-		on_pedal_tap()
+	if frozen: return
 
-	tap_power = max(0.0, tap_power - power_decay * delta)
-	speed_x = clamp(tap_power * speed_per_power, 0.0, max_speed)
-
-	var new_progress: float = progress + speed_x * delta
-	if not loop and new_progress > end_offset:
-		new_progress = end_offset
-
-	var reached_end_now: bool = (not loop) and (prev_progress < end_offset - 0.001) and (new_progress >= end_offset - 0.001)
-
-	progress = new_progress
-	prev_progress = progress
-
-	if reached_end_now and lock_when_reached_end:
-		input_locked = true
-		tap_power = 0.0
+	# 1. --- VELOCIDAD BASADA EN LA SEÑAL DE POTENCIA ---
+	# Calculamos la velocidad objetivo usando la potencia del sensor
+	var target_speed = GlobalWahoo.power * power_to_speed_multiplier
+	
+	# REGLA DE PARADA: Si la potencia es 0, matamos la velocidad para que no se mueva solo.
+	# Si hay potencia, aplicamos el lerp para que el cambio sea suave.
+	if GlobalWahoo.power <= 0:
 		speed_x = 0.0
+	else:
+		speed_x = lerp(speed_x, target_speed, 2.0 * delta)
+	
+	speed_x = clamp(speed_x, 0.0, max_speed)
+
+	# 2. --- MOVIMIENTO SOBRE LA LÍNEA (Path Follow) ---
+	# Solo calculamos el movimiento si hay velocidad real. 
+	# Esto respeta el Path Follow pero evita el "movimiento fantasma".
+	if speed_x > 0:
+		var new_progress: float = progress + speed_x * delta
+		
+		# Respetamos los límites del camino (clamping)
+		if not loop and new_progress > end_offset:
+			new_progress = end_offset
+
+		# Detectamos si hemos llegado al final justo en este frame
+		var reached_end_now: bool = (not loop) and (prev_progress < end_offset - 0.001) and (new_progress >= end_offset - 0.001)
+
+		# Aplicamos el movimiento real a la propiedad progress
+		progress = new_progress
+		prev_progress = progress
+
+		# 3. --- BLOQUEO Y ESTADO FINAL ---
+		if reached_end_now and lock_when_reached_end:
+			input_locked = true
+			speed_x = 0.0 # Detenemos la velocidad al llegar al final
+
+	# 4. --- ENERGÍA Y ANIMACIÓN ---
+	if GlobalWahoo.power > 50:
+		energy_points += 1 
+		_update_energy_ui()
 
 	_update_animation()
-
 func on_pedal_tap() -> void:
 	if input_locked or frozen:
 		return
@@ -173,3 +198,14 @@ func _on_curve_changed() -> void:
 	_compute_start_end_offsets()
 	progress = lerp(start_offset, end_offset, t_norm)
 	prev_progress = progress
+	
+	
+func _update_energy_ui() -> void:
+	var p: Node = get_parent()
+	# Buscamos hacia arriba en la jerarquía hasta encontrar el nodo que maneja la UI
+	while p != null:
+		if p.has_method("update_energy_UI"):
+			p.call("update_energy_UI", energy_points)
+			break
+		p = p.get_parent()
+		

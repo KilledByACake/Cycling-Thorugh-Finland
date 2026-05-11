@@ -2,85 +2,106 @@ extends CharacterBody2D
 
 signal pedal_tapped
 
-# Player controller: taps add power, which decays to control horizontal speed via PathFollow2D.
+# --- Tuning Configuration (Original kept) ---
+@export_group("Manual Configuration")
+@export var power_per_tap: float = 1.0
+@export var power_decay: float = 2.5
+@export var speed_per_power: float = 2000.0
 
-# Tap-to-speed tuning
-@export var power_per_tap: float = 1.0       # Tap adds this much power
-@export var power_decay: float = 2.5         # Power lost per second
-@export var speed_per_power: float = 2000.0  # Horizontal speed per 1.0 tap power
-@export var max_speed: float = 2000.0        # Max horizontal speed
+@export_group("Wahoo Sensor Configuration")
+# Multiplicador para ajustar la relación entre Watts y avance en el juego
+@export var power_to_speed_multiplier: float = 5.0 
+@export var max_speed: float = 2000.0
 
-# Score
+@export_group("Scoring")
 @export var energy_per_tap: int = 5
 
-# Runtime state
-var tap_power: float = 0.0                   # Accumulates on tap; decays over time
-var speed_x: float = 0.0                     # Current rightward speed (pixels/sec)
+# --- State Variables ---
+var velocidad_sensor: float = 0.0
+var potencia_sensor: int = 0
+var tap_power: float = 0.0
+var speed_x: float = 0.0 # Esta variable ahora la mueve la POTENCIA del GlobalWahoo
 var energy_points: int = 0
-var input_locked: bool = false               # GameController can disable input
-var frozen: bool = false                     # Level/scene can freeze the player
+var input_locked: bool = false
+var frozen: bool = false
 
-# Child nodes
 @onready var sprite: AnimatedSprite2D = get_node_or_null("AnimatedSprite2D") as AnimatedSprite2D
 
-# Called when added to the scene; initializes groups and state.
 func _ready() -> void:
+	# Mantenemos todos tus grupos originales
 	add_to_group("player")
 	add_to_group("radler")
 	add_to_group("input_receivers")
 	add_to_group("freezable")
-
-	# Ensure CharacterBody2D starts at rest.
 	velocity = Vector2.ZERO
-
 	_update_energy_ui()
 
-# Physics tick; reads input, updates power/speed, and animates.
+	# --- COMENTADO: Ya no buscamos el nodo localmente porque usamos el Global ---
+	# await get_tree().process_frame 
+	# var ruta_gestor = "/root/Main/HBoxContainer/Dashboard/Wahoo/GestorWahoo"
+	# var gestor = get_node_or_null(ruta_gestor)
+	# if gestor:
+	# 	gestor.power_updated.connect(_on_power_from_sensor)
+	# 	gestor.speed_updated.connect(_on_speed_from_sensor)
+	# 	print("Player: Wahoo connection established")
+
 func _physics_process(delta: float) -> void:
-	# Tap-to-accelerate (polling avoids UI Controls consuming the key event).
-	if not input_locked and not frozen and Input.is_action_just_pressed("ui_accept"):
-		on_pedal_tap()
+	if frozen: return
 
-	# Convert tap power → horizontal speed (with decay and clamp).
-	tap_power = max(0.0, tap_power - power_decay * delta)
-	speed_x = clamp(tap_power * speed_per_power, 0.0, max_speed)
+	# --- SUSTITUCIÓN DEL TAPING POR POTENCIA GLOBAL ---
+	# En lugar de usar tap_power (espacio), usamos GlobalWahoo.power
+	# Usamos un lerp muy suave para que la potencia no dé tirones al cambiar
+	var target_speed = GlobalWahoo.power * power_to_speed_multiplier
+	speed_x = lerp(speed_x, target_speed, 2.0 * delta) 
+	speed_x = clamp(speed_x, 0.0, max_speed)
+	
+	# Aplicamos el movimiento a la velocidad física
+	velocity.x = speed_x
+	#move_and_slide() # Necesario para que el CharacterBody2D se mueva
 
-	# Position/rotation are handled by PathFollow2D; do not move this node here.
-	# global_position += Vector2(speed_x * delta, 0.0)  # intentionally disabled
+	# --- Lógica de energía adaptada ---
+	if GlobalWahoo.power > 50:
+		# Sumamos energía de forma constante mientras haya potencia
+		energy_points += 1
+		_update_energy_ui()
 
+	# --- COMENTADO: Código anterior de input manual ---
+	# if not input_locked and Input.is_action_just_pressed("ui_accept"):
+	# 	on_pedal_tap()
+	# tap_power = max(0.0, tap_power - power_decay * delta)
+	
 	_update_animation()
 
-# Handles a pedal tap; increases power/energy and notifies listeners.
+# --- COMENTADO: Ya no usamos estas señales porque leemos directo del GlobalWahoo ---
+# func _on_power_from_sensor(watts: int) -> void:
+# 	potencia_sensor = watts
+# func _on_speed_from_sensor(kmh: float) -> void:
+# 	velocidad_sensor = kmh
+
 func on_pedal_tap() -> void:
-	if input_locked or frozen:
-		return
+	if input_locked or frozen: return
 	tap_power += power_per_tap
 	energy_points += energy_per_tap
 	_update_energy_ui()
 	emit_signal("pedal_tapped")
 
-# Updates the pedaling animation based on horizontal speed.
 func _update_animation() -> void:
-	if sprite == null:
-		return
-	var s: float = speed_x
-	if s > 1.0:
+	if sprite == null: return
+	# Usamos velocity.x (el movimiento real) para la animación
+	if abs(velocity.x) > 1.0:
 		sprite.play("rollen")
-		sprite.speed_scale = clamp(s / 120.0, 0.2, 8.0)
+		sprite.speed_scale = clamp(velocity.x / 300.0, 0.2, 8.0)
 	else:
 		sprite.stop()
 
-# Sends the current energy to a parent UI (if it implements update_energy_UI).
 func _update_energy_ui() -> void:
 	var p: Node = get_parent()
 	if p and p.has_method("update_energy_UI"):
 		p.call("update_energy_UI", energy_points)
 
-# External API: lock/unlock input handling.
 func lock_input(v: bool) -> void:
 	input_locked = v
 
-# External API: freeze movement and clear velocity/power.
 func freeze() -> void:
 	frozen = true
 	tap_power = 0.0

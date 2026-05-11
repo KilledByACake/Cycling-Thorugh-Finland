@@ -106,6 +106,8 @@ func _spawn_terrain() -> void:
 func _process(delta: float) -> void:
 	if round_finished:
 		return
+	if GlobalWahoo.power > 1: # Si hay más de 1W, el jugador está activo
+		_on_player_pedaled()
 	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		timer_label.text = _format_time(t)
@@ -211,9 +213,9 @@ func _setup_inactivity_detection() -> void:
 	inactivity_warning_timer.start()
 	inactivity_timer.start()
 
-	var radler: Node = get_tree().get_first_node_in_group("radler")
-	if radler and radler.has_signal("pedal_tapped"):
-		radler.connect("pedal_tapped", Callable(self, "_on_player_pedaled"))
+	#var radler: Node = get_tree().get_first_node_in_group("radler")
+	#if radler and radler.has_signal("pedal_tapped"):
+	#	radler.connect("pedal_tapped", Callable(self, "_on_player_pedaled"))
 
 # Handles player pedaling; resets inactivity timers and updates blink state.
 func _on_player_pedaled() -> void:

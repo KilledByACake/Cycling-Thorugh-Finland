@@ -1,0 +1,10 @@
+[gd_scene format=3 uid="uid://bma1jmvdudrt1"]
+
+[ext_resource type="Script" uid="uid://cgsdxh1baaa4v" path="res://Scenes/GlobalWahoo.gd" id="1_5bb2y"]
+
+[node name="GlobalWahoo" type="Control" unique_id=2028123159]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("1_5bb2y")
