@@ -246,12 +246,6 @@ animations = [{
 
 [node name="Player" type="CharacterBody2D" unique_id=50299590]
 script = ExtResource("1_1u43k")
-power_per_tap = null
-power_decay = null
-speed_per_power = null
-max_speed = null
-energy_per_tap = null
-pedal_anim_name = null
 
 [node name="Felix" type="AnimatedSprite2D" parent="." unique_id=709662869]
 position = Vector2(0, 4)
