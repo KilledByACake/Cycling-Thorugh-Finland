@@ -5,10 +5,10 @@
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_ym0tl"]
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="3_2culi"]
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="4_yiku2"]
-[ext_resource type="Script" uid="uid://bcyuokv2cftbc" path="res://Levels/control.gd" id="5_sqkkj"]
+[ext_resource type="Script" path="res://Levels/control.gd" id="5_sqkkj"]
 [ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_yiku2"]
-[ext_resource type="Script" uid="uid://d3p4qf603waln" path="res://Levels/wahoo.gd" id="8_4xj3r"]
-[ext_resource type="Script" uid="uid://i58q88nh23li" path="res://Levels/gestor_wahoo.gd" id="9_2jnnk"]
+[ext_resource type="Script" path="res://Levels/wahoo.gd" id="8_4xj3r"]
+[ext_resource type="Script" path="res://Levels/gestor_wahoo.gd" id="9_2jnnk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gacrx"]
 content_margin_left = 130.0
