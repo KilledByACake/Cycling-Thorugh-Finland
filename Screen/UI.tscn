@@ -28,7 +28,7 @@ expand_mode = 2
 [node name="SpeedLabel" type="Label" parent="VBoxContainer/Speed" unique_id=1956653022]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
-theme_override_font_sizes/font_size = 150
+theme_override_font_sizes/font_size = 120
 text = "0"
 
 [node name="Energy" type="HBoxContainer" parent="VBoxContainer" unique_id=1741399407]
@@ -42,7 +42,7 @@ expand_mode = 2
 [node name="EnergyLabel" type="Label" parent="VBoxContainer/Energy" unique_id=216446171]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
-theme_override_font_sizes/font_size = 150
+theme_override_font_sizes/font_size = 120
 text = "0"
 
 [node name="TimerLabel" type="Label" parent="." unique_id=192753063]
@@ -54,6 +54,6 @@ offset_right = -53.0
 offset_bottom = 243.0
 grow_horizontal = 0
 theme_override_fonts/font = ExtResource("2_nf4gj")
-theme_override_font_sizes/font_size = 200
+theme_override_font_sizes/font_size = 150
 text = "02:00"
 horizontal_alignment = 2
