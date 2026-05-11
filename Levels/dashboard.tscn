@@ -1,18 +1,18 @@
 [gd_scene format=3 uid="uid://dgj3tk6nktcfo"]
 
-[ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/Screens/dashboard.gd" id="1_8rqq3"]
-[ext_resource type="Texture2D" uid="uid://cr8odhe5s5nrj" path="res://Images/Design/sprite objects/Vector-2.png" id="2_2culi"]
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_ym0tl"]
-[ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="3_2culi"]
-[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="4_yiku2"]
-[ext_resource type="Script" path="res://Levels/control.gd" id="5_sqkkj"]
-[ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_yiku2"]
+[ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/Screens/dashboard.gd" id="1_2culi"]
+[ext_resource type="Texture2D" uid="uid://cr8odhe5s5nrj" path="res://Images/Design/sprite objects/Vector-2.png" id="2_yiku2"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="3_sqkkj"]
+[ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="4_n2g2g"]
+[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_bdl2f"]
+[ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_be544"]
+[ext_resource type="Script" path="res://Levels/control.gd" id="7_ux4mo"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gacrx"]
-content_margin_left = 130.0
-content_margin_top = 40.0
-content_margin_right = 60.0
-content_margin_bottom = 40.0
+content_margin_left = 20.0
+content_margin_top = 20.0
+content_margin_right = 20.0
+content_margin_bottom = 20.0
 bg_color = Color(9.877248, 10.651967, 6.637515, 0.42745098)
 corner_radius_top_left = 24
 corner_radius_top_right = 24
@@ -26,7 +26,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_8rqq3")
+script = ExtResource("1_2culi")
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=309210946]
 layout_mode = 1
@@ -38,24 +38,26 @@ grow_vertical = 2
 color = Color(0.45882353, 0.654902, 0.43137255, 1)
 
 [node name="Windmill" type="Sprite2D" parent="." unique_id=2034148796]
-position = Vector2(3514.875, 1191.25)
-scale = Vector2(2.0885324, 2.2275825)
-texture = ExtResource("2_2culi")
+position = Vector2(1690, 662.49994)
+scale = Vector2(1.4128442, 1.4358683)
+texture = ExtResource("2_yiku2")
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1197755579]
 layout_mode = 1
 anchors_preset = 9
 anchor_bottom = 1.0
-offset_right = 3152.0
+offset_right = 2752.0
+offset_bottom = -276.0
 grow_vertical = 2
-theme_override_constants/margin_left = 100
-theme_override_constants/margin_top = 100
-theme_override_constants/margin_right = 100
-theme_override_constants/margin_bottom = 100
+theme_override_constants/margin_left = 40
+theme_override_constants/margin_top = 40
+theme_override_constants/margin_right = 40
+theme_override_constants/margin_bottom = 40
 
 [node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1349834310]
 layout_mode = 2
-theme_override_constants/separation = 50
+size_flags_horizontal = 0
+theme_override_constants/separation = 40
 
 [node name="Header" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=599118569]
 layout_mode = 2
@@ -63,8 +65,8 @@ layout_mode = 2
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/Header" unique_id=1799983815]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 200
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 100
 text = "Energy Dashboard"
 
 [node name="SessionStatusLabel" type="Label" parent="MarginContainer/VBoxContainer/Header" unique_id=424069106]
@@ -72,13 +74,14 @@ layout_mode = 2
 
 [node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer" unique_id=1252285866]
 layout_mode = 2
-theme_override_constants/h_separation = 80
-theme_override_constants/v_separation = 80
+size_flags_horizontal = 0
+theme_override_constants/h_separation = 40
+theme_override_constants/v_separation = 40
 columns = 3
 
-[node name="SpeedCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=175229276]
+[node name="SpeedCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=389866373]
 clip_contents = true
-custom_minimum_size = Vector2(700, 0)
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
 
@@ -96,8 +99,8 @@ theme_override_constants/separation = 10
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox" unique_id=1595972417]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 80
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 60
 text = "Speed"
 
 [node name="ValueRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox" unique_id=1682665357]
@@ -106,26 +109,25 @@ theme_override_constants/separation = 60
 
 [node name="ValueLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox/ValueRow" unique_id=1607837275]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 300
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 80
 text = "20"
 
 [node name="UnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox/ValueRow" unique_id=66286659]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 35
 text = "km/t"
 
 [node name="LabelSpeed" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox/ValueRow" unique_id=784942824]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 100
+theme_override_font_sizes/font_size = 40
 text = "speed
 "
 
-[node name="EnergyCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1556425741]
+[node name="EnergyCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1669860497]
 clip_contents = true
-custom_minimum_size = Vector2(700, 0)
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
 
@@ -143,39 +145,40 @@ theme_override_constants/separation = 10
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox" unique_id=2107182125]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 80
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 60
 text = "Pedal Power"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox" unique_id=2017145322]
 layout_mode = 2
-theme_override_constants/separation = 200
+theme_override_constants/separation = 80
 
 [node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/HBoxContainer" unique_id=1227170154]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 35
 text = "0 watt"
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/HBoxContainer" unique_id=2087834937]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 35
 text = "500 watts"
 
 [node name="LabelPower" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/HBoxContainer" unique_id=1702608269]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 100
+theme_override_font_sizes/font_size = 40
 text = "power
 "
 
-[node name="Charge" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=673532160]
+[node name="Charge" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=421791004]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer/Charge" unique_id=565657748]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
@@ -186,15 +189,17 @@ layout_mode = 2
 theme_override_constants/separation = 10
 
 [node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Charge/CardMargin/CardVBox" unique_id=1142816821]
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 80
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 50
 text = "How much you need to cycle to charge your phone"
 autowrap_mode = 2
 max_lines_visible = 3
 
-[node name="Solarpanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1214079184]
+[node name="Solarpanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1606271807]
 clip_contents = true
 custom_minimum_size = Vector2(700, 0)
 layout_mode = 2
@@ -214,29 +219,30 @@ theme_override_constants/separation = 10
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox" unique_id=1159070936]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 80
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 60
 text = "Solarpanel"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox" unique_id=445967031]
 layout_mode = 2
-theme_override_constants/separation = 200
+theme_override_constants/separation = 80
 
 [node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=25679089]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 35
 text = "0 watt"
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=328591609]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 35
 text = "500 watts"
 
-[node name="Windwheel" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=439065229]
+[node name="Windwheel" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1229265380]
 custom_minimum_size = Vector2(700, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel" unique_id=1627423445]
@@ -253,28 +259,29 @@ theme_override_constants/separation = 10
 [node name="Title" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox" unique_id=721557130]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 80
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 50
 text = "Windwheel"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox" unique_id=1211447482]
 layout_mode = 2
-theme_override_constants/separation = 200
+theme_override_constants/separation = 80
 
 [node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=1690713820]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 35
 text = "0 watt"
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=1495033521]
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 50
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 35
 text = "500 watts"
 
-[node name="Charge2" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=2099886977]
+[node name="Charge2" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1883928027]
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer/Charge2" unique_id=1185806984]
@@ -287,13 +294,16 @@ theme_override_constants/margin_bottom = 16
 [node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/Charge2/CardMargin" unique_id=1288551999]
 custom_minimum_size = Vector2(1000, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_constants/separation = 10
 
 [node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Charge2/CardMargin/CardVBox" unique_id=1420699027]
+custom_minimum_size = Vector2(600, 0)
 layout_mode = 2
+size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 80
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 50
 text = "You need to cycle twice as fast to catch the solar panel"
 autowrap_mode = 2
 
@@ -315,8 +325,8 @@ theme_override_constants/separation = 10
 [node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/Attention/CardMargin/CardVBox" unique_id=1494563455]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 80
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 50
 text = "Here is some information written that might be important for the cycler"
 autowrap_mode = 2
 
@@ -336,25 +346,25 @@ grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
-theme_override_fonts/font = ExtResource("2_ym0tl")
-theme_override_font_sizes/font_size = 120
-theme_override_styles/normal = ExtResource("3_2culi")
-theme_override_styles/pressed = ExtResource("4_yiku2")
-theme_override_styles/hover = ExtResource("4_yiku2")
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = ExtResource("4_n2g2g")
+theme_override_styles/pressed = ExtResource("5_bdl2f")
+theme_override_styles/hover = ExtResource("5_bdl2f")
 text = "Back"
 icon_alignment = 1
 
 [node name="Meteoria2" type="Sprite2D" parent="." unique_id=749458229]
-position = Vector2(527, 1784)
-scale = Vector2(0.71053624, 0.65072167)
-texture = ExtResource("6_yiku2")
+position = Vector2(175.99997, 934)
+scale = Vector2(0.5172771, 0.47339708)
+texture = ExtResource("6_be544")
 
 [node name="Meteoria" type="Control" parent="." unique_id=2100880608]
 visible = false
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("5_sqkkj")
+script = ExtResource("7_ux4mo")
 
 [node name="powerSolar" type="Label" parent="Meteoria" unique_id=1299442263]
 layout_mode = 0
