@@ -229,8 +229,8 @@ grow_vertical = 2
 color = Color(0.45882353, 0.654902, 0.43137255, 1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=948401926]
-position = Vector2(1806, 710)
-scale = Vector2(2.675781, 2.3818622)
+position = Vector2(1806, 660.50006)
+scale = Vector2(2.675781, 2.618139)
 sprite_frames = SubResource("SpriteFrames_cwejb")
 script = ExtResource("3_yiku2")
 
@@ -256,7 +256,7 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/Header" unique_id=1799983815]
 layout_mode = 2
-theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_colors/font_color = Color(2.3050766, 2.853377, 1.4230278, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 100
 text = "Energy Dashboard"
@@ -343,6 +343,7 @@ theme_override_constants/separation = 10
 
 [node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/HBoxContainer" unique_id=1227170154]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "0 watt"
@@ -356,6 +357,7 @@ text = "power
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/HBoxContainer" unique_id=2087834937]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "500 watts"
@@ -418,12 +420,14 @@ theme_override_constants/separation = 80
 
 [node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=25679089]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "0 watt"
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=328591609]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "500 watts"
@@ -458,12 +462,14 @@ theme_override_constants/separation = 80
 
 [node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=1690713820]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "0 watt"
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=1495033521]
 layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "500 watts"
@@ -515,7 +521,7 @@ theme_override_constants/separation = 10
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
-theme_override_font_sizes/font_size = 40
+theme_override_font_sizes/font_size = 35
 text = "Here is some information written that might be important for the cycler"
 autowrap_mode = 2
 
@@ -544,7 +550,7 @@ text = "Back"
 icon_alignment = 1
 
 [node name="Meteoria2" type="Sprite2D" parent="." unique_id=749458229]
-position = Vector2(175.99997, 934)
+position = Vector2(221, 924.00006)
 scale = Vector2(0.5172771, 0.47339708)
 texture = ExtResource("6_be544")
 
