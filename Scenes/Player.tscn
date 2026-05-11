@@ -1340,10 +1340,14 @@ animations = [{
 script = ExtResource("1_1u43k")
 
 [node name="Mikko" type="AnimatedSprite2D" parent="." unique_id=458075795]
+position = Vector2(3.9999926, 12.999989)
+scale = Vector2(1.7031249, 1.78125)
 sprite_frames = SubResource("SpriteFrames_ujsok")
 animation = &"Celebrate"
 
 [node name="Hilla" type="AnimatedSprite2D" parent="." unique_id=177600156]
+position = Vector2(6.000004, 4.499981)
+scale = Vector2(1.671875, 1.7929688)
 sprite_frames = SubResource("SpriteFrames_6v1ow")
 animation = &"Celebrate"
 
