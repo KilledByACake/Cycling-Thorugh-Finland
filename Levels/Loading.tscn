@@ -19,41 +19,38 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0, 0, 0, 1)
 
-[node name="Hills50" type="Sprite2D" parent="Overlay" unique_id=1682482000]
-position = Vector2(1921, 2100)
-scale = Vector2(0.9079933, 0.9079933)
+[node name="Hills50" type="Sprite2D" parent="Overlay" unique_id=1846205574]
+position = Vector2(955, 989)
+scale = Vector2(0.45155475, 0.5986678)
 texture = ExtResource("3_2vi0w")
 
-[node name="Text" type="Label" parent="Overlay" unique_id=2136164313]
-unique_name_in_owner = true
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -1700.0
-offset_top = 602.0
-offset_right = 1719.0
-offset_bottom = 1322.0
-grow_horizontal = 2
-theme_override_fonts/font = ExtResource("2_kcpon")
-theme_override_font_sizes/font_size = 150
-text = "Cycle as much as far north you can,
- and reach the notheren light!"
-horizontal_alignment = 1
-
-[node name="CountdownTimer" type="Label" parent="Overlay" unique_id=138467882]
-unique_name_in_owner = true
+[node name="VBoxContainer" type="VBoxContainer" parent="Overlay" unique_id=44137459]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -550.0
-offset_top = 86.0
-offset_right = 551.0
-offset_bottom = 329.0
+offset_left = -684.0
+offset_top = -186.0
+offset_right = 684.0
+offset_bottom = 186.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 80
+
+[node name="Text" type="Label" parent="Overlay/VBoxContainer" unique_id=2136164313]
+unique_name_in_owner = true
+layout_mode = 2
 theme_override_fonts/font = ExtResource("2_kcpon")
-theme_override_font_sizes/font_size = 200
+theme_override_font_sizes/font_size = 80
+text = "Cycle as much as far north you can,
+ and reach the notheren light!"
+horizontal_alignment = 1
+
+[node name="CountdownTimer" type="Label" parent="Overlay/VBoxContainer" unique_id=138467882]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_kcpon")
+theme_override_font_sizes/font_size = 140
 text = "Ready?"
 horizontal_alignment = 1

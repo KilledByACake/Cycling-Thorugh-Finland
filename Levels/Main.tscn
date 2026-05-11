@@ -28,29 +28,12 @@ script = ExtResource("2_yy7ei")
 [node name="movingGradient" type="ColorRect" parent="." unique_id=1547595929]
 z_index = -1
 material = ExtResource("2_b7uiw")
-layout_mode = 0
-offset_left = -89.0
-offset_top = -47.0
-offset_right = 3882.0
-offset_bottom = 2207.0
-
-[node name="Label" type="Label" parent="." unique_id=1566016174]
 layout_mode = 1
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -326.5
-offset_top = -328.0
-offset_right = 326.5
-offset_bottom = -254.0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("3_b7uiw")
-theme_override_font_sizes/font_size = 230
-text = "Cycle Through Finland"
-horizontal_alignment = 1
 
 [node name="Polygon2D" type="Polygon2D" parent="." unique_id=544999636]
 visible = false
@@ -65,49 +48,63 @@ top_level = true
 position = Vector2(56, -1194)
 curve = SubResource("Curve2D_r6vcu")
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=149146580]
+[node name="Hills50" type="Sprite2D" parent="." unique_id=1107955066]
+position = Vector2(955, 989)
+scale = Vector2(0.45155475, 0.5986678)
+texture = ExtResource("7_b7uiw")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=408302282]
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.503
-anchor_top = 0.57900006
-anchor_right = 0.503
-anchor_bottom = 0.57900006
-offset_left = -854.52
-offset_top = -64.64014
-offset_right = 853.48
-offset_bottom = 63.359863
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -773.0
+offset_top = -240.0
+offset_right = 773.0
+offset_bottom = 240.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = SubResource("Theme_qjlnc")
-theme_override_constants/separation = 200
+theme_override_constants/separation = 100
+alignment = 1
 
-[node name="Dashboard" type="Button" parent="HBoxContainer" unique_id=1385432774]
+[node name="Title" type="Label" parent="VBoxContainer" unique_id=1566016174]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("3_b7uiw")
+theme_override_font_sizes/font_size = 130
+text = "Cycle Through Finland"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer" unique_id=149146580]
+layout_mode = 2
+theme = SubResource("Theme_qjlnc")
+theme_override_constants/separation = 80
+alignment = 1
+
+[node name="Dashboard" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1385432774]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("3_b7uiw")
-theme_override_font_sizes/font_size = 120
+theme_override_font_sizes/font_size = 80
 theme_override_styles/normal = ExtResource("4_bl2xt")
 theme_override_styles/pressed = ExtResource("5_r6vcu")
 theme_override_styles/hover = ExtResource("5_r6vcu")
 text = "Dashboard"
 
-[node name="Start Game" type="Button" parent="HBoxContainer" unique_id=669158430]
+[node name="Start Game" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=669158430]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("3_b7uiw")
-theme_override_font_sizes/font_size = 120
+theme_override_font_sizes/font_size = 80
 theme_override_styles/normal = ExtResource("4_bl2xt")
 theme_override_styles/pressed = ExtResource("5_r6vcu")
 theme_override_styles/hover = ExtResource("5_r6vcu")
 text = "Start Game"
 
-[node name="Hills50" type="Sprite2D" parent="." unique_id=1107955066]
-position = Vector2(1954, 2134)
-texture = ExtResource("7_b7uiw")
-
-[connection signal="pressed" from="HBoxContainer/Dashboard" to="." method="_on_dashboard_pressed"]
-[connection signal="pressed" from="HBoxContainer/Start Game" to="." method="_on_start_game_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Dashboard" to="." method="_on_dashboard_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/Start Game" to="." method="_on_start_game_pressed"]
