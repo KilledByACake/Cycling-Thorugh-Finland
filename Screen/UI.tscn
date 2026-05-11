@@ -5,38 +5,6 @@
 
 [node name="UI" type="CanvasLayer" unique_id=482392122 groups=["ui"]]
 
-[node name="Energy" type="TextureRect" parent="." unique_id=1524677923]
-offset_left = 16.0
-offset_top = 188.0
-offset_right = 416.0
-offset_bottom = 538.0
-texture = ExtResource("3_2246s")
-expand_mode = 1
-
-[node name="Label" type="Label" parent="Energy" unique_id=216446171]
-layout_mode = 1
-anchors_preset = -1
-anchor_left = 1.1170001
-anchor_top = 0.18400002
-anchor_right = 1.9070001
-anchor_bottom = 0.86700004
-offset_left = -16.197021
-offset_top = -1.5840034
-offset_right = -20.197021
-offset_bottom = 7.8159943
-theme_override_fonts/font = ExtResource("2_nf4gj")
-theme_override_font_sizes/font_size = 150
-text = "0"
-
-[node name="PlayerNameLabel" type="Label" parent="." unique_id=967513957]
-offset_left = 39.0
-offset_top = -1.0
-offset_right = 959.0
-offset_bottom = 182.0
-theme_override_fonts/font = ExtResource("2_nf4gj")
-theme_override_font_sizes/font_size = 150
-text = "Player Name"
-
 [node name="TimerLabel" type="Label" parent="." unique_id=192753063]
 anchors_preset = 1
 anchor_left = 1.0
@@ -49,3 +17,43 @@ theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 200
 text = "02:00"
 horizontal_alignment = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=576102572]
+offset_left = 39.0
+offset_top = -1.0
+offset_right = 79.0
+offset_bottom = 39.0
+
+[node name="PlayerNameLabel" type="Label" parent="VBoxContainer" unique_id=967513957]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_nf4gj")
+theme_override_font_sizes/font_size = 150
+text = "Player Name"
+
+[node name="Speed" type="HBoxContainer" parent="VBoxContainer" unique_id=1817900206]
+layout_mode = 2
+
+[node name="Picture" type="TextureRect" parent="VBoxContainer/Speed" unique_id=1717586164]
+layout_mode = 2
+texture = ExtResource("3_2246s")
+expand_mode = 2
+
+[node name="SpeedLabel" type="Label" parent="VBoxContainer/Speed" unique_id=1956653022]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_nf4gj")
+theme_override_font_sizes/font_size = 150
+text = "0"
+
+[node name="Energy" type="HBoxContainer" parent="VBoxContainer" unique_id=1741399407]
+layout_mode = 2
+
+[node name="Picture" type="TextureRect" parent="VBoxContainer/Energy" unique_id=1524677923]
+layout_mode = 2
+texture = ExtResource("3_2246s")
+expand_mode = 2
+
+[node name="EnergyLabel" type="Label" parent="VBoxContainer/Energy" unique_id=216446171]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_nf4gj")
+theme_override_font_sizes/font_size = 150
+text = "0"
