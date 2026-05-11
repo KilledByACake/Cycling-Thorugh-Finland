@@ -5,24 +5,11 @@
 
 [node name="UI" type="CanvasLayer" unique_id=482392122 groups=["ui"]]
 
-[node name="TimerLabel" type="Label" parent="." unique_id=192753063]
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -587.0
-offset_right = -53.0
-offset_bottom = 243.0
-grow_horizontal = 0
-theme_override_fonts/font = ExtResource("2_nf4gj")
-theme_override_font_sizes/font_size = 200
-text = "02:00"
-horizontal_alignment = 2
-
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=576102572]
 offset_left = 39.0
 offset_top = -1.0
-offset_right = 79.0
-offset_bottom = 39.0
+offset_right = 959.0
+offset_bottom = 556.0
 
 [node name="PlayerNameLabel" type="Label" parent="VBoxContainer" unique_id=967513957]
 layout_mode = 2
@@ -57,3 +44,16 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 150
 text = "0"
+
+[node name="TimerLabel" type="Label" parent="." unique_id=192753063]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -587.0
+offset_right = -53.0
+offset_bottom = 243.0
+grow_horizontal = 0
+theme_override_fonts/font = ExtResource("2_nf4gj")
+theme_override_font_sizes/font_size = 200
+text = "02:00"
+horizontal_alignment = 2
