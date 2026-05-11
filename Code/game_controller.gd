@@ -284,6 +284,15 @@ func _finish_as_victory() -> void:
 	_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
+
+	# ADD: trigger celebrate and wait until it finishes (plays once)
+	var p := get_tree().get_first_node_in_group("player")
+	if p and p.has_method("start_celebrate"):
+		p.call("start_celebrate")
+		var spr := p.get("sprite") as AnimatedSprite2D
+		if spr and spr.is_playing():
+			await spr.animation_finished
+
 	# Freeze world and show overlays.
 	_freeze_world()
 	emit_signal("round_over", true)

@@ -16,6 +16,9 @@ signal pedal_tapped
 @export_group("Scoring")
 @export var energy_per_tap: int = 5
 
+@export var celebrate_anim_name: String = "Celebrate"  # name of the finish animation
+var celebrating: bool = false                           # blocks normal pedaling animation
+
 # --- State Variables ---
 var velocidad_sensor: float = 0.0                    # Sensor speed (km/h), kept for reference
 var potencia_sensor: int = 0                         # Sensor power (watts), kept for reference
@@ -133,3 +136,14 @@ func _choose_random_skin() -> void:
 func reshuffle_skin() -> void:
 	# Public method to re-roll the visible skin if needed (e.g., on respawn)
 	_choose_random_skin()
+	
+	
+# -------- Celebratory pose ------
+
+func start_celebrate() -> void:
+	celebrating = true
+	if sprite and sprite.sprite_frames and sprite.sprite_frames.has_animation(celebrate_anim_name):
+		sprite.sprite_frames.set_animation_loop(celebrate_anim_name, false)  # ensure it does not loop
+	if sprite:
+		sprite.play(celebrate_anim_name)
+		sprite.speed_scale = 1.0
