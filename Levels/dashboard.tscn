@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dgj3tk6nktcfo"]
+[gd_scene format=3 uid="uid://nnhhowa31b74"]
 
 [ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/Screens/dashboard.gd" id="1_8rqq3"]
 [ext_resource type="Texture2D" uid="uid://cr8odhe5s5nrj" path="res://Images/Design/sprite objects/Vector-2.png" id="2_2culi"]
