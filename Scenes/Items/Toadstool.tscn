@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://62dotpdoxww3"]
 
-[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_ds1xf"]
+[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/Game/pickup.gd" id="1_ds1xf"]
 [ext_resource type="Texture2D" uid="uid://cxttt4gfgbvxh" path="res://Images/Pickups/Toadstool.png" id="2_ds1xf"]
 [ext_resource type="AudioStream" uid="uid://s37acrynkp68" path="res://Audio/Squash2.wav" id="3_ds1xf"]
 

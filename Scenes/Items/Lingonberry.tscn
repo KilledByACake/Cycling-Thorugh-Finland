@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://hamk62gyj103"]
 
-[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_lqrog"]
+[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/Game/pickup.gd" id="1_lqrog"]
 [ext_resource type="Texture2D" uid="uid://cv37e4anc45v1" path="res://Images/Pickups/Lingonberry.png" id="2_lqrog"]
 [ext_resource type="AudioStream" uid="uid://bykvybwggyfgd" path="res://Audio/Pop.wav" id="3_lqrog"]
 

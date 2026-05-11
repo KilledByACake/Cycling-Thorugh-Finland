@@ -1,11 +1,11 @@
 [gd_scene format=3 uid="uid://dg1halhkihrb6"]
 
-[ext_resource type="Material" uid="uid://cp4yijtp6hg33" path="res://Style/bg_moving_gradient.tres" id="2_b7uiw"]
+[ext_resource type="Material" path="res://Style/bg_moving_gradient.tres" id="2_b7uiw"]
 [ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/Screens/main_menu.gd" id="2_yy7ei"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="3_b7uiw"]
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="4_bl2xt"]
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_r6vcu"]
-[ext_resource type="Script" path="res://Code/polygon_to_path.gd" id="6_yy7ei"]
+[ext_resource type="Script" uid="uid://bh16u6ah1m4rb" path="res://Code/Game/polygon_to_path.gd" id="6_yy7ei"]
 [ext_resource type="Texture2D" uid="uid://dr258l5mh52a8" path="res://Images/Design/transparent_hills/hills_50.png" id="7_b7uiw"]
 
 [sub_resource type="Curve2D" id="Curve2D_r6vcu"]

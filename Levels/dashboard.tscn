@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dgj3tk6nktcfo"]
 
 [ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/Screens/dashboard.gd" id="1_2culi"]
-[ext_resource type="Texture2D" uid="uid://bfsiur8q86trw" path="res://Images/Design/Spritesheets/Windmill-spritesheet.png" id="2_2culi"]
+[ext_resource type="Texture2D" uid="uid://bfsiur8q86trw" path="res://Images/Idle Objects/Spritesheets/Windmill-spritesheet.png" id="2_2culi"]
 [ext_resource type="Shader" uid="uid://dcr6cuhcanm0l" path="res://Levels/Dashboard.gdshader" id="2_sqkkj"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="3_sqkkj"]
 [ext_resource type="Script" uid="uid://pa0sy78820m7" path="res://Code/animated_sprite_2d.gd" id="3_yiku2"]
@@ -9,8 +9,10 @@
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_bdl2f"]
 [ext_resource type="Shader" uid="uid://dsrc3r41a1gn7" path="res://Style/bar.gdshader" id="6_bdl2f"]
 [ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_be544"]
-[ext_resource type="Script" uid="uid://dajbatrv1reqc" path="res://Code/pedal_gauge.gd" id="6_ux4mo"]
+[ext_resource type="Script" uid="uid://dajbatrv1reqc" path="res://Code/Dashboard/pedal_gauge.gd" id="6_ux4mo"]
 [ext_resource type="Script" uid="uid://bcyuokv2cftbc" path="res://Levels/control.gd" id="7_ux4mo"]
+[ext_resource type="Script" uid="uid://icagaf3tjpmn" path="res://Code/Dashboard/solar_gauge.gd" id="8_be544"]
+[ext_resource type="Script" uid="uid://dvb7d04ijuepw" path="res://Code/Dashboard/windmill_gauge.gd" id="9_ux4mo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n2g2g"]
 shader = ExtResource("2_sqkkj")
@@ -388,8 +390,9 @@ grow_vertical = 2
 [node name="Needle" type="ColorRect" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/HBoxContainer/PedalGauge/Control" unique_id=205373686]
 z_index = 100
 layout_mode = 0
-offset_right = 12.0
-offset_bottom = 40.0
+offset_left = 94.0
+offset_right = 106.0
+offset_bottom = 35.0
 color = Color(0.16470589, 0.16470589, 0.16470589, 1)
 
 [node name="LabelPower" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/HBoxContainer" unique_id=1702608269]
@@ -460,7 +463,7 @@ text = "Solarpanel"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox" unique_id=445967031]
 layout_mode = 2
-theme_override_constants/separation = 80
+theme_override_constants/separation = 10
 
 [node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=25679089]
 layout_mode = 2
@@ -468,6 +471,15 @@ theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "0 watt"
+
+[node name="SolarGauge" type="Control" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=585323246]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 150)
+layout_mode = 2
+script = ExtResource("8_be544")
+max_value = 500.0
+value = 20.0
+needle_width_px = 6.0
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=328591609]
 layout_mode = 2
@@ -498,11 +510,11 @@ layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 40
-text = "Windwheel"
+text = "Windmill"
 
 [node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox" unique_id=1211447482]
 layout_mode = 2
-theme_override_constants/separation = 80
+theme_override_constants/separation = 10
 
 [node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=1690713820]
 layout_mode = 2
@@ -510,6 +522,15 @@ theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "0 watt"
+
+[node name="WindmillGauge" type="Control" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=2024645073]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(320, 150)
+layout_mode = 2
+script = ExtResource("9_ux4mo")
+max_value = 500.0
+value = 50.0
+thickness_px = 28.0
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=1495033521]
 layout_mode = 2

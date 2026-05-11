@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://iy306aupeoa1"]
 
-[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_8wule"]
+[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/Game/pickup.gd" id="1_8wule"]
 [ext_resource type="Texture2D" uid="uid://bupfksubp3wef" path="res://Images/Pickups/Chanterelle.png" id="2_8wule"]
 [ext_resource type="AudioStream" uid="uid://c8wxxle3xgymg" path="res://Audio/Pickup.mp3" id="3_8wule"]
 

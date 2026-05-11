@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://yy2svaa57xus"]
 
-[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_agjmk"]
+[ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/Game/pickup.gd" id="1_agjmk"]
 [ext_resource type="Texture2D" uid="uid://1m4y6st4o1nb" path="res://Images/Pickups/Strawberry.png" id="2_ccaxf"]
 [ext_resource type="AudioStream" uid="uid://bykvybwggyfgd" path="res://Audio/Pop.wav" id="3_ccaxf"]
 
