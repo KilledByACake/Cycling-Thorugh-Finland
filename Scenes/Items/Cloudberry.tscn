@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_60vhm"]
 [ext_resource type="Texture2D" uid="uid://vmr43caji3yi" path="res://Images/Pickups/Cloudberry.png" id="2_60vhm"]
-[ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_3rdmp"]
+[ext_resource type="AudioStream" uid="uid://0imsq0gc4ilr" path="res://Audio/wop.wav" id="3_60vhm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]
 radius = 63.007935
@@ -67,7 +67,7 @@ tracks/2/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
-"stream": ExtResource("3_3rdmp")
+"stream": ExtResource("3_60vhm")
 }],
 "times": PackedFloat32Array(0)
 }

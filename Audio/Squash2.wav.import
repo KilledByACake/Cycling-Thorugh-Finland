@@ -2,13 +2,13 @@
 
 importer="wav"
 type="AudioStreamWAV"
-uid="uid://baq44skwxs21n"
-path="res://.godot/imported/water1.wav-3779a69eff6ec3e9a0611b37b1c6335a.sample"
+uid="uid://s37acrynkp68"
+path="res://.godot/imported/Squash2.wav-db7daba63f998a15b434636857ebfdd5.sample"
 
 [deps]
 
-source_file="res://Audio/water1.wav"
-dest_files=["res://.godot/imported/water1.wav-3779a69eff6ec3e9a0611b37b1c6335a.sample"]
+source_file="res://Audio/Squash2.wav"
+dest_files=["res://.godot/imported/Squash2.wav-db7daba63f998a15b434636857ebfdd5.sample"]
 
 [params]
 

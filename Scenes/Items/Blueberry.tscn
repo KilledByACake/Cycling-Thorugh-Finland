@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_vwcqu"]
 [ext_resource type="Texture2D" uid="uid://cffp1bpev0igo" path="res://Images/Pickups/Blueberry.png" id="2_g86ho"]
-[ext_resource type="AudioStream" uid="uid://bhy87wbee4rpo" path="res://Audio/Apple.wav" id="3_60d37"]
+[ext_resource type="AudioStream" uid="uid://bykvybwggyfgd" path="res://Audio/Pop.wav" id="3_60d37"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]
 radius = 81.0

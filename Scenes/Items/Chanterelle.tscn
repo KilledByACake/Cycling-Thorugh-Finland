@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/pickup.gd" id="1_8wule"]
 [ext_resource type="Texture2D" uid="uid://bupfksubp3wef" path="res://Images/Pickups/Chanterelle.png" id="2_8wule"]
-[ext_resource type="AudioStream" uid="uid://be2oyhj48xha5" path="res://Audio/Coin.wav" id="3_ag33q"]
+[ext_resource type="AudioStream" uid="uid://c8wxxle3xgymg" path="res://Audio/Pickup.mp3" id="3_8wule"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mwnru"]
 radius = 72.0
@@ -68,7 +68,7 @@ tracks/2/keys = {
 "clips": [{
 "end_offset": 0.0,
 "start_offset": 0.0,
-"stream": ExtResource("3_ag33q")
+"stream": ExtResource("3_8wule")
 }],
 "times": PackedFloat32Array(0)
 }
