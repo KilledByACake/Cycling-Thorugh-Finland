@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kc10fstyboyj"
-path="res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"
+uid="uid://nrqrtdqms2ic"
+path="res://.godot/imported/SantaClaus-spritesheet.png-02de9f04e1cc176a1f0c402fa7a0628d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Pickups/Raspberry.png"
-dest_files=["res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"]
+source_file="res://Images/Design/Spritesheets/SantaClaus-spritesheet.png"
+dest_files=["res://.godot/imported/SantaClaus-spritesheet.png-02de9f04e1cc176a1f0c402fa7a0628d.ctex"]
 
 [params]
 

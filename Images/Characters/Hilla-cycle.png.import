@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kc10fstyboyj"
-path="res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"
+uid="uid://b5era0cs48so5"
+path="res://.godot/imported/Hilla-cycle.png-eebe851a9e5f5ba6971d9857965bc192.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Pickups/Raspberry.png"
-dest_files=["res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"]
+source_file="res://Images/Characters/Hilla-cycle.png"
+dest_files=["res://.godot/imported/Hilla-cycle.png-eebe851a9e5f5ba6971d9857965bc192.ctex"]
 
 [params]
 

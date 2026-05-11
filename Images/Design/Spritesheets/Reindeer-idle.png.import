@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kc10fstyboyj"
-path="res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"
+uid="uid://bg6hrf2hrrpfx"
+path="res://.godot/imported/Reindeer-idle.png-c5f192193e4dea895b355cf97f733d8f.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Pickups/Raspberry.png"
-dest_files=["res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"]
+source_file="res://Images/Design/Spritesheets/Reindeer-idle.png"
+dest_files=["res://.godot/imported/Reindeer-idle.png-c5f192193e4dea895b355cf97f733d8f.ctex"]
 
 [params]
 

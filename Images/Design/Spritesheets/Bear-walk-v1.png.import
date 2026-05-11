@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kc10fstyboyj"
-path="res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"
+uid="uid://olm7mtga1tsr"
+path="res://.godot/imported/Bear-walk-v1.png-4d706e9cbb310731febecc1c5a11718d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Pickups/Raspberry.png"
-dest_files=["res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"]
+source_file="res://Images/Design/Spritesheets/Bear-walk-v1.png"
+dest_files=["res://.godot/imported/Bear-walk-v1.png-4d706e9cbb310731febecc1c5a11718d.ctex"]
 
 [params]
 

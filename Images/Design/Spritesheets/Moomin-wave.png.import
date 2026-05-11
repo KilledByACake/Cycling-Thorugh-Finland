@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://kc10fstyboyj"
-path="res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"
+uid="uid://biqsddx3e6yg3"
+path="res://.godot/imported/Moomin-wave.png-5dff751dc09866ee01f5ec0c3264d720.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Pickups/Raspberry.png"
-dest_files=["res://.godot/imported/Raspberry.png-eb9ab0f54e0e1c4f50b11e55d733b150.ctex"]
+source_file="res://Images/Design/Spritesheets/Moomin-wave.png"
+dest_files=["res://.godot/imported/Moomin-wave.png-5dff751dc09866ee01f5ec0c3264d720.ctex"]
 
 [params]
 
