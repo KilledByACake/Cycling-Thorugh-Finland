@@ -7,9 +7,6 @@ extends Node2D
 		popup_text = v
 		_update_label()
 
-# Button to recalculate the panel size in the editor
-@export_tool_button("Reload Size") var _recalc_button = _recalculate_size
-
 # Maximum width of the popup label
 @export var max_width: float = 950.0:
 	set(v):
