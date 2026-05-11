@@ -6,10 +6,11 @@ extends Control
 @export var max_value: float = 275.0
 @export var value: float = 0.0 : set = set_value
 
-# Arc (only color changed)
-@export var arc_color: Color = Color8(30, 75, 119, 255) # deep blue
+# Arc
+@export var arc_color: Color = Color8(181, 143, 25, 255)
 @export var thickness_px: float = 24.0
-@export var margin_px: float = 12.0
+@export var margin_px: float = 12.0          # vertical margin (bottom for PI→TAU layout)
+@export var side_inset_px: float = 80.0      # increase to make the arc narrower horizontally
 
 # Needle (drawn)
 @export var needle_color: Color = Color(0.18, 0.18, 0.18, 0.95)
@@ -29,8 +30,9 @@ func _draw() -> void:
 	if s.x <= 1.0 or s.y <= 1.0:
 		return
 
-	# Bottom-center origin; draw the UPPER semicircle so it opens downward
-	var radius: float = minf(s.x * 0.5 - margin_px, s.y - margin_px) - thickness_px * 0.5
+	# Geometry: bottom-center origin; draw the UPPER semicircle (opens downward)
+	var usable_w: float = maxf(1.0, s.x - 2.0 * side_inset_px)
+	var radius: float = minf(usable_w * 0.5, s.y - margin_px) - thickness_px * 0.5
 	radius = maxf(radius, 1.0)
 	var center: Vector2 = Vector2(s.x * 0.5, s.y - margin_px)
 
@@ -54,7 +56,6 @@ func _draw() -> void:
 
 	var half_w: float = maxf(needle_width_px * 0.5, 1.0)
 	var perp: Vector2 = Vector2(-dir.y, dir.x) * half_w
-
 	var poly: PackedVector2Array = PackedVector2Array([base + perp, base - perp, tip])
 	draw_colored_polygon(poly, needle_color)
 	draw_circle(base, half_w, needle_color)

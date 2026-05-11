@@ -474,7 +474,7 @@ text = "0 watt"
 
 [node name="SolarGauge" type="Control" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=585323246]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(320, 150)
+custom_minimum_size = Vector2(300, 150)
 layout_mode = 2
 script = ExtResource("8_be544")
 max_value = 500.0
@@ -488,51 +488,53 @@ theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "500 watts"
 
-[node name="Windwheel" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1229265380]
+[node name="Windmill" type="PanelContainer" parent="MarginContainer/VBoxContainer/GridContainer" unique_id=1229265380]
 custom_minimum_size = Vector2(400, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
 
-[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel" unique_id=1627423445]
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/GridContainer/Windmill" unique_id=1627423445]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin" unique_id=1717403656]
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/Windmill/CardMargin" unique_id=1717403656]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox" unique_id=721557130]
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox" unique_id=721557130]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 40
 text = "Windmill"
 
-[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox" unique_id=1211447482]
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox" unique_id=1211447482]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=1690713820]
+[node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox/HBoxContainer" unique_id=1690713820]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "0 watt"
 
-[node name="WindmillGauge" type="Control" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=2024645073]
+[node name="WindmillGauge" type="Control" parent="MarginContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox/HBoxContainer" unique_id=2024645073]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(320, 150)
+custom_minimum_size = Vector2(250, 150)
 layout_mode = 2
 script = ExtResource("9_ux4mo")
 max_value = 500.0
 value = 50.0
+arc_color = Color(0.11764706, 0.29411766, 0.46666667, 1)
 thickness_px = 28.0
+side_inset_px = null
 
-[node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windwheel/CardMargin/CardVBox/HBoxContainer" unique_id=1495033521]
+[node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox/HBoxContainer" unique_id=1495033521]
 layout_mode = 2
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
