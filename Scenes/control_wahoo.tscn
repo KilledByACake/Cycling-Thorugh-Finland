@@ -30,20 +30,34 @@ func _ready():
 		print(\"✅ Listening for data on UDP port: \", puerto_escucha)
 	else:
 		print(\"❌ Error opening UDP port: \", error_udp)
-
+		
 func _process(_delta):
-	# 3. Read data if it arrives
 	while udp.get_available_packet_count() > 0:
 		var paquete = udp.get_packet().get_string_from_utf8()
 		var datos = JSON.parse_string(paquete)
 		
-		# If data is valid, store and print it
-		if datos:
-			power = datos.get(\"power\", 0)
-			speed = datos.get(\"speed\", 0.0)
+		if datos is Dictionary:
+			# Forzamos la conversión a int y float por seguridad
+			power = int(datos.get(\"power\", 0)) 
+			speed = float(datos.get(\"speed\", 0.0))
 			
-			# MAGIC HAPPENS HERE FOR VERIFICATION!
 			print(\"🚴 Live Data -> Power: \", power, \" W | Speed: \", speed, \" km/h\")
+		else:
+			print(\"❌ Error: El paquete no es un diccionario válido o está vacío\")
+
+#func _process(_delta):
+	## 3. Read data if it arrives
+	#while udp.get_available_packet_count() > 0:
+		#var paquete = udp.get_packet().get_string_from_utf8()
+		#var datos = JSON.parse_string(paquete)
+		#
+		## If data is valid, store and print it
+		#if datos:
+			#power = datos.get(\"power\", 0)
+			#speed = datos.get(\"speed\", 0.0)
+			#
+			## MAGIC HAPPENS HERE FOR VERIFICATION!
+			#print(\"🚴 Live Data -> Power: \", power, \" W | Speed: \", speed, \" km/h\")
 "
 
 [node name="GlobalWahoo" type="Control" unique_id=2028123159]
