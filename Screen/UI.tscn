@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://cppeck65bvb3k"]
 
+[ext_resource type="Texture2D" uid="uid://bupfksubp3wef" path="res://Images/Pickups/Chanterelle.png" id="2_dnerv"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_nf4gj"]
-[ext_resource type="Texture2D" uid="uid://cx4iyso3jru3y" path="res://Images/Other/EnergySymbol2.png" id="3_2246s"]
+[ext_resource type="Texture2D" uid="uid://cxttt4gfgbvxh" path="res://Images/Pickups/Toadstool.png" id="3_0dhui"]
 
 [node name="UI" type="CanvasLayer" unique_id=482392122 groups=["ui"]]
 
@@ -22,7 +23,7 @@ layout_mode = 2
 
 [node name="Picture" type="TextureRect" parent="VBoxContainer/Speed" unique_id=1717586164]
 layout_mode = 2
-texture = ExtResource("3_2246s")
+texture = ExtResource("2_dnerv")
 expand_mode = 2
 
 [node name="SpeedLabel" type="Label" parent="VBoxContainer/Speed" unique_id=1956653022]
@@ -36,7 +37,7 @@ layout_mode = 2
 
 [node name="Picture" type="TextureRect" parent="VBoxContainer/Energy" unique_id=1524677923]
 layout_mode = 2
-texture = ExtResource("3_2246s")
+texture = ExtResource("3_0dhui")
 expand_mode = 2
 
 [node name="EnergyLabel" type="Label" parent="VBoxContainer/Energy" unique_id=216446171]
