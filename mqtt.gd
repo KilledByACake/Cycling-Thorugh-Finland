@@ -35,8 +35,8 @@ func _process(_delta):
 		
 		var available = socket.get_available_bytes()
 		if available > 0:
-			# CHIVATO: Esto saldrá en la consola si entra CUALQUIER dato
-			print("Recibiendo ", available, " bytes del servidor...")
+			# DEBUG: This will show in the console if ANY data is received
+			print("Receiving ", available, " bytes from server...")
 			var data = socket.get_data(available)
 			receivedbuffer.append_array(data[1])
 			_parse_buffer()
@@ -83,12 +83,12 @@ func _parse_buffer():
 	while receivedbuffer.size() >= 2:
 		var type = receivedbuffer[0]
 		
-		# --- Lector de longitud Variable (MQTT Standard) ---
+		# --- Variable Length Header Reader (MQTT Standard) ---
 		var multiplier = 1
 		var length = 0
 		var pos = 1
 		while true:
-			if pos >= receivedbuffer.size(): return # Esperar a más datos
+			if pos >= receivedbuffer.size(): return # Wait for more data
 			var digit = receivedbuffer[pos]
 			length += (digit & 127) * multiplier
 			multiplier *= 128
@@ -96,7 +96,7 @@ func _parse_buffer():
 			if (digit & 128) == 0: break
 		# ----------------------------------------------------
 		
-		if receivedbuffer.size() < pos + length: return # Paquete incompleto
+		if receivedbuffer.size() < pos + length: return # Incomplete packet
 		
 		var payload = receivedbuffer.slice(pos, pos + length)
 		
