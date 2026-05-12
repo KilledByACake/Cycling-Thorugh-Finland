@@ -1,21 +1,19 @@
-[gd_scene format=3 uid="uid://bwvxcx7l0f02n"]
+[gd_scene format=3 uid="uid://tui4riicv7fo"]
 
-[ext_resource type="Script" uid="uid://de26es2lysnpm" path="res://Code/Screens/name_input.gd" id="1_xncxv"]
-[ext_resource type="Texture2D" uid="uid://c4rnw07ucj3hq" path="res://Images/Other/Screenshot.jpeg" id="2_x4mlx"]
-[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_xncxv"]
-[ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/Screens/main_menu.gd" id="3_x4mlx"]
-[ext_resource type="Material" path="res://Style/bg_moving_gradient.tres" id="4_qpl1d"]
-[ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="5_8gsew"]
-[ext_resource type="Texture2D" uid="uid://dr258l5mh52a8" path="res://Images/Design/transparent_hills/hills_50.png" id="5_j1nqe"]
-[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="6_8gsew"]
-[ext_resource type="StyleBox" uid="uid://c8r6f6hj78pi4" path="res://Style/button_pressed_hover_smaller.tres" id="6_g0jiq"]
+[ext_resource type="Script" uid="uid://de26es2lysnpm" path="res://Code/Screens/name_input.gd" id="1_b07jh"]
+[ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/Screens/main_menu.gd" id="2_gbmrc"]
+[ext_resource type="Material" path="res://Style/bg_moving_gradient.tres" id="3_7yq3o"]
+[ext_resource type="Texture2D" uid="uid://dr258l5mh52a8" path="res://Images/Design/transparent_hills/hills_50.png" id="4_x1q67"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="5_kmfl1"]
+[ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="6_tseih"]
+[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="7_4prjb"]
+[ext_resource type="StyleBox" uid="uid://c8r6f6hj78pi4" path="res://Style/button_pressed_hover_smaller.tres" id="8_b4djg"]
 
 [sub_resource type="StyleBoxTexture" id="StyleBoxTexture_x4mlx"]
-texture = ExtResource("2_x4mlx")
 modulate_color = Color(0.35305238, 0.35305238, 0.35305238, 1)
 
 [sub_resource type="Theme" id="Theme_xncxv"]
-default_font = ExtResource("2_xncxv")
+default_font = ExtResource("5_kmfl1")
 default_font_size = 100
 
 [node name="NameInput" type="Control" unique_id=1964198822]
@@ -25,7 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_xncxv")
+script = ExtResource("1_b07jh")
 
 [node name="Panel" type="Panel" parent="." unique_id=737065188]
 visible = false
@@ -36,11 +34,11 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxTexture_x4mlx")
-script = ExtResource("3_x4mlx")
+script = ExtResource("2_gbmrc")
 
 [node name="movingGradient" type="ColorRect" parent="." unique_id=1574845212]
 z_index = -1
-material = ExtResource("4_qpl1d")
+material = ExtResource("3_7yq3o")
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -51,7 +49,7 @@ grow_vertical = 2
 [node name="Hills50" type="Sprite2D" parent="." unique_id=1466175612]
 position = Vector2(955, 989)
 scale = Vector2(0.45155475, 0.5986678)
-texture = ExtResource("5_j1nqe")
+texture = ExtResource("4_x1q67")
 
 [node name="Label" type="Label" parent="." unique_id=1974430479]
 layout_mode = 1
@@ -66,7 +64,7 @@ offset_right = 543.1597
 offset_bottom = 26.799988
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_fonts/font = ExtResource("5_kmfl1")
 theme_override_font_sizes/font_size = 100
 text = "Nickname"
 horizontal_alignment = 1
@@ -106,11 +104,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 2
 theme_override_constants/h_separation = 0
-theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_fonts/font = ExtResource("5_kmfl1")
 theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = ExtResource("5_8gsew")
-theme_override_styles/pressed = ExtResource("6_8gsew")
-theme_override_styles/hover = ExtResource("6_8gsew")
+theme_override_styles/normal = ExtResource("6_tseih")
+theme_override_styles/pressed = ExtResource("7_4prjb")
+theme_override_styles/hover = ExtResource("7_4prjb")
 text = "Quit"
 
 [node name="backspace" type="Button" parent="HBoxContainer" unique_id=782151137]
@@ -118,11 +116,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 2
 theme_override_constants/h_separation = 0
-theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_fonts/font = ExtResource("5_kmfl1")
 theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = ExtResource("6_g0jiq")
-theme_override_styles/pressed = ExtResource("6_8gsew")
-theme_override_styles/hover = ExtResource("6_8gsew")
+theme_override_styles/normal = ExtResource("8_b4djg")
+theme_override_styles/pressed = ExtResource("7_4prjb")
+theme_override_styles/hover = ExtResource("7_4prjb")
 text = "Backspace"
 
 [node name="done" type="Button" parent="HBoxContainer" unique_id=127716656]
@@ -130,11 +128,11 @@ layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 2
 theme_override_constants/h_separation = 0
-theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_fonts/font = ExtResource("5_kmfl1")
 theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = ExtResource("5_8gsew")
-theme_override_styles/pressed = ExtResource("6_8gsew")
-theme_override_styles/hover = ExtResource("6_8gsew")
+theme_override_styles/normal = ExtResource("6_tseih")
+theme_override_styles/pressed = ExtResource("7_4prjb")
+theme_override_styles/hover = ExtResource("7_4prjb")
 text = "Done"
 
 [node name="Txt" type="Label" parent="." unique_id=2109215096]
@@ -150,7 +148,7 @@ offset_right = 976.0
 offset_bottom = -324.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("2_xncxv")
+theme_override_fonts/font = ExtResource("5_kmfl1")
 theme_override_font_sizes/font_size = 120
 text = "Fill out Nickname"
 horizontal_alignment = 1

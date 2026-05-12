@@ -94,7 +94,7 @@ theme_override_styles/pressed = ExtResource("5_r6vcu")
 theme_override_styles/hover = ExtResource("5_r6vcu")
 text = "Dashboard"
 
-[node name="Start Game" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=669158430]
+[node name="StartGame" type="Button" parent="VBoxContainer/HBoxContainer" unique_id=1610691582]
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 3
@@ -107,4 +107,4 @@ theme_override_styles/hover = ExtResource("5_r6vcu")
 text = "Start Game"
 
 [connection signal="pressed" from="VBoxContainer/HBoxContainer/Dashboard" to="." method="_on_dashboard_pressed"]
-[connection signal="pressed" from="VBoxContainer/HBoxContainer/Start Game" to="." method="_on_start_game_pressed"]
+[connection signal="pressed" from="VBoxContainer/HBoxContainer/StartGame" to="." method="_on_start_game_pressed"]

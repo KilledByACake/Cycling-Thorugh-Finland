@@ -2,7 +2,7 @@ extends Control
 
 # Main menu screen: handles navigation to name input and dashboard scenes.
 
-const NAME_INPUT_SCENE_PATH: String = "res://Levels/NameInput.tscn"
+const NAME_INPUT_SCENE_PATH: String = "res://Levels/InputName.tscn"
 const DASHBOARD_SCENE_PATH: String = "res://Levels/Dashboard.tscn"
 
 # Called by the Start Game button; goes to the name input screen.
