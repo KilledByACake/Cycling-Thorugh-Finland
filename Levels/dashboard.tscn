@@ -10,14 +10,15 @@
 [ext_resource type="Shader" uid="uid://dsrc3r41a1gn7" path="res://Style/bar.gdshader" id="6_bdl2f"]
 [ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_be544"]
 [ext_resource type="Script" uid="uid://dajbatrv1reqc" path="res://Code/Dashboard/pedal_gauge.gd" id="6_ux4mo"]
+[ext_resource type="StyleBox" uid="uid://dnybv2xh3fuif" path="res://Style/dashboard_box_style.tres" id="6_v48c6"]
 [ext_resource type="Script" path="res://Levels/control.gd" id="7_ux4mo"]
 [ext_resource type="Script" uid="uid://icagaf3tjpmn" path="res://Code/Dashboard/solar_gauge.gd" id="8_be544"]
 [ext_resource type="Script" uid="uid://dvb7d04ijuepw" path="res://Code/Dashboard/windmill_gauge.gd" id="9_ux4mo"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n2g2g"]
 shader = ExtResource("2_sqkkj")
-shader_parameter/color_dark = Color(0.2196, 0.302, 0.2157, 1)
-shader_parameter/color_light = Color(0.7529, 0.7137, 0.3647, 1)
+shader_parameter/color_dark = Color(0.18039216, 0.23529412, 0.30588236, 1)
+shader_parameter/color_light = Color(0.5019608, 0.73333335, 0.76862746, 1)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_2culi"]
 atlas = ExtResource("2_2culi")
@@ -202,17 +203,6 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_gacrx"]
-content_margin_left = 20.0
-content_margin_top = 20.0
-content_margin_right = 20.0
-content_margin_bottom = 20.0
-bg_color = Color(9.877248, 10.651967, 6.637515, 0.42745098)
-corner_radius_top_left = 24
-corner_radius_top_right = 24
-corner_radius_bottom_right = 24
-corner_radius_bottom_left = 24
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bdl2f"]
 corner_radius_top_left = 24
 corner_radius_top_right = 24
@@ -244,7 +234,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-color = Color(0.45882353, 0.654902, 0.43137255, 1)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=948401926]
 position = Vector2(1806, 660.50006)
@@ -297,7 +286,7 @@ columns = 3
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
+theme_override_styles/panel = ExtResource("6_v48c6")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/SpeedCard" unique_id=922265302]
 layout_mode = 2
@@ -353,7 +342,7 @@ text = "km/h"
 [node name="EnergyCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1669860497]
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
+theme_override_styles/panel = ExtResource("6_v48c6")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard" unique_id=2106141563]
 layout_mode = 2
@@ -446,7 +435,7 @@ text = "500 watts"
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
+theme_override_styles/panel = ExtResource("6_v48c6")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge" unique_id=565657748]
 layout_mode = 2
@@ -475,7 +464,7 @@ max_lines_visible = 3
 layout_mode = 2
 size_flags_horizontal = 0
 size_flags_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
+theme_override_styles/panel = ExtResource("6_v48c6")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel" unique_id=1627225681]
 layout_mode = 2
@@ -537,7 +526,7 @@ text = "500 watts"
 [node name="Windmill" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1229265380]
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
+theme_override_styles/panel = ExtResource("6_v48c6")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Windmill" unique_id=1627423445]
 layout_mode = 2
@@ -597,7 +586,7 @@ text = "500 watts"
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
+theme_override_styles/panel = ExtResource("6_v48c6")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge2" unique_id=1185806984]
 layout_mode = 2
@@ -624,7 +613,7 @@ autowrap_mode = 2
 [node name="Attention" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1368259523]
 visible = false
 layout_mode = 2
-theme_override_styles/panel = SubResource("StyleBoxFlat_gacrx")
+theme_override_styles/panel = ExtResource("6_v48c6")
 
 [node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/Attention" unique_id=603207126]
 layout_mode = 2
