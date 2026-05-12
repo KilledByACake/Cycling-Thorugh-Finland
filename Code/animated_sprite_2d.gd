@@ -1,7 +1,7 @@
 extends AnimatedSprite2D
 
 func _ready():
-	var anim := "default"
+	var anim := "faster"
 	if sprite_frames.has_animation(anim):
 		# Make sure the animation loops forever
 		sprite_frames.set_animation_loop(anim, true)
