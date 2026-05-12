@@ -9,8 +9,8 @@ extends Control
 # Arc
 @export var arc_color: Color = Color8(181, 143, 25, 255)
 @export var thickness_px: float = 24.0
-@export var margin_px: float = 12.0          # vertical margin (bottom for PI→TAU layout)
-@export var side_inset_px: float = 80.0      # increase to make the arc narrower horizontally
+@export var margin_px: float = 0.0          # 12 / vertical margin (bottom for PI→TAU layout)
+@export var side_inset_px: float = 0.0      # increase to make the arc narrower horizontally
 
 # Needle (drawn)
 @export var needle_color: Color = Color(0.18, 0.18, 0.18, 0.95)
