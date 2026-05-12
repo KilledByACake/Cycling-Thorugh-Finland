@@ -3,7 +3,7 @@ extends Control
 # Prefers today's display-only "reset-view" list; falls back to canonical daily list.
 # Adding a score here does not modify how lists are chosen; HighScores controls that.
 
-const LEVEL1_SCENE_PATH: String = "res://Levels/Game.tscn"
+const LEVEL1_SCENE_PATH: String = "res://Levels/Loading.tscn"
 const MAIN_MENU_SCENE_PATH: String = "res://Levels/Main.tscn"
 const SHOW_TOP_N: int = 5
 
