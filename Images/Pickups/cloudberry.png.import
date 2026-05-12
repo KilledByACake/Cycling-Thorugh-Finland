@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://vmr43caji3yi"
-path="res://.godot/imported/Cloudberry.png-91bd388a1234be6bd8b8fda926f65422.ctex"
+uid="uid://c4lf8rg8lfd24"
+path="res://.godot/imported/cloudberry.png-9612f8dcc8ed7ed6cf065b0e128721b4.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Pickups/Cloudberry.png"
-dest_files=["res://.godot/imported/Cloudberry.png-91bd388a1234be6bd8b8fda926f65422.ctex"]
+source_file="res://Images/Pickups/cloudberry.png"
+dest_files=["res://.godot/imported/cloudberry.png-9612f8dcc8ed7ed6cf065b0e128721b4.ctex"]
 
 [params]
 
