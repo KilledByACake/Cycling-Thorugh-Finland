@@ -474,11 +474,12 @@ text = "0 watt"
 
 [node name="SolarGauge" type="Control" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=585323246]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(300, 150)
+custom_minimum_size = Vector2(250, 150)
 layout_mode = 2
 script = ExtResource("8_be544")
 max_value = 500.0
 value = 20.0
+side_inset_px = null
 needle_width_px = 6.0
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=328591609]
