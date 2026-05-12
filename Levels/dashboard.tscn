@@ -498,7 +498,6 @@ custom_minimum_size = Vector2(250, 125)
 layout_mode = 2
 size_flags_horizontal = 0
 script = ExtResource("8_be544")
-value = 20.0
 side_inset_px = 0.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=964211574]
@@ -661,6 +660,7 @@ offset_bottom = 40.0
 script = ExtResource("7_ux4mo")
 
 [node name="powerSolar" type="Label" parent="Meteoria" unique_id=1299442263]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 303.0
 offset_top = 1434.0
@@ -669,6 +669,7 @@ offset_bottom = 1665.0
 text = "solar power"
 
 [node name="powerWind" type="Label" parent="Meteoria" unique_id=1954618943]
+unique_name_in_owner = true
 layout_mode = 0
 offset_left = 316.0
 offset_top = 1643.0

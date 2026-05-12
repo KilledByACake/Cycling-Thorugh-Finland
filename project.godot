@@ -31,6 +31,7 @@ GlobalWahoo="*uid://cgsdxh1baaa4v"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1200
+window/size/mode=4
 window/stretch/mode="canvas_items"
 
 [editor_plugins]
