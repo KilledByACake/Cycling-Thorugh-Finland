@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/Screens/dashboard.gd" id="1_2culi"]
 [ext_resource type="Texture2D" uid="uid://bfsiur8q86trw" path="res://Images/Idle Objects/Spritesheets/Windmill-spritesheet.png" id="2_2culi"]
-[ext_resource type="Shader" uid="uid://dcr6cuhcanm0l" path="res://Levels/Dashboard.gdshader" id="2_sqkkj"]
+[ext_resource type="Shader" uid="uid://dcr6cuhcanm0l" path="res://Style/Dashboard.gdshader" id="2_sqkkj"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="3_sqkkj"]
 [ext_resource type="Script" uid="uid://pa0sy78820m7" path="res://Code/animated_sprite_2d.gd" id="3_yiku2"]
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="4_n2g2g"]

@@ -8,7 +8,7 @@
 [ext_resource type="PackedScene" uid="uid://c4u2wq7pdwgjm" path="res://Scenes/Items/Blueberry.tscn" id="7_i12b1"]
 [ext_resource type="PackedScene" uid="uid://yy2svaa57xus" path="res://Scenes/Items/Strawberry.tscn" id="10_i12b1"]
 [ext_resource type="PackedScene" uid="uid://bx30rwu2g1mrc" path="res://Scenes/Items/Raspberry.tscn" id="11_tx4co"]
-[ext_resource type="Script" uid="uid://c8h77oet1ypvf" path="res://Levels/items.gd" id="12_f81n8"]
+[ext_resource type="Script" uid="uid://c8h77oet1ypvf" path="res://Code/Game/items.gd" id="12_f81n8"]
 [ext_resource type="PackedScene" uid="uid://b50sjm3kawb5w" path="res://Scenes/Items/Apple.tscn" id="12_h107k"]
 [ext_resource type="PackedScene" uid="uid://cppeck65bvb3k" path="res://Screen/UI.tscn" id="14_skt5q"]
 [ext_resource type="PackedScene" uid="uid://iy306aupeoa1" path="res://Scenes/Items/Chanterelle.tscn" id="15_7xmhm"]
