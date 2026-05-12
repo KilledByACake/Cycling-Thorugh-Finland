@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://b6sxvhai6drd4"]
 
-[ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/Screens/dashboard.gd" id="1_2culi"]
+[ext_resource type="Script" uid="uid://db7k7b1h261c8" path="res://Code/Dashboard/dashboard.gd" id="1_wk8sf"]
 [ext_resource type="Texture2D" uid="uid://lt01meykgidg" path="res://Images/Idle Objects/Spritesheets/Windmill-spritesheet.png" id="2_2culi"]
 [ext_resource type="Shader" uid="uid://dcr6cuhcanm0l" path="res://Style/Dashboard.gdshader" id="2_sqkkj"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="3_sqkkj"]
@@ -11,11 +11,12 @@
 [ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_be544"]
 [ext_resource type="Script" uid="uid://dajbatrv1reqc" path="res://Code/Dashboard/pedal_gauge.gd" id="6_ux4mo"]
 [ext_resource type="StyleBox" uid="uid://dnybv2xh3fuif" path="res://Style/dashboard_box_style.tres" id="6_v48c6"]
-[ext_resource type="Script" uid="uid://borcxkl28avco" path="res://Code/Dashboard/wind_speed_dashboard.gd" id="7_8xj7h"]
-[ext_resource type="Script" path="res://Levels/control.gd" id="7_ux4mo"]
+[ext_resource type="Script" path="res://Code/Dashboard/wind_speed_dashboard.gd" id="7_8xj7h"]
+[ext_resource type="Script" uid="uid://bcyuokv2cftbc" path="res://Levels/control.gd" id="7_ux4mo"]
 [ext_resource type="Script" uid="uid://icagaf3tjpmn" path="res://Code/Dashboard/solar_gauge.gd" id="8_be544"]
+[ext_resource type="Script" uid="uid://b3q1bgdf0qjr1" path="res://Code/Dashboard/solar_data.gd" id="8_wk8sf"]
 [ext_resource type="Script" uid="uid://dvb7d04ijuepw" path="res://Code/Dashboard/windmill_gauge.gd" id="9_ux4mo"]
-[ext_resource type="Script" uid="uid://bqqertitopswr" path="res://Code/Dashboard/smartphone_dashboard_message.gd" id="10_pp23k"]
+[ext_resource type="Script" path="res://Code/Dashboard/smartphone_dashboard_message.gd" id="10_pp23k"]
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_n2g2g"]
 shader = ExtResource("2_sqkkj")
@@ -308,7 +309,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_2culi")
+script = ExtResource("1_wk8sf")
+gauge_path = NodePath("MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer/SolarGauge")
+solar_data_path = NodePath("MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer/SolarData")
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=309210946]
 material = SubResource("ShaderMaterial_n2g2g")
@@ -571,13 +574,20 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/separation = 13
 
-[node name="SolarGauge" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=585323246]
+[node name="SolarData" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=1227953656]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("8_wk8sf")
+poll_interval_sec = 5.0
+
+[node name="SolarGauge" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=1459114678]
 unique_name_in_owner = true
 custom_minimum_size = Vector2(250, 125)
 layout_mode = 2
-size_flags_horizontal = 0
+size_flags_vertical = 0
 script = ExtResource("8_be544")
-side_inset_px = 0.0
+value = 50.0
+margin_px = 12.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=964211574]
 layout_mode = 2
@@ -599,7 +609,7 @@ size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
-text = "500 watts"
+text = "2400 watts"
 
 [node name="Windmill" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1229265380]
 layout_mode = 2
@@ -634,7 +644,7 @@ custom_minimum_size = Vector2(250, 125)
 layout_mode = 2
 size_flags_vertical = 0
 script = ExtResource("9_ux4mo")
-value = 20.0
+value = 50.0
 arc_color = Color(0.11764706, 0.29411766, 0.46666667, 1)
 margin_px = 12.0
 
@@ -685,7 +695,7 @@ size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 38
-text = "You need to cycle twice as fast to catch the solar panel"
+text = "Your smart phone could be fully charged in 18.5 minutes."
 autowrap_mode = 2
 script = ExtResource("10_pp23k")
 
