@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dgj3tk6nktcfo"]
+[gd_scene format=3 uid="uid://gxjchy8debtb"]
 
 [ext_resource type="Script" uid="uid://chg88ar6ep5ci" path="res://Code/Screens/dashboard.gd" id="1_2culi"]
 [ext_resource type="Texture2D" uid="uid://bfsiur8q86trw" path="res://Images/Idle Objects/Spritesheets/Windmill-spritesheet.png" id="2_2culi"]
@@ -479,7 +479,6 @@ layout_mode = 2
 script = ExtResource("8_be544")
 max_value = 500.0
 value = 20.0
-side_inset_px = null
 needle_width_px = 6.0
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/HBoxContainer" unique_id=328591609]
@@ -533,7 +532,6 @@ max_value = 500.0
 value = 50.0
 arc_color = Color(0.11764706, 0.29411766, 0.46666667, 1)
 thickness_px = 28.0
-side_inset_px = null
 
 [node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox/HBoxContainer" unique_id=1495033521]
 layout_mode = 2
