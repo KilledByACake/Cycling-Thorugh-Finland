@@ -1,10 +1,54 @@
 [gd_scene format=3 uid="uid://bma1jmvdudrt1"]
 
-[ext_resource type="Script" uid="uid://cgsdxh1baaa4v" path="res://Scenes/GlobalWahoo.gd" id="1_5bb2y"]
+[sub_resource type="GDScript" id="GDScript_so4ve"]
+script/source = "extends Node  
+
+# Global variables where data will be stored
+var power: int = 0
+var speed: float = 0.0
+
+# Connection tools
+var udp := PacketPeerUDP.new()
+var puerto_escucha = 4242
+
+func _ready():
+	print(\"--- Starting GlobalTraining ---\")
+	
+	# 1. Run the .bat file
+	var ruta_bat = ProjectSettings.globalize_path(\"res://arrancar.bat\")
+	var ruta_segura = \"file:///\" + ruta_bat
+	var error_bat = OS.shell_open(ruta_segura)
+	
+	if error_bat == OK:
+		print(\"✅ .bat file executed successfully.\")
+	else:
+		print(\"❌ Error executing .bat file: \", error_bat)
+	
+	# 2. Open the UDP port
+	var error_udp = udp.bind(puerto_escucha)
+	if error_udp == OK:
+		print(\"✅ Listening for data on UDP port: \", puerto_escucha)
+	else:
+		print(\"❌ Error opening UDP port: \", error_udp)
+
+func _process(_delta):
+	# 3. Read data if it arrives
+	while udp.get_available_packet_count() > 0:
+		var paquete = udp.get_packet().get_string_from_utf8()
+		var datos = JSON.parse_string(paquete)
+		
+		# If data is valid, store and print it
+		if datos:
+			power = datos.get(\"power\", 0)
+			speed = datos.get(\"speed\", 0.0)
+			
+			# MAGIC HAPPENS HERE FOR VERIFICATION!
+			print(\"🚴 Live Data -> Power: \", power, \" W | Speed: \", speed, \" km/h\")
+"
 
 [node name="GlobalWahoo" type="Control" unique_id=2028123159]
 layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("1_5bb2y")
+script = SubResource("GDScript_so4ve")
