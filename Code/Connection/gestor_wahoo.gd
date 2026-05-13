@@ -1,40 +1,56 @@
 extends Node
 
+# Signals to notify other nodes about data updates
 signal power_updated(watts: int)
 signal speed_updated(kmh: float)
 
 var udp := PacketPeerUDP.new()
 var puerto_escucha = 4242
 
+# --- CLASS VARIABLES ---
+# These must exist here so other scripts can access them via GestorWahoo.speed
+var speed: float = 0.0
+var power: int = 0
+# -----------------------
+
 func _ready():
-	# 1. Obtenemos la ruta normal
+	# IMPORTANT: You must bind the port to start receiving UDP packets
+	var status = udp.bind(puerto_escucha)
+	
+	if status == OK:
+		print("UDP Server listening on port: ", puerto_escucha)
+	else:
+		print("Failed to bind UDP port! Error code: ", status)
+
+	# 1. Get the absolute path of the batch file
 	var ruta_bat = ProjectSettings.globalize_path("res://arrancar.bat")
 	
-	# 2. Le ponemos el escudo "file:///" por delante
+	# 2. Format the path with the "file:///" prefix for Windows compatibility
 	var ruta_segura = "file:///" + ruta_bat
 	
-	print("Intentando abrir de forma segura: ", ruta_segura)
+	print("Attempting to open safely: ", ruta_segura)
 	
-	# 3. Disparamos
+	# 3. Execute the file
 	var error = OS.shell_open(ruta_segura)
 	
 	if error == OK:
-		print("¡Windows lo ha aceptado!")
+		print("Windows accepted the shell command!")
 	else:
-		print("Fallo masivo. Error número: ", error)
+		print("Execution failed. Error number: ", error)
 		
 		
 func _process(_delta):
-	# 3. Revisar si han llegado datos de Python
+	# Check if there are any incoming packets from Python
 	while udp.get_available_packet_count() > 0:
-		var paquete = udp.get_packet().get_string_from_utf8()
-		var datos = JSON.parse_string(paquete)
+		var packet = udp.get_packet().get_string_from_utf8()
+		var data = JSON.parse_string(packet)
 		
-		if datos:
-			# Extraemos los datos del JSON que envía tu Python
-			var watts = datos.get("power", 0)
-			var kmh = datos.get("speed", 0.0)
+		if data:
+			# Extract values from the JSON sent by the Python script
+			# We update the class variables first
+			power = data.get("power", 0)
+			speed = data.get("speed", 0.0)
 			
-			# ¡ESTO ES LO QUE ACTIVA AL JUGADOR!
-			power_updated.emit(watts)
-			speed_updated.emit(kmh)
+			# Emit signals so the Player or UI can react to the changes
+			power_updated.emit(power)
+			speed_updated.emit(speed)
