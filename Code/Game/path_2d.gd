@@ -37,7 +37,13 @@ func _rebuild_after_ready() -> void:
 	_rebuild_from_terrain()
 
 # Editor tick; rebuilds continuously for live preview if enabled.
+#func _process(_dt: float) -> void:
+	#if Engine.is_editor_hint() and auto_rebuild_in_editor:
+		#_rebuild_from_terrain()
+# En path_2d.gd
 func _process(_dt: float) -> void:
+	# NEW: Only rebuild in the editor. 
+	# NEVER rebuild during gameplay as it breaks PathFollow2D.
 	if Engine.is_editor_hint() and auto_rebuild_in_editor:
 		_rebuild_from_terrain()
 

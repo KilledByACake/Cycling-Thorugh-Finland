@@ -1,211 +1,71 @@
 extends PathFollow2D
 
-# Tap = speed (tuning)
-@export var power_per_tap: float = 1.0        # tap power added per Space press
-@export var power_decay: float = 2.5          # tap power lost per second
-@export var speed_per_power: float = 200.0    # horizontal speed per 1.0 tap power
-@export var max_speed: float = 2000.0         # speed clamp
+@export var max_speed: float = 2000.0
+@export var power_to_speed_multiplier: float = 5.0 
+@export var loop_path: bool = false
+@export var lock_when_reached_end: bool = true
 
-# Path follow (tuning)
-@export var loop_path: bool = false           # must be false to clamp at path end
-
-# Start/end markers on the Path2D (optional)
+# Markers y Path
 @export_node_path("Node2D") var start_marker_path: NodePath
 @export_node_path("Node2D") var end_marker_path: NodePath
 @export var search_samples: int = 600
-@export var lock_when_reached_end: bool = true
-
-# Energy per tap (adds to the shared total via level.add_energy)
-@export var energy_per_tap: int = 5
-
-# --- Wahoo Sensor Configuration (Añade esto) ---
-@export var power_to_speed_multiplier: float = 5.0 
-var energy_points: int = 0  # También necesitaremos esta para que no te dé el siguiente error
-
-# Curve readiness and update behavior
 @export var wait_frames_for_curve: int = 5
-@export var auto_recompute_on_curve_change: bool = true
 
-# Runtime state
-var tap_power: float = 0.0
+# Estado
 var speed_x: float = 0.0
 var input_locked: bool = false
 var frozen: bool = false
-
-# Computed offsets (pixels along the curve)
 var start_offset: float = 0.0
 var end_offset: float = 0.0
 var prev_progress: float = 0.0
 
-# Node references
-@onready var rider: Node2D = get_node_or_null("Radler") as Node2D
-@onready var sprite: AnimatedSprite2D = get_node_or_null("Radler/AnimatedSprite2D") as AnimatedSprite2D
+# Referencia al hijo (Player)
+@onready var rider: Node2D = get_node_or_null("Radler")
 
 func _ready() -> void:
-	assert(self is PathFollow2D, "path_follow2d.gd must be attached to a PathFollow2D node.")
-	assert(get_parent() is Path2D, "PathFollow2D must be a child of a Path2D.")
-
-	scale = Vector2.ONE
-	rotates = true
-	loop = loop_path
 	if rider:
-		rider.scale = Vector2.ONE
-		rider.rotation = 0.0
-
+		rider.position = Vector2.ZERO # Reset de posición del hijo
+	
 	await _wait_for_curve_ready()
-
-	var p2d: Path2D = get_parent() as Path2D
-	if auto_recompute_on_curve_change and p2d and p2d.curve and not p2d.curve.changed.is_connected(_on_curve_changed):
-		p2d.curve.changed.connect(_on_curve_changed, Object.CONNECT_DEFERRED)
-
 	_compute_start_end_offsets()
+	
 	progress = start_offset
 	prev_progress = progress
-	input_locked = false
 
 func _physics_process(delta: float) -> void:
-	if frozen: return
+	if frozen or input_locked: return
 
-	# 1. --- VELOCIDAD BASADA EN LA SEÑAL DE POTENCIA ---
-	# Calculamos la velocidad objetivo usando la potencia del sensor
+	# Cálculo de velocidad del sensor
 	var target_speed = GlobalWahoo.power * power_to_speed_multiplier
-	
-	# REGLA DE PARADA: Si la potencia es 0, matamos la velocidad para que no se mueva solo.
-	# Si hay potencia, aplicamos el lerp para que el cambio sea suave.
-	if GlobalWahoo.power <= 0:
-		speed_x = 0.0
-	else:
-		speed_x = lerp(speed_x, target_speed, 2.0 * delta)
-	
+	speed_x = lerp(speed_x, target_speed, 4.0 * delta)
 	speed_x = clamp(speed_x, 0.0, max_speed)
 
-	# 2. --- MOVIMIENTO SOBRE LA LÍNEA (Path Follow) ---
-	# Solo calculamos el movimiento si hay velocidad real. 
-	# Esto respeta el Path Follow pero evita el "movimiento fantasma".
-	if speed_x > 0:
-		var new_progress: float = progress + speed_x * delta
+	# Movimiento físico por el Path
+	if speed_x > 0.1:
+		progress += speed_x * delta
 		
-		# Respetamos los límites del camino (clamping)
-		if not loop and new_progress > end_offset:
-			new_progress = end_offset
+		if not loop and progress > end_offset:
+			progress = end_offset
 
-		# Detectamos si hemos llegado al final justo en este frame
-		var reached_end_now: bool = (not loop) and (prev_progress < end_offset - 0.001) and (new_progress >= end_offset - 0.001)
-
-		# Aplicamos el movimiento real a la propiedad progress
-		progress = new_progress
+		var reached_end_now = (not loop) and (prev_progress < end_offset - 0.1) and (progress >= end_offset - 0.1)
 		prev_progress = progress
 
-		# 3. --- BLOQUEO Y ESTADO FINAL ---
 		if reached_end_now and lock_when_reached_end:
 			input_locked = true
-			speed_x = 0.0 # Detenemos la velocidad al llegar al final
+			speed_x = 0.0
 
-	# 4. --- ENERGÍA Y ANIMACIÓN ---
-	if GlobalWahoo.power > 50:
-		energy_points += 1 
-		_update_energy_ui()
-
-	_update_animation()
-func on_pedal_tap() -> void:
-	if input_locked or frozen:
-		return
-	tap_power += power_per_tap
-	_send_energy_to_level(energy_per_tap)
-
-func _update_animation() -> void:
-	if sprite == null:
-		return
-	var s: float = speed_x
-	if s > 1.0:
-		sprite.play("rollen")
-		sprite.speed_scale = clamp(s / 120.0, 0.2, 8.0)
-	else:
-		sprite.stop()
-
-# ---- energy plumbing (shared total) ----
-func _send_energy_to_level(amount: int) -> void:
-	var n: Node = self
-	while n != null and not n.has_method("add_energy"):
-		n = n.get_parent()
-	if n:
-		n.call("add_energy", amount)
-
-# ---- offsets/helpers ----
-func _compute_start_end_offsets() -> void:
-	var p2d: Path2D = get_parent() as Path2D
-	if p2d == null or p2d.curve == null:
-		start_offset = 0.0
-		end_offset = 0.0
-		return
-
-	var length: float = p2d.curve.get_baked_length()
-	if length <= 0.0:
-		start_offset = 0.0
-		end_offset = 0.0
-		return
-
-	start_offset = _offset_from_marker(p2d, start_marker_path, 0.0, length)
-	end_offset = _offset_from_marker(p2d, end_marker_path, length, length)
-
-	if end_offset < start_offset:
-		var tmp: float = start_offset
-		start_offset = end_offset
-		end_offset = tmp
-	if end_offset <= start_offset + 1.0:
-		end_offset = length
-
-func _offset_from_marker(p2d: Path2D, marker_path: NodePath, fallback: float, length: float) -> float:
-	if marker_path.is_empty():
-		return fallback
-	var marker: Node2D = get_node_or_null(marker_path) as Node2D
-	if marker == null:
-		return fallback
-
-	var local_target: Vector2 = p2d.to_local(marker.global_position)
-	var samples: int = max(1, search_samples)
-	var step: float = length / float(samples)
-
-	var best_offset: float = fallback
-	var best_dist: float = INF
-	var off: float = 0.0
-	while off <= length:
-		var pt: Vector2 = p2d.curve.sample_baked(off)
-		var d: float = pt.distance_to(local_target)
-		if d < best_dist:
-			best_dist = d
-			best_offset = off
-		off += step
-	return best_offset
+# --- Helper Functions (Iguales para no romper el camino) ---
 
 func _wait_for_curve_ready() -> void:
-	var frames_left: int = max(0, wait_frames_for_curve)
-	while frames_left >= 0:
-		var p2d: Path2D = get_parent() as Path2D
-		if p2d and p2d.curve and p2d.curve.get_baked_length() > 0.0:
+	for i in range(wait_frames_for_curve):
+		var p2d = get_parent()
+		if p2d is Path2D and p2d.curve and p2d.curve.get_baked_length() > 10.0:
 			break
 		await get_tree().process_frame
-		frames_left -= 1
 
-func _on_curve_changed() -> void:
-	var p2d: Path2D = get_parent() as Path2D
-	if p2d == null or p2d.curve == null:
-		return
-	var t_norm: float = 0.0
-	var denom: float = max(1.0, end_offset - start_offset)
-	if denom > 0.0:
-		t_norm = clamp((progress - start_offset) / denom, 0.0, 1.0)
-	_compute_start_end_offsets()
-	progress = lerp(start_offset, end_offset, t_norm)
-	prev_progress = progress
-	
-	
-func _update_energy_ui() -> void:
-	var p: Node = get_parent()
-	# Buscamos hacia arriba en la jerarquía hasta encontrar el nodo que maneja la UI
-	while p != null:
-		if p.has_method("update_energy_UI"):
-			p.call("update_energy_UI", energy_points)
-			break
-		p = p.get_parent()
-		
+func _compute_start_end_offsets() -> void:
+	var p2d = get_parent()
+	if not p2d or not p2d is Path2D or not p2d.curve: return
+	var length = p2d.curve.get_baked_length()
+	start_offset = p2d.curve.get_closest_offset(p2d.to_local(get_node(start_marker_path).global_position)) if not start_marker_path.is_empty() else 0.0
+	end_offset = p2d.curve.get_closest_offset(p2d.to_local(get_node(end_marker_path).global_position)) if not end_marker_path.is_empty() else length

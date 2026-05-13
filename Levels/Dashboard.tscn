@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://b6sxvhai6drd4"]
+[gd_scene format=3 uid="uid://dh0gx4gg4g47n"]
 
 [ext_resource type="Script" uid="uid://db7k7b1h261c8" path="res://Code/Dashboard/dashboard.gd" id="1_wk8sf"]
 [ext_resource type="Texture2D" uid="uid://lt01meykgidg" path="res://Images/Idle Objects/Spritesheets/Windmill-spritesheet.png" id="2_2culi"]
@@ -7,7 +7,7 @@
 [ext_resource type="Script" uid="uid://pa0sy78820m7" path="res://Code/animated_sprite_2d.gd" id="3_yiku2"]
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="4_n2g2g"]
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_bdl2f"]
-[ext_resource type="Shader" uid="uid://dsrc3r41a1gn7" path="res://Style/bar.gdshader" id="6_bdl2f"]
+[ext_resource type="Shader" path="res://Style/bar.gdshader" id="6_bdl2f"]
 [ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_be544"]
 [ext_resource type="Script" uid="uid://dajbatrv1reqc" path="res://Code/Dashboard/pedal_gauge.gd" id="6_ux4mo"]
 [ext_resource type="StyleBox" uid="uid://dnybv2xh3fuif" path="res://Style/dashboard_box_style.tres" id="6_v48c6"]
