@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://b50sjm3kawb5w"]
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/Game/pickup.gd" id="1_6fv38"]
-[ext_resource type="Texture2D" uid="uid://cylaongjfnxaq" path="res://Images/Pickups/Apple.png" id="2_6fv38"]
-[ext_resource type="AudioStream" uid="uid://bhy87wbee4rpo" path="res://Audio/Apple.wav" id="3_6fv38"]
+[ext_resource type="Texture2D" uid="uid://dd008w8d2n0ct" path="res://Images/Pickups/Apple1.png" id="2_6fv38"]
+[ext_resource type="AudioStream" uid="uid://bhy87wbee4rpo" path="res://Audio/apple.wav" id="3_6fv38"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]
 radius = 81.0

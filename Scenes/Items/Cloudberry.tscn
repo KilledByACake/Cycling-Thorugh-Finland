@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://crup3nieb8gbj"]
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/Game/pickup.gd" id="1_60vhm"]
-[ext_resource type="Texture2D" uid="uid://vmr43caji3yi" path="res://Images/Pickups/Cloudberry.png" id="2_60vhm"]
+[ext_resource type="Texture2D" uid="uid://78kdbgkijarr" path="res://Images/Pickups/Cloudberry1.png" id="2_60vhm"]
 [ext_resource type="AudioStream" uid="uid://0imsq0gc4ilr" path="res://Audio/wop.wav" id="3_60vhm"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_vwcqu"]

@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bx30rwu2g1mrc"]
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/Game/pickup.gd" id="1_wrmad"]
-[ext_resource type="Texture2D" uid="uid://kc10fstyboyj" path="res://Images/Pickups/Raspberry.png" id="2_wrmad"]
+[ext_resource type="Texture2D" uid="uid://dx2j88edv1cl" path="res://Images/Pickups/Raspberry1.png" id="2_wrmad"]
 [ext_resource type="AudioStream" uid="uid://bykvybwggyfgd" path="res://Audio/Pop.wav" id="3_wrmad"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mwnru"]

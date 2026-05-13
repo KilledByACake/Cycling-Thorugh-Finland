@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://iy306aupeoa1"]
 
 [ext_resource type="Script" uid="uid://cn1nu4aptc62g" path="res://Code/Game/pickup.gd" id="1_8wule"]
-[ext_resource type="Texture2D" uid="uid://bupfksubp3wef" path="res://Images/Pickups/Chanterelle.png" id="2_8wule"]
+[ext_resource type="Texture2D" uid="uid://4oq16ie2mvaf" path="res://Images/Pickups/Chanterelle1.png" id="2_8wule"]
 [ext_resource type="AudioStream" uid="uid://c8wxxle3xgymg" path="res://Audio/Pickup.mp3" id="3_8wule"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_mwnru"]
@@ -88,7 +88,7 @@ collector_groups = PackedStringArray("player", "radler")
 award_energy_kj = 45
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
-position = Vector2(-5.0000057, 0)
+position = Vector2(-2.9999998, 0)
 scale = Vector2(0.31534994, 0.2639434)
 texture = ExtResource("2_8wule")
 
