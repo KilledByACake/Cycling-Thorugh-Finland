@@ -55,41 +55,53 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 0,
-"values": [Vector2(40730, -48.999878)]
+"values": [Vector2(25826, -49)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("level 1/BG Design/Meteorid:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(64338, -788.99994)]
 }
 
 [sub_resource type="Animation" id="Animation_n8fgn"]
 resource_name = "meteorid"
-length = 10.0
+length = 6.0
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("BG Design/Meteorid:position")
+tracks/0/path = NodePath("level 1/BG Design/Meteorid:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 10),
-"transitions": PackedFloat32Array(1, 1),
+"times": PackedFloat32Array(0, 5.3, 6),
+"transitions": PackedFloat32Array(1, 1, 1),
 "update": 0,
-"values": [Vector2(47961, -1393), Vector2(47197, -925)]
+"values": [Vector2(64338, -788.99994), Vector2(63693, -514.99994), Vector2(63693, -514.99994)]
 }
 
 [sub_resource type="Animation" id="Animation_demcn"]
 resource_name = "trainmoves"
-length = 16.033333
-loop_mode = 1
+length = 10.0
+loop_mode = 2
 tracks/0/type = "value"
 tracks/0/imported = false
 tracks/0/enabled = true
-tracks/0/path = NodePath("BG Design/Train:position")
+tracks/0/path = NodePath("level 1/BG Design/Train:position")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 5, 6.9333334, 14.833333),
+"times": PackedFloat32Array(0.16666667, 3.5666666, 4.5666666, 9.566667),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(27972, -41), Vector2(24278, -41), Vector2(24278, -41), Vector2(27972, -41)]
+"values": [Vector2(25826, -49), Vector2(23859, -49), Vector2(23859, -49), Vector2(25826, -49)]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_ongqy"]
@@ -1558,7 +1570,7 @@ offset_right = -1314.0
 offset_bottom = 997.0
 
 [node name="Meteorid" type="Sprite2D" parent="BG Design" unique_id=1763076694]
-position = Vector2(64123.004, -724.375)
+position = Vector2(64338, -788.99994)
 scale = Vector2(0.15806645, 0.15806642)
 texture = ExtResource("20_nlly1")
 
@@ -1573,7 +1585,7 @@ offset_bottom = 1021.0
 texture = SubResource("GradientTexture2D_wndho")
 
 [node name="Train" type="Sprite2D" parent="BG Design" unique_id=1952360778]
-position = Vector2(40730, -48.999878)
+position = Vector2(25826, -49)
 scale = Vector2(0.45328292, 0.45328295)
 texture = ExtResource("17_qvq5f")
 
@@ -1927,10 +1939,10 @@ offset_bottom = 2043.625
 
 [node name="windfarm" type="Control" parent="Middle Sprite" unique_id=1004322805]
 anchors_preset = 0
-offset_left = 11916.0
-offset_top = -760.0
-offset_right = 11956.0
-offset_bottom = -720.0
+offset_left = -5260.3438
+offset_top = -760.4962
+offset_right = -5220.3438
+offset_bottom = -720.4962
 scale = Vector2(0.76000977, 0.76000977)
 
 [node name="Windwheel_sprite2" type="AnimatedSprite2D" parent="Middle Sprite/windfarm" unique_id=1308652406]
@@ -2042,7 +2054,7 @@ animation = &"animation"
 autoplay = "animation"
 
 [node name="Windwheel_sprite" type="AnimatedSprite2D" parent="Middle Sprite" unique_id=841054938]
-position = Vector2(4593.002, -1204.625)
+position = Vector2(-12583.344, -1205.1212)
 scale = Vector2(0.50039876, 0.50039876)
 sprite_frames = SubResource("SpriteFrames_gmbyt")
 animation = &"animation"
@@ -2101,6 +2113,8 @@ position = Vector2(76072, 271)
 scale = Vector2(1.3199999, 1.3199999)
 sprite_frames = SubResource("SpriteFrames_2le4y")
 autoplay = "default"
+frame = 1
+frame_progress = 0.13186674
 
 [node name="Reindeer6" type="AnimatedSprite2D" parent="FrontSprite" unique_id=1144047314]
 position = Vector2(85118.01, 325)
