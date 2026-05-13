@@ -250,7 +250,6 @@ func _game_over_due_to_inactivity() -> void:
 	_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
-	show_popup_message("Du syklet ikke på 10 sekunder.\nGame Over!")
 	_freeze_world()
 	emit_signal("round_over", false)
 	await _show_banner_overlay(false)
