@@ -714,10 +714,10 @@ layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 50
 text = "you are producing power equals to 3.44 m wind turbine diameter"
 autowrap_mode = 2
-max_lines_visible = 3
+max_lines_visible = 4
 script = ExtResource("7_8xj7h")
 
 [node name="Solarpanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1606271807]
@@ -821,7 +821,6 @@ custom_minimum_size = Vector2(250, 125)
 layout_mode = 2
 size_flags_vertical = 0
 script = ExtResource("9_ux4mo")
-value = 250.0
 arc_color = Color(0.11764706, 0.29411766, 0.46666667, 1)
 margin_px = 12.0
 source_label_path = NodePath("../../../../../../../../../Meteoria/powerWind")
@@ -848,31 +847,31 @@ theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "500 watts"
 
-[node name="Charge2" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1883928027]
+[node name="Smartphone" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1883928027]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/panel = ExtResource("6_v48c6")
 
-[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge2" unique_id=1185806984]
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Smartphone" unique_id=1185806984]
 layout_mode = 2
 theme_override_constants/margin_left = 16
 theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge2/CardMargin" unique_id=1288551999]
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Smartphone/CardMargin" unique_id=1288551999]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/separation = 10
 
-[node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge2/CardMargin/CardVBox" unique_id=1420699027]
+[node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Smartphone/CardMargin/CardVBox" unique_id=1420699027]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
-theme_override_font_sizes/font_size = 38
+theme_override_font_sizes/font_size = 50
 text = "Your smart phone could be fully charged in 18.5 minutes."
 autowrap_mode = 2
 script = ExtResource("10_pp23k")
