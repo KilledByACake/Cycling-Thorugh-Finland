@@ -26,7 +26,7 @@ func _ready() -> void:
 	dir.list_dir_begin()
 	var file: String = dir.get_next()
 	while file != "":
-		if not dir.current_is_dir() and file.ends_with(".png"):
+		if not dir.current_is_dir() and file.ends_with(".png") or file.ends_with(".PNG"):
 			chunks.append(file)
 		file = dir.get_next()
 	dir.list_dir_end()
