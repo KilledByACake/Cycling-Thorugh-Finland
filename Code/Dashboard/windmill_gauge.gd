@@ -14,14 +14,25 @@ extends Control
 @export var needle_width_px: float = 8.0
 @export var needle_inner_ratio: float = 0.15
 
-# Clamps and sets the value, then schedules a redraw.
+@export var source_label_path: NodePath
+
+var _label_ref: Label
+var _last_text: String = ""
+
+# Sets the gauge value within bounds and schedules a redraw.
 func set_value(v: float) -> void:
-	value = clampf(v, min_value, max_value)
+	var clamped := clampf(v, min_value, max_value)
+	if is_equal_approx(clamped, value):
+		return
+	value = clamped
+	print("Dashboard: wind =", value)
 	queue_redraw()
 
-# Hooks resize to redraw and triggers the first draw.
+# Prepares redraw hooks, enables polling, and binds the label source.
 func _ready() -> void:
 	resized.connect(func(): queue_redraw())
+	set_process(true)
+	_bind_label()
 	queue_redraw()
 
 # Draws the arc and the needle for the current value.
@@ -30,7 +41,6 @@ func _draw() -> void:
 	if s.x <= 1.0 or s.y <= 1.0:
 		return
 
-	# Ensure a minimal horizontal padding so end caps don't touch edges.
 	var half_t := thickness_px * 0.5
 	var inset := maxf(side_inset_px, half_t)
 	var usable_w: float = maxf(1.0, s.x - 2.0 * inset)
@@ -60,3 +70,48 @@ func _draw() -> void:
 	var poly: PackedVector2Array = PackedVector2Array([base + perp, base - perp, tip])
 	draw_colored_polygon(poly, needle_color)
 	draw_circle(base, half_w, needle_color)
+
+# Polls the label, parses the first number, and updates the gauge when text changes.
+func _process(_delta: float) -> void:
+	if _label_ref == null:
+		_bind_label()
+		return
+	var t := _label_ref.text
+	if t == _last_text:
+		return
+	_last_text = t
+	var watts := _extract_first_float(t)
+	set_value(watts)
+
+# Resolves the label from the exported path or common fallback names.
+func _bind_label() -> void:
+	if source_label_path != NodePath():
+		var n := get_node_or_null(source_label_path)
+		if n and n is Label:
+			_set_label(n)
+			return
+	var candidate := find_child("powerWind", true, false)
+	if candidate and candidate is Label:
+		_set_label(candidate)
+		return
+	var alt := find_child("HighUnitLabel", true, false)
+	if alt and alt is Label:
+		_set_label(alt)
+
+# Stores the label reference and triggers an immediate value update.
+func _set_label(l: Label) -> void:
+	_label_ref = l
+	_last_text = ""
+	if _label_ref:
+		var watts := _extract_first_float(_label_ref.text)
+		set_value(watts)
+
+# Extracts the first floating-point number from a string.
+func _extract_first_float(s: String) -> float:
+	var re := RegEx.new()
+	re.compile(r"[-+]?\d+(?:[.,]\d+)?")
+	var m := re.search(s)
+	if m:
+		var t := m.get_string().replace(",", ".")
+		return float(t)
+	return 0.0
