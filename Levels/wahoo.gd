@@ -7,9 +7,9 @@ extends Node
 
 func _ready():
 	# --- TU CÓDIGO DEL .BAT (Esto está bien) ---
-	var ruta_bat = ProjectSettings.globalize_path("res://arrancar.bat")
-	var ruta_segura = "file:///" + ruta_bat
-	OS.shell_open(ruta_segura)
+	#var ruta_bat = ProjectSettings.globalize_path("res://arrancar.bat")
+	#var ruta_segura = "file:///" + ruta_bat
+	#OS.shell_open(ruta_segura)
 	
 	# --- PASO 2: Conectar las señales del controlador ---
 	# Usamos 'gestor' (el nodo), NO 'WahooController' (la clase)

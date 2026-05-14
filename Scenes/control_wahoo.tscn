@@ -15,14 +15,14 @@ func _ready():
 	print(\"--- Starting GlobalTraining ---\")
 	
 	# 1. Run the .bat file
-	var ruta_bat = ProjectSettings.globalize_path(\"res://arrancar.bat\")
-	var ruta_segura = \"file:///\" + ruta_bat
-	var error_bat = OS.shell_open(ruta_segura)
+	#var ruta_bat = ProjectSettings.globalize_path(\"res://arrancar.bat\")
+	#var ruta_segura = \"file:///\" + ruta_bat
+	#var error_bat = OS.shell_open(ruta_segura)
 	
-	if error_bat == OK:
-		print(\"✅ .bat file executed successfully.\")
-	else:
-		print(\"❌ Error executing .bat file: \", error_bat)
+	#if error_bat == OK:
+		#print(\"✅ .bat file executed successfully.\")
+	#else:
+		#print(\"❌ Error executing .bat file: \", error_bat)
 	
 	# 2. Open the UDP port
 	var error_udp = udp.bind(puerto_escucha)

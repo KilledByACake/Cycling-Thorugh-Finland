@@ -12,9 +12,9 @@ func _ready():
 	print("--- Iniciando GlobalTraining ---")
 	
 	# 1. Arrancar el .bat
-	var ruta_bat = ProjectSettings.globalize_path("res://arrancar.bat")
-	var ruta_segura = "file:///" + ruta_bat
-	var error_bat = OS.shell_open(ruta_segura)
+	#var ruta_bat = ProjectSettings.globalize_path("res://arrancar.bat")
+	#var ruta_segura = "file:///" + ruta_bat
+	#var error_bat = OS.shell_open(ruta_segura)
 	
 	if error_bat == OK:
 		print("✅ Archivo .bat ejecutado correctamente.")

@@ -22,21 +22,21 @@ func _ready():
 	else:
 		print("Failed to bind UDP port! Error code: ", status)
 
-	# 1. Get the absolute path of the batch file
-	var ruta_bat = ProjectSettings.globalize_path("res://arrancar.bat")
+	## 1. Get the absolute path of the batch file
+	#var ruta_bat = ProjectSettings.globalize_path("res://arrancar.bat")
+	#
+	## 2. Format the path with the "file:///" prefix for Windows compatibility
+	#var ruta_segura = "file:///" + ruta_bat
+	#
+	#print("Attempting to open safely: ", ruta_segura)
 	
-	# 2. Format the path with the "file:///" prefix for Windows compatibility
-	var ruta_segura = "file:///" + ruta_bat
-	
-	print("Attempting to open safely: ", ruta_segura)
-	
-	# 3. Execute the file
-	var error = OS.shell_open(ruta_segura)
-	
-	if error == OK:
-		print("Windows accepted the shell command!")
-	else:
-		print("Execution failed. Error number: ", error)
+	## 3. Execute the file
+	#var error = OS.shell_open(ruta_segura)
+	#
+	#if error == OK:
+		#print("Windows accepted the shell command!")
+	#else:
+		#print("Execution failed. Error number: ", error)
 		
 		
 func _process(_delta):

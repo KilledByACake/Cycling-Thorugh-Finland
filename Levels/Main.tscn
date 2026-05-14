@@ -3,10 +3,10 @@
 [ext_resource type="Material" path="res://Style/bg_moving_gradient.tres" id="2_b7uiw"]
 [ext_resource type="Script" uid="uid://cf6iavoyiweqk" path="res://Code/Screens/main_menu.gd" id="2_yy7ei"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="3_b7uiw"]
+[ext_resource type="Texture2D" uid="uid://d25oi1g4k8gpu" path="res://Images/Design1/transparent_hills/hills_35.png" id="4_b7uiw"]
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="4_bl2xt"]
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_r6vcu"]
 [ext_resource type="Script" uid="uid://bh16u6ah1m4rb" path="res://Code/Game/polygon_to_path.gd" id="6_yy7ei"]
-[ext_resource type="Texture2D" uid="uid://dr258l5mh52a8" path="res://Images/Design/transparent_hills/hills_50.png" id="7_b7uiw"]
 
 [sub_resource type="Curve2D" id="Curve2D_r6vcu"]
 _data = {
@@ -48,10 +48,10 @@ top_level = true
 position = Vector2(56, -1194)
 curve = SubResource("Curve2D_r6vcu")
 
-[node name="Hills50" type="Sprite2D" parent="." unique_id=1107955066]
-position = Vector2(955, 989)
+[node name="Hills35" type="Sprite2D" parent="." unique_id=1107955066]
+position = Vector2(955.00006, 1155)
 scale = Vector2(0.45155475, 0.5986678)
-texture = ExtResource("7_b7uiw")
+texture = ExtResource("4_b7uiw")
 
 [node name="Highscores" type="Button" parent="." unique_id=936658463]
 layout_mode = 0
