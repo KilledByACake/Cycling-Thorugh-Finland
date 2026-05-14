@@ -50,7 +50,7 @@ curve = SubResource("Curve2D_r6vcu")
 
 [node name="Hills35" type="Sprite2D" parent="." unique_id=1107955066]
 position = Vector2(955.00006, 1155)
-scale = Vector2(0.45155475, 0.5986678)
+scale = Vector2(0.5315541, 0.70473033)
 texture = ExtResource("4_b7uiw")
 
 [node name="Highscores" type="Button" parent="." unique_id=936658463]

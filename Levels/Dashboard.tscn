@@ -8,7 +8,7 @@
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="4_n2g2g"]
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_bdl2f"]
 [ext_resource type="Shader" uid="uid://dsrc3r41a1gn7" path="res://Style/bar.gdshader" id="6_bdl2f"]
-[ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_be544"]
+[ext_resource type="Texture2D" uid="uid://b1grktmmknmjv" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_be544"]
 [ext_resource type="Script" uid="uid://dajbatrv1reqc" path="res://Code/Dashboard/pedal_gauge.gd" id="6_ux4mo"]
 [ext_resource type="StyleBox" uid="uid://dnybv2xh3fuif" path="res://Style/dashboard_box_style.tres" id="6_v48c6"]
 [ext_resource type="Script" uid="uid://borcxkl28avco" path="res://Code/Dashboard/wind_speed_dashboard.gd" id="7_8xj7h"]
@@ -215,101 +215,105 @@ func _exit_tree() -> void:
 		_http.cancel_request()
 "
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_v48c6"]
-atlas = ExtResource("2_2culi")
-region = Rect2(778, 0, 778, 1273)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_8xj7h"]
-atlas = ExtResource("2_2culi")
-region = Rect2(2334, 0, 778, 1273)
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_pp23k"]
 atlas = ExtResource("2_2culi")
-region = Rect2(0, 1273, 778, 1273)
+region = Rect2(0, 0, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wk8sf"]
 atlas = ExtResource("2_2culi")
-region = Rect2(1556, 1273, 778, 1273)
+region = Rect2(475, 0, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_xwwd1"]
 atlas = ExtResource("2_2culi")
-region = Rect2(3112, 1273, 778, 1273)
+region = Rect2(950, 0, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7ymlh"]
 atlas = ExtResource("2_2culi")
-region = Rect2(778, 2546, 778, 1273)
+region = Rect2(1425, 0, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a6c22"]
 atlas = ExtResource("2_2culi")
-region = Rect2(2334, 2546, 778, 1273)
+region = Rect2(1900, 0, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ogdq2"]
 atlas = ExtResource("2_2culi")
-region = Rect2(0, 3819, 778, 1273)
+region = Rect2(0, 778, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_1ye3c"]
 atlas = ExtResource("2_2culi")
-region = Rect2(1556, 3819, 778, 1273)
+region = Rect2(475, 778, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_p4k6u"]
 atlas = ExtResource("2_2culi")
-region = Rect2(3112, 3819, 778, 1273)
+region = Rect2(950, 778, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_rs3jv"]
 atlas = ExtResource("2_2culi")
-region = Rect2(778, 5092, 778, 1273)
+region = Rect2(1425, 778, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_a4de0"]
 atlas = ExtResource("2_2culi")
-region = Rect2(2334, 5092, 778, 1273)
+region = Rect2(1900, 778, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_bhw6r"]
 atlas = ExtResource("2_2culi")
-region = Rect2(778, 0, 778, 1273)
+region = Rect2(0, 1556, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wex3b"]
 atlas = ExtResource("2_2culi")
-region = Rect2(2334, 0, 778, 1273)
+region = Rect2(475, 1556, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_oxkh7"]
 atlas = ExtResource("2_2culi")
-region = Rect2(0, 1273, 778, 1273)
+region = Rect2(950, 1556, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_myswu"]
 atlas = ExtResource("2_2culi")
-region = Rect2(1556, 1273, 778, 1273)
+region = Rect2(1425, 1556, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_7tlnh"]
 atlas = ExtResource("2_2culi")
-region = Rect2(3112, 1273, 778, 1273)
+region = Rect2(1900, 1556, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_jfsi8"]
 atlas = ExtResource("2_2culi")
-region = Rect2(778, 2546, 778, 1273)
+region = Rect2(0, 2334, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_cwejb"]
 atlas = ExtResource("2_2culi")
-region = Rect2(2334, 2546, 778, 1273)
+region = Rect2(475, 2334, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wffon"]
 atlas = ExtResource("2_2culi")
-region = Rect2(0, 3819, 778, 1273)
+region = Rect2(950, 2334, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ppqh3"]
 atlas = ExtResource("2_2culi")
-region = Rect2(1556, 3819, 778, 1273)
+region = Rect2(1425, 2334, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_yol6p"]
 atlas = ExtResource("2_2culi")
-region = Rect2(3112, 3819, 778, 1273)
+region = Rect2(1900, 2334, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_q5knl"]
 atlas = ExtResource("2_2culi")
-region = Rect2(778, 5092, 778, 1273)
+region = Rect2(0, 3112, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_kxhh3"]
 atlas = ExtResource("2_2culi")
-region = Rect2(2334, 5092, 778, 1273)
+region = Rect2(475, 3112, 475, 778)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_y2cmn"]
+atlas = ExtResource("2_2culi")
+region = Rect2(950, 3112, 475, 778)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_g8cv5"]
+atlas = ExtResource("2_2culi")
+region = Rect2(1425, 3112, 475, 778)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_3qmv8"]
+atlas = ExtResource("2_2culi")
+region = Rect2(1900, 3112, 475, 778)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_x855k"]
 atlas = ExtResource("2_2culi")
@@ -362,12 +366,6 @@ region = Rect2(2334, 5092, 778, 1273)
 [sub_resource type="SpriteFrames" id="SpriteFrames_cwejb"]
 animations = [{
 "frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_v48c6")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_8xj7h")
-}, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_pp23k")
 }, {
@@ -433,10 +431,19 @@ animations = [{
 }, {
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_kxhh3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_y2cmn")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_g8cv5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_3qmv8")
 }],
 "loop": true,
 "name": &"default",
-"speed": 4.0
+"speed": 5.0
 }, {
 "frames": [{
 "duration": 1.0,
@@ -716,7 +723,7 @@ theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 58
 text = "Whooooooosh!
-About a 0.00 m wind turbine."
+About a 3.44 m wind turbine."
 autowrap_mode = 2
 max_lines_visible = 4
 script = ExtResource("7_8xj7h")
@@ -874,7 +881,7 @@ theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 50
 text = "Funfact!
-You need to cycle 0.0 more minutes to charge a phone."
+You need to cycle 18.5 more minutes to charge a phone."
 autowrap_mode = 2
 script = ExtResource("10_pp23k")
 
@@ -920,9 +927,8 @@ metadata/_edit_use_anchors_ = true
 position = Vector2(1821, 694.4667)
 scale = Vector2(0.85347027, 0.83508474)
 sprite_frames = SubResource("SpriteFrames_cwejb")
-animation = &"faster"
 autoplay = "default"
-frame_progress = 0.3296865
+frame_progress = 0.10293749
 script = ExtResource("3_yiku2")
 
 [node name="Meteoria2" type="Sprite2D" parent="." unique_id=749458229]
