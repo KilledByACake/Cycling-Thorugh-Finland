@@ -877,7 +877,7 @@ theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 50
 text = "Funfact!
-You need to cycle 0.0 more minutes to fully charge a phone."
+You need to cycle 0.0 more minutes to charge a phone."
 autowrap_mode = 2
 script = ExtResource("10_pp23k")
 test_power = null
