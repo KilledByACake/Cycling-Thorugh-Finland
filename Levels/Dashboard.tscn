@@ -690,13 +690,13 @@ theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "500 watts"
 
-[node name="Charge" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=421791004]
+[node name="Equal2Windturbine" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=421791004]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_styles/panel = ExtResource("6_v48c6")
 
-[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge" unique_id=565657748]
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Equal2Windturbine" unique_id=565657748]
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_constants/margin_left = 16
@@ -704,21 +704,25 @@ theme_override_constants/margin_top = 16
 theme_override_constants/margin_right = 16
 theme_override_constants/margin_bottom = 16
 
-[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge/CardMargin" unique_id=1491127918]
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Equal2Windturbine/CardMargin" unique_id=1491127918]
 layout_mode = 2
 theme_override_constants/separation = 10
 
-[node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge/CardMargin/CardVBox" unique_id=1142816821]
+[node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Equal2Windturbine/CardMargin/CardVBox" unique_id=1142816821]
 custom_minimum_size = Vector2(450, 0)
 layout_mode = 2
 size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
-theme_override_font_sizes/font_size = 50
-text = "you are producing power equals to 3.44 m wind turbine diameter"
+theme_override_font_sizes/font_size = 58
+text = "Whooooooosh!
+About a 0.00 m wind turbine."
 autowrap_mode = 2
 max_lines_visible = 4
 script = ExtResource("7_8xj7h")
+test_power = null
+test_wind_speed = null
+coeff = null
 
 [node name="Solarpanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1606271807]
 layout_mode = 2
@@ -872,9 +876,13 @@ size_flags_horizontal = 0
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 50
-text = "Your smart phone could be fully charged in 18.5 minutes."
+text = "Funfact!
+You need to cycle 0.0 more minutes to fully charge a phone."
 autowrap_mode = 2
 script = ExtResource("10_pp23k")
+test_power = null
+battery_wh = null
+charge_efficiency = null
 
 [node name="Attention" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1368259523]
 visible = false
