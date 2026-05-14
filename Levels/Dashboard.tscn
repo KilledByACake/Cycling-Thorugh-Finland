@@ -586,7 +586,7 @@ custom_minimum_size = Vector2(250, 125)
 layout_mode = 2
 size_flags_vertical = 0
 script = ExtResource("8_be544")
-value = 50.0
+value = 250.0
 margin_px = 12.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=964211574]
@@ -644,7 +644,7 @@ custom_minimum_size = Vector2(250, 125)
 layout_mode = 2
 size_flags_vertical = 0
 script = ExtResource("9_ux4mo")
-value = 50.0
+value = 250.0
 arc_color = Color(0.11764706, 0.29411766, 0.46666667, 1)
 margin_px = 12.0
 
