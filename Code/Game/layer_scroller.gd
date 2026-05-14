@@ -2,7 +2,7 @@ extends Node2D
 
 # Streams and reuses large background chunks as the camera moves horizontally.
 
-@export var folder_path: String = "res://Images/Design/Layer1/smaller/"
+@export var folder_path: String = "res://Images/Design/Layer1/"
 @export var chunk_width: float = 5296.0
 @export var chunk_height: float = 2979.0
 @export var camera: Camera2D
@@ -69,6 +69,7 @@ func _load(index: int) -> void:
 	
 	var sprite: Sprite2D = Sprite2D.new()
 	sprite.texture = tex
+	sprite.scale = Vector2(5296.0 / 3890.0, 5296.0 / 3890.0)  # ≈ 1.3613
 	# Position based on start_x, independent of the camera.
 	sprite.position.x = start_x + index * chunk_width + chunk_width / 2.0
 	sprite.position.y = start_y + chunk_height / 2.0
