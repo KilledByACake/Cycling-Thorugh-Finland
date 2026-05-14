@@ -13,6 +13,7 @@
 [ext_resource type="StyleBox" uid="uid://dnybv2xh3fuif" path="res://Style/dashboard_box_style.tres" id="6_v48c6"]
 [ext_resource type="Script" uid="uid://borcxkl28avco" path="res://Code/Dashboard/wind_speed_dashboard.gd" id="7_8xj7h"]
 [ext_resource type="Script" uid="uid://bcyuokv2cftbc" path="res://Code/Connection/meteoria_control.gd" id="7_ux4mo"]
+[ext_resource type="Script" uid="uid://bfbrrq45htqmg" path="res://Code/Dashboard/label_power.gd" id="7_wk8sf"]
 [ext_resource type="Script" uid="uid://icagaf3tjpmn" path="res://Code/Dashboard/solar_gauge.gd" id="8_be544"]
 [ext_resource type="Script" uid="uid://dvb7d04ijuepw" path="res://Code/Dashboard/windmill_gauge.gd" id="9_ux4mo"]
 [ext_resource type="Script" uid="uid://bqqertitopswr" path="res://Code/Dashboard/smartphone_dashboard_message.gd" id="10_pp23k"]
@@ -645,6 +646,11 @@ layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_bdl2f")
 script = ExtResource("6_ux4mo")
 value = 50.0
+needle_width = null
+bar_corner_px = null
+bar_col_left = null
+bar_col_mid = null
+bar_col_right = null
 
 [node name="Control" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer/HBoxContainer/PedalGauge" unique_id=559155237]
 layout_mode = 2
@@ -662,9 +668,9 @@ grow_vertical = 2
 [node name="Needle" type="ColorRect" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer/HBoxContainer/PedalGauge/Control" unique_id=205373686]
 z_index = 100
 layout_mode = 0
-offset_left = -6.0
-offset_right = 6.0
-offset_bottom = 5.0
+offset_left = 19.0
+offset_right = 31.0
+offset_bottom = 40.0
 color = Color(0.16470589, 0.16470589, 0.16470589, 1)
 
 [node name="LabelPower" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer" unique_id=1702608269]
@@ -675,6 +681,7 @@ size_flags_horizontal = 0
 size_flags_vertical = 0
 theme_override_font_sizes/font_size = 30
 text = "power"
+script = ExtResource("7_wk8sf")
 
 [node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer" unique_id=1670023840]
 layout_mode = 2
