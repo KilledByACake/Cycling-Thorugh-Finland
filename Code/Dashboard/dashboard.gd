@@ -43,6 +43,5 @@ func _on_back_pressed() -> void:
 	if ResourceLoader.exists(MAIN_SCENE_PATH):
 		get_tree().change_scene_to_file(MAIN_SCENE_PATH)
 		# Optional: keep the signal if any parent also listens.
-		emit_signal("back_pressed")
 	else:
 		push_error("Main scene not found: " + MAIN_SCENE_PATH)
