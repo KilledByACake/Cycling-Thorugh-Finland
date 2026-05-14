@@ -2,7 +2,7 @@ extends Node2D
 
 # Streams and reuses large background chunks as the camera moves horizontally.
 
-@export var folder_path: String = "res://Images/Design/Layer1/"
+@export var folder_path: String = "res://Images/Design1/Layer1/"
 @export var chunk_width: float = 5296.0
 @export var chunk_height: float = 2979.0
 @export var camera: Camera2D

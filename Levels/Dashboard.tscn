@@ -8,7 +8,7 @@
 [ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="4_n2g2g"]
 [ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="5_bdl2f"]
 [ext_resource type="Shader" uid="uid://dsrc3r41a1gn7" path="res://Style/bar.gdshader" id="6_bdl2f"]
-[ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="6_be544"]
+[ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design1/Layer3/Layer3_Slice_12.png" id="6_be544"]
 [ext_resource type="Script" uid="uid://dajbatrv1reqc" path="res://Code/Dashboard/pedal_gauge.gd" id="6_ux4mo"]
 [ext_resource type="StyleBox" uid="uid://dnybv2xh3fuif" path="res://Style/dashboard_box_style.tres" id="6_v48c6"]
 [ext_resource type="Script" uid="uid://borcxkl28avco" path="res://Code/Dashboard/wind_speed_dashboard.gd" id="7_8xj7h"]
@@ -655,9 +655,9 @@ grow_vertical = 2
 [node name="Needle" type="ColorRect" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer/HBoxContainer/PedalGauge/Control" unique_id=205373686]
 z_index = 100
 layout_mode = 0
-offset_left = 19.0
-offset_right = 31.0
-offset_bottom = 40.0
+offset_left = -6.0
+offset_right = 6.0
+offset_bottom = 5.0
 color = Color(0.16470589, 0.16470589, 0.16470589, 1)
 
 [node name="LabelPower" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer" unique_id=1702608269]
@@ -720,9 +720,6 @@ About a 0.00 m wind turbine."
 autowrap_mode = 2
 max_lines_visible = 4
 script = ExtResource("7_8xj7h")
-test_power = null
-test_wind_speed = null
-coeff = null
 
 [node name="Solarpanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1606271807]
 layout_mode = 2
@@ -880,9 +877,6 @@ text = "Funfact!
 You need to cycle 0.0 more minutes to charge a phone."
 autowrap_mode = 2
 script = ExtResource("10_pp23k")
-test_power = null
-battery_wh = null
-charge_efficiency = null
 
 [node name="Attention" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1368259523]
 visible = false
