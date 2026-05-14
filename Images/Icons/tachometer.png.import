@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cego40kfe5gw1"
-path="res://.godot/imported/hills_main.png-ffe768b54b8b52fcdb04222bebe2ef68.ctex"
+uid="uid://cysq5ewo8ye0o"
+path="res://.godot/imported/tachometer.png-4ba4260d384a9faf7818527d19cad902.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Design/transparent_hills/hills_main.png"
-dest_files=["res://.godot/imported/hills_main.png-ffe768b54b8b52fcdb04222bebe2ef68.ctex"]
+source_file="res://Images/Icons/tachometer.png"
+dest_files=["res://.godot/imported/tachometer.png-4ba4260d384a9faf7818527d19cad902.ctex"]
 
 [params]
 

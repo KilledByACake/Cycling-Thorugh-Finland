@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cppeck65bvb3k"]
 
-[ext_resource type="Texture2D" uid="uid://d0xiw426y24an" path="res://Images/Icons/energy_icon.png" id="2_dnerv"]
+[ext_resource type="Texture2D" uid="uid://cysq5ewo8ye0o" path="res://Images/Icons/tachometer.png" id="2_dnerv"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_nf4gj"]
 [ext_resource type="Texture2D" uid="uid://la3vhsxmnn0o" path="res://Images/Icons/speed_icon.png" id="3_0dhui"]
 
