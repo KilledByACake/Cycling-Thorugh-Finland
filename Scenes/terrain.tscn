@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://begi8cpog3er3"]
+[gd_scene format=3 uid="uid://rdjxe5funvft"]
 
 [ext_resource type="Script" uid="uid://cthog1pmieh2u" path="res://Code/terrain.gd" id="1_13aae"]
 [ext_resource type="Material" uid="uid://bo4l5i3vj10ow" path="res://Style/shader_hill_gradient.tres" id="2_pmkc2"]
