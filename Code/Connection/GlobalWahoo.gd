@@ -1,30 +1,43 @@
 extends Node
 
-signal data_updated(power: int, speed: float)
-
-@export var listen_port: int = 4242
-
+# Variables globales donde guardaremos los datos
 var power: int = 0
 var speed: float = 0.0
-var udp: PacketPeerUDP = PacketPeerUDP.new()
 
-# Binds the UDP socket and enables processing.
-func _ready() -> void:
-	set_process(true)
-	var err: int = udp.bind(listen_port, "127.0.0.1")
-	if err != OK:
-		push_error("UDP bind failed: %s" % err)
+# Herramientas para la conexión
+var udp := PacketPeerUDP.new()
+var puerto_escucha = 4242
+
+func _ready():
+	print("--- Iniciando GlobalTraining ---")
+	
+	# 1. Arrancar el .bat
+	#var ruta_bat = ProjectSettings.globalize_path("res://arrancar.bat")
+	#var ruta_segura = "file:///" + ruta_bat
+	#var error_bat = OS.shell_open(ruta_segura)
+	
+	if error_bat == OK:
+		print("✅ Archivo .bat ejecutado correctamente.")
 	else:
-		print("Listening on UDP port:", listen_port)
+		print("❌ Error al ejecutar el .bat: ", error_bat)
+	
+	# 2. Abrir el puerto UDP
+	var error_udp = udp.bind(puerto_escucha)
+	if error_udp == OK:
+		print("✅ Escuchando datos en el puerto UDP: ", puerto_escucha)
+	else:
+		print("❌ Error al abrir el puerto UDP: ", error_udp)
 
-# Reads incoming UDP packets and updates power/speed.
-func _process(_delta: float) -> void:
+func _process(_delta):
+	# 3. Leer los datos si llegan
 	while udp.get_available_packet_count() > 0:
-		var pkt: PackedByteArray = udp.get_packet()
-		var txt: String = pkt.get_string_from_utf8()
-		var data: Variant = JSON.parse_string(txt)
-		if typeof(data) == TYPE_DICTIONARY:
-			var d: Dictionary = data
-			power = int(d.get("power", power))
-			speed = float(d.get("speed", speed))
-			emit_signal("data_updated", power, speed)
+		var paquete = udp.get_packet().get_string_from_utf8()
+		var datos = JSON.parse_string(paquete)
+		
+		# Si los datos son válidos, los guardamos y los imprimimos
+		if datos:
+			power = datos.get("power", 0)
+			speed = datos.get("speed", 0.0)
+			
+			# ¡AQUÍ ESTÁ LA MAGIA PARA COMPROBARLO!
+			print("🚴 Datos en vivo -> Potencia: ", power, " W | Velocidad: ", speed, " km/h")
