@@ -54,11 +54,15 @@ scale = Vector2(0.50785804, 0.6733142)
 texture = ExtResource("4_b7uiw")
 
 [node name="Highscores" type="Button" parent="." unique_id=936658463]
-layout_mode = 0
-offset_left = 67.00001
-offset_top = 1041.0
-offset_right = 646.0
-offset_bottom = 1188.0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 64.0
+offset_top = -157.0
+offset_right = 643.0
+offset_bottom = -10.0
+grow_vertical = 0
 scale = Vector2(0.64000016, 0.64000016)
 size_flags_horizontal = 4
 size_flags_vertical = 3
