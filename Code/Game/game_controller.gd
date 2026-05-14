@@ -141,20 +141,17 @@ func update_energy_UI(value: int) -> void:
 
 # Updates the energy UI (via UI script method or fallback label).
 func _refresh_energy_ui() -> void:
+	# If UI wasn’t ready yet, try to resolve once more.
+	if ui_root == null or energy_label == null:
+		_resolve_ui_refs()
+
 	if ui_root and ui_root.has_method("set_energy"):
 		ui_root.call("set_energy", energy_points)
-		return
-	if ui_root:
-		if energy_label == null:
-			var node: Node = ui_root.get_node_or_null("Energy/Label")
-			if node == null:
-				var energy_node: Node = ui_root.get_node_or_null("Energy")
-				if energy_node:
-					energy_label = energy_node.find_child("Label", true, false) as Label
-			else:
-				energy_label = node as Label
-		if energy_label:
-			energy_label.text = str(energy_points)
+	elif energy_label:
+		energy_label.text = str(energy_points)
+	else:
+		push_warning("EnergyLabel not found under UI. Expected path: UI/VBoxContainer/Energy/EnergyLabel")
+		
 
 # Pulls the player name from the tree metadata into the label.
 func _update_player_name_from_tree() -> void:
@@ -449,13 +446,19 @@ func show_popup_message(text: String, _id: String = "") -> void:
 func _resolve_ui_refs() -> void:
 	ui_root = get_node_or_null("UI") as CanvasLayer
 	if ui_root:
-		timer_label = ui_root.get_node_or_null("TimerLabel") as Label
+		timer_label = ui_root.get_node_or_null("VBoxContainer/TimerLabel") as Label
 		if timer_label == null:
 			timer_label = ui_root.find_child("TimerLabel", true, false) as Label
-		player_name_label = ui_root.get_node_or_null("PlayerNameLabel") as Label
+
+		player_name_label = ui_root.get_node_or_null("VBoxContainer/PlayerNameLabel") as Label
 		if player_name_label == null:
 			player_name_label = ui_root.find_child("PlayerNameLabel", true, false) as Label
 
+		# FIX: use the actual path/name
+		energy_label = ui_root.get_node_or_null("VBoxContainer/Energy/EnergyLabel") as Label
+		if energy_label == null:
+			energy_label = ui_root.find_child("EnergyLabel", true, false) as Label
+			
 # Ensures there is a layer to host transient overlays.
 func _ensure_overlay_layer() -> void:
 	if overlay_layer == null:
