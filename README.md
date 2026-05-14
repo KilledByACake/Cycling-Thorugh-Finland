@@ -1,3 +1,15 @@
+#### CYCLE THROUGH FINLAND ####
+
+# SOUND LICENSE 
+
+This project incorporates certain sound effects sourced from Pixabay and used under the Pixabay License. 
+
+Under this license, the audio may be used in both commercial and non‑commercial contexts and may be modified (e.g., trimming, looping, mixing). Attribution is not required, though credit may be provided at our discretion. 
+
+Audio obtained from Pixabay is included solely as part of the compiled game; we do not redistribute or resell the files in their original form, nor do we claim ownership of unmodified assets or imply endorsement by Pixabay or the respective creators. 
+
+https://pixabay.com/service/license-summary/.
+
 # SmartShape2D
 
 ![Sample Image](./addons/rmsmartshape/documentation/imgs/sample.png)

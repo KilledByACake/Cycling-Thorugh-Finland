@@ -5,6 +5,7 @@ extends Control
 
 const LEVEL1_SCENE_PATH: String = "res://Levels/Loading.tscn"
 const MAIN_MENU_SCENE_PATH: String = "res://Levels/Main.tscn"
+const HIGHSCORES_SCENE_PATH: String = "res://Levels/Highscores.tscn"
 const SHOW_TOP_N: int = 5
 
 @onready var center: CenterContainer = get_node_or_null("CenterContainer") as CenterContainer
@@ -95,6 +96,10 @@ func set_result(_won: bool, energy: int, _target: int, player_name: String = "")
 # Button handler: restarts the game scene.
 func _on_Retry_pressed() -> void:
 	get_tree().change_scene_to_file(LEVEL1_SCENE_PATH)
+	
+# Called by the Highscores button; goes to the highscore scene.
+func _on_highscores_pressed() -> void:
+	get_tree().change_scene_to_file(HIGHSCORES_SCENE_PATH)
 
 # Button handler: returns to the main menu.
 func _on_Main_Menu_pressed() -> void:
@@ -104,3 +109,11 @@ func _on_Main_Menu_pressed() -> void:
 func _today_iso() -> String:
 	var d: Dictionary = Time.get_date_dict_from_system()
 	return "%04d-%02d-%02d" % [d.year, d.month, d.day]
+
+
+func _on_main_menu_pressed() -> void:
+	pass # Replace with function body.
+
+
+func _on_retry_pressed() -> void:
+	pass # Replace with function body.

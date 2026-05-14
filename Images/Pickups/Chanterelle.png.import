@@ -3,15 +3,15 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://dc2wy4frxokda"
-path="res://.godot/imported/Chanterelle.png-47e3bead91e515acf8f8360732944213.ctex"
+path="res://.godot/imported/chanterelle.png-f24ba4c02384573a84211ba1f96b9fa0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Images/Pickups/Chanterelle.png"
-dest_files=["res://.godot/imported/Chanterelle.png-47e3bead91e515acf8f8360732944213.ctex"]
+source_file="res://Images/Pickups/chanterelle.png"
+dest_files=["res://.godot/imported/chanterelle.png-f24ba4c02384573a84211ba1f96b9fa0.ctex"]
 
 [params]
 

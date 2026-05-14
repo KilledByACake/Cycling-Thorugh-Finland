@@ -1,5 +1,7 @@
 extends Control
 
+const MAIN_SCENE_PATH: String = "res://Levels/Main.tscn"
+
 @export var gauge_path: NodePath
 @export var solar_data_path: NodePath
 
@@ -34,3 +36,12 @@ func _on_solar2_changed(v: float) -> void:
 	print("Dashboard: solar2 =", v)
 	if gauge:
 		gauge.set("value", v)
+
+
+func _on_back_pressed() -> void:
+	# Go straight to main menu from here (no parent needed).
+	if ResourceLoader.exists(MAIN_SCENE_PATH):
+		get_tree().change_scene_to_file(MAIN_SCENE_PATH)
+		# Optional: keep the signal if any parent also listens.
+	else:
+		push_error("Main scene not found: " + MAIN_SCENE_PATH)
