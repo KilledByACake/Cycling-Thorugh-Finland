@@ -23,7 +23,7 @@ layout_mode = 2
 
 [node name="Picture" type="TextureRect" parent="VBoxContainer/Speed" unique_id=1717586164]
 layout_mode = 2
-texture = ExtResource("2_dnerv")
+texture = ExtResource("3_0dhui")
 expand_mode = 2
 stretch_mode = 4
 
@@ -38,7 +38,7 @@ layout_mode = 2
 
 [node name="Picture" type="TextureRect" parent="VBoxContainer/Energy" unique_id=1524677923]
 layout_mode = 2
-texture = ExtResource("3_0dhui")
+texture = ExtResource("2_dnerv")
 expand_mode = 2
 stretch_mode = 4
 
