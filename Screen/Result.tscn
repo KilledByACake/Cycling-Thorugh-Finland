@@ -2,8 +2,8 @@
 
 [ext_resource type="Script" uid="uid://ddmyeee3qgkf7" path="res://Code/Screens/result.gd" id="1_l2t1i"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_b23m6"]
-[ext_resource type="StyleBox" uid="uid://csn6mu6bm258" path="res://Style/button_design.tres" id="3_b23m6"]
-[ext_resource type="StyleBox" uid="uid://br4l54domtmsh" path="res://Style/button_pressed.tres" id="4_jehiq"]
+[ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="5_76ab5"]
+[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="6_6vue2"]
 
 [node name="ResultScreen" type="Control" unique_id=2076446682]
 layout_mode = 3
@@ -58,29 +58,42 @@ horizontal_alignment = 1
 layout_mode = 2
 theme_override_constants/separation = 100
 
-[node name="Retry" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1576396313]
+[node name="Retry" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1805243627]
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_b23m6")
 theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = ExtResource("3_b23m6")
-theme_override_styles/pressed = ExtResource("4_jehiq")
-theme_override_styles/hover = ExtResource("4_jehiq")
+theme_override_styles/normal = ExtResource("5_76ab5")
+theme_override_styles/pressed = ExtResource("6_6vue2")
+theme_override_styles/hover = ExtResource("6_6vue2")
 text = "Retry"
 
-[node name="Main Menu" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1649614579]
+[node name="Highscores" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=111174379]
 layout_mode = 2
-size_flags_horizontal = 10
+size_flags_horizontal = 4
 size_flags_vertical = 3
 theme_override_constants/h_separation = 0
 theme_override_fonts/font = ExtResource("2_b23m6")
 theme_override_font_sizes/font_size = 80
-theme_override_styles/normal = ExtResource("3_b23m6")
-theme_override_styles/pressed = ExtResource("4_jehiq")
-theme_override_styles/hover = ExtResource("4_jehiq")
+theme_override_styles/normal = ExtResource("5_76ab5")
+theme_override_styles/pressed = ExtResource("6_6vue2")
+theme_override_styles/hover = ExtResource("6_6vue2")
+text = "Highscores"
+
+[node name="Main Menu" type="Button" parent="CenterContainer/VBoxContainer/HBoxContainer" unique_id=1257698567]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 3
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("2_b23m6")
+theme_override_font_sizes/font_size = 80
+theme_override_styles/normal = ExtResource("5_76ab5")
+theme_override_styles/pressed = ExtResource("6_6vue2")
+theme_override_styles/hover = ExtResource("6_6vue2")
 text = "Main Menu"
 
 [connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Retry" to="." method="_on_retry_pressed"]
+[connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Highscores" to="." method="_on_highscores_pressed"]
 [connection signal="pressed" from="CenterContainer/VBoxContainer/HBoxContainer/Main Menu" to="." method="_on_main_menu_pressed"]

@@ -143,7 +143,7 @@ theme_override_font_sizes/font_size = 80
 theme_override_styles/normal = ExtResource("6_itwon")
 theme_override_styles/pressed = ExtResource("7_u4se4")
 theme_override_styles/hover = ExtResource("7_u4se4")
-text = "Start Game"
+text = "Main Menu"
 
 [connection signal="pressed" from="VBoxContainer/TopButtons/Left" to="." method="_on_left_pressed"]
 [connection signal="pressed" from="VBoxContainer/TopButtons/Right" to="." method="_on_right_pressed"]

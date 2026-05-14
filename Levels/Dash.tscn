@@ -1,0 +1,779 @@
+[gd_scene format=3 uid="uid://gxjchy8debtb"]
+
+[ext_resource type="Script" uid="uid://db7k7b1h261c8" path="res://Code/Dashboard/dashboard.gd" id="1_tekbw"]
+[ext_resource type="Shader" uid="uid://dcr6cuhcanm0l" path="res://Style/Dashboard.gdshader" id="2_7lafj"]
+[ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="3_riqyx"]
+[ext_resource type="StyleBox" uid="uid://dnybv2xh3fuif" path="res://Style/dashboard_box_style.tres" id="4_6lref"]
+[ext_resource type="Script" uid="uid://dajbatrv1reqc" path="res://Code/Dashboard/pedal_gauge.gd" id="5_bdv5b"]
+[ext_resource type="Shader" uid="uid://dsrc3r41a1gn7" path="res://Style/bar.gdshader" id="6_ebf71"]
+[ext_resource type="Script" uid="uid://borcxkl28avco" path="res://Code/Dashboard/wind_speed_dashboard.gd" id="7_faeja"]
+[ext_resource type="Script" uid="uid://b3q1bgdf0qjr1" path="res://Code/Dashboard/solar_data.gd" id="8_jlyio"]
+[ext_resource type="Script" uid="uid://icagaf3tjpmn" path="res://Code/Dashboard/solar_gauge.gd" id="9_1yd17"]
+[ext_resource type="Script" uid="uid://dvb7d04ijuepw" path="res://Code/Dashboard/windmill_gauge.gd" id="10_0xs22"]
+[ext_resource type="Script" uid="uid://bqqertitopswr" path="res://Code/Dashboard/smartphone_dashboard_message.gd" id="11_fgyie"]
+[ext_resource type="StyleBox" uid="uid://cvu4ngrn040ui" path="res://Style/button_default_smaller.tres" id="12_nw4u7"]
+[ext_resource type="StyleBox" uid="uid://htniysebktkw" path="res://Style/button_smaller_hover_pressed.tres" id="13_xwfi5"]
+[ext_resource type="Texture2D" uid="uid://lt01meykgidg" path="res://Images/Idle Objects/Spritesheets/Windmill-spritesheet.png" id="14_xkkbo"]
+[ext_resource type="Script" uid="uid://pa0sy78820m7" path="res://Code/animated_sprite_2d.gd" id="15_bucke"]
+[ext_resource type="Texture2D" uid="uid://dyqbpmqvm73lk" path="res://Images/Design/Layer3/Layer3_Slice_12.png" id="16_4qcak"]
+[ext_resource type="Script" uid="uid://bcyuokv2cftbc" path="res://Levels/control.gd" id="17_viyk0"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n2g2g"]
+shader = ExtResource("2_7lafj")
+shader_parameter/color_dark = Color(0.18039216, 0.23529412, 0.30588236, 1)
+shader_parameter/color_light = Color(0.5019608, 0.73333335, 0.76862746, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_bdl2f"]
+corner_radius_top_left = 24
+corner_radius_top_right = 24
+corner_radius_bottom_right = 24
+corner_radius_bottom_left = 24
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ux4mo"]
+shader = ExtResource("6_ebf71")
+shader_parameter/col_left = Color(0.3, 0.75, 0.2, 1)
+shader_parameter/col_mid = Color(0.9, 0.85, 0.4, 1)
+shader_parameter/col_right = Color(0.9, 0.25, 0.15, 1)
+shader_parameter/corner_px = 24.0
+shader_parameter/rect_size = Vector2(600, 48)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_v48c6"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(778, 0, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_8xj7h"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(2334, 0, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pp23k"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(0, 1273, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wk8sf"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(1556, 1273, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_xwwd1"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(3112, 1273, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7ymlh"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(778, 2546, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a6c22"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(2334, 2546, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ogdq2"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(0, 3819, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1ye3c"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(1556, 3819, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_p4k6u"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(3112, 3819, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rs3jv"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(778, 5092, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a4de0"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(2334, 5092, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bhw6r"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(778, 0, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wex3b"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(2334, 0, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_oxkh7"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(0, 1273, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_myswu"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(1556, 1273, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7tlnh"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(3112, 1273, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jfsi8"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(778, 2546, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_cwejb"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(2334, 2546, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wffon"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(0, 3819, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ppqh3"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(1556, 3819, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yol6p"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(3112, 3819, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5knl"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(778, 5092, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kxhh3"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(2334, 5092, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_x855k"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(778, 0, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uhxn1"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(2334, 0, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2myfb"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(0, 1273, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7na5w"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(1556, 1273, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1iy4n"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(3112, 1273, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_n7nlt"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(778, 2546, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a8jqk"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(2334, 2546, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_yg38b"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(0, 3819, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_wwlwj"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(1556, 3819, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7aq5e"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(3112, 3819, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6345f"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(778, 5092, 778, 1273)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_04hmy"]
+atlas = ExtResource("14_xkkbo")
+region = Rect2(2334, 5092, 778, 1273)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_cwejb"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_v48c6")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_8xj7h")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_pp23k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wk8sf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_xwwd1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7ymlh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a6c22")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ogdq2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1ye3c")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_p4k6u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rs3jv")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a4de0")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bhw6r")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wex3b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_oxkh7")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_myswu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7tlnh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jfsi8")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_cwejb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wffon")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ppqh3")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yol6p")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q5knl")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kxhh3")
+}],
+"loop": true,
+"name": &"default",
+"speed": 4.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_x855k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uhxn1")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2myfb")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7na5w")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1iy4n")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_n7nlt")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a8jqk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_yg38b")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_wwlwj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7aq5e")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6345f")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_04hmy")
+}],
+"loop": true,
+"name": &"faster",
+"speed": 12.0
+}]
+
+[node name="Dashboard" type="Control" unique_id=398791287]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_tekbw")
+gauge_path = NodePath("MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer/SolarGauge")
+solar_data_path = NodePath("MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer/SolarData")
+
+[node name="BackgroundColor" type="ColorRect" parent="." unique_id=309210946]
+material = SubResource("ShaderMaterial_n2g2g")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1197755579]
+layout_mode = 1
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 1932.0
+offset_bottom = -18.0
+grow_vertical = 2
+theme_override_constants/margin_left = 80
+theme_override_constants/margin_top = 80
+theme_override_constants/margin_right = 80
+theme_override_constants/margin_bottom = 60
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1349834310]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 70
+
+[node name="Header" type="HBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=599118569]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="MarginContainer/VBoxContainer/Header" unique_id=1799983815]
+layout_mode = 2
+theme_override_colors/font_color = Color(2.3050766, 2.853377, 1.4230278, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 100
+text = "Energy Dashboard"
+
+[node name="SessionStatusLabel" type="Label" parent="MarginContainer/VBoxContainer/Header" unique_id=424069106]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer" unique_id=425017192]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1252285866]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/h_separation = 50
+theme_override_constants/v_separation = 50
+columns = 3
+
+[node name="SpeedCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=389866373]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = ExtResource("4_6lref")
+
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/SpeedCard" unique_id=922265302]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin" unique_id=670273764]
+custom_minimum_size = Vector2(250, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox" unique_id=1595972417]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 32
+text = "Your Speed"
+
+[node name="ValueRow" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox" unique_id=1682665357]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 10
+theme_override_constants/separation = 20
+alignment = 1
+
+[node name="LabelSpeed" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox/ValueRow" unique_id=784942824]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_constants/line_spacing = 0
+theme_override_constants/shadow_outline_size = 0
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 130
+text = "20"
+justification_flags = 160
+
+[node name="UnitLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/SpeedCard/CardMargin/CardVBox/ValueRow" unique_id=66286659]
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 8
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 20
+text = "km/h"
+
+[node name="EnergyCard" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1669860497]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = ExtResource("4_6lref")
+
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard" unique_id=2106141563]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin" unique_id=1948774858]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox" unique_id=2107182125]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 32
+text = "Pedal Power"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox" unique_id=1672235449]
+layout_mode = 2
+size_flags_vertical = 10
+theme_override_constants/separation = 35
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer" unique_id=2017145322]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="PedalGauge" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer/HBoxContainer" unique_id=934320896]
+custom_minimum_size = Vector2(250, 35)
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_bdl2f")
+script = ExtResource("5_bdv5b")
+value = 50.0
+
+[node name="Control" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer/HBoxContainer/PedalGauge" unique_id=559155237]
+layout_mode = 2
+
+[node name="Bar" type="ColorRect" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer/HBoxContainer/PedalGauge/Control" unique_id=1972851822]
+material = SubResource("ShaderMaterial_ux4mo")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_bottom = 5.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Needle" type="ColorRect" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer/HBoxContainer/PedalGauge/Control" unique_id=205373686]
+z_index = 100
+layout_mode = 0
+offset_left = 19.0
+offset_right = 31.0
+offset_bottom = 40.0
+color = Color(0.16470589, 0.16470589, 0.16470589, 1)
+
+[node name="LabelPower" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer" unique_id=1702608269]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 30
+text = "power"
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer" unique_id=1670023840]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer/HBoxContainer2" unique_id=1227170154]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 20
+text = "0 watt"
+
+[node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/EnergyCard/CardMargin/CardVBox/VBoxContainer/HBoxContainer2" unique_id=2087834937]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 20
+text = "500 watts"
+
+[node name="Charge" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=421791004]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = ExtResource("4_6lref")
+
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge" unique_id=565657748]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge/CardMargin" unique_id=1491127918]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge/CardMargin/CardVBox" unique_id=1142816821]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 38
+text = "you are producing power equals to 3.44 m wind turbine diameter"
+autowrap_mode = 2
+max_lines_visible = 3
+script = ExtResource("7_faeja")
+
+[node name="Solarpanel" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1606271807]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+theme_override_styles/panel = ExtResource("4_6lref")
+
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel" unique_id=1627225681]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin" unique_id=1516520693]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 35
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox" unique_id=1159070936]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 32
+text = "Solarpanel"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox" unique_id=570483156]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 13
+
+[node name="SolarData" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=1227953656]
+unique_name_in_owner = true
+layout_mode = 2
+script = ExtResource("8_jlyio")
+poll_interval_sec = 5.0
+
+[node name="SolarGauge" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=1459114678]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 125)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("9_1yd17")
+value = 50.0
+margin_px = 12.0
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=964211574]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer/HBoxContainer3" unique_id=255692258]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 20
+text = "0 watt"
+
+[node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer/HBoxContainer3" unique_id=1477551578]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 20
+text = "2400 watts"
+
+[node name="Windmill" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1229265380]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = ExtResource("4_6lref")
+
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Windmill" unique_id=1627423445]
+layout_mode = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 25
+theme_override_constants/margin_right = 25
+theme_override_constants/margin_bottom = 25
+
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Windmill/CardMargin" unique_id=1717403656]
+layout_mode = 2
+theme_override_constants/separation = 35
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox" unique_id=721557130]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 32
+text = "Windmill"
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox" unique_id=1208683604]
+layout_mode = 2
+theme_override_constants/separation = 13
+
+[node name="WindmillGauge" type="Control" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox/VBoxContainer" unique_id=2024645073]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(250, 125)
+layout_mode = 2
+size_flags_vertical = 0
+script = ExtResource("10_0xs22")
+value = 50.0
+arc_color = Color(0.11764706, 0.29411766, 0.46666667, 1)
+margin_px = 12.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox/VBoxContainer" unique_id=308099465]
+layout_mode = 2
+size_flags_vertical = 0
+
+[node name="LowUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox/VBoxContainer/HBoxContainer2" unique_id=1690713820]
+layout_mode = 2
+size_flags_horizontal = 2
+size_flags_vertical = 8
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 20
+text = "0 watt"
+
+[node name="HighUnitLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Windmill/CardMargin/CardVBox/VBoxContainer/HBoxContainer2" unique_id=1495033521]
+layout_mode = 2
+size_flags_horizontal = 10
+size_flags_vertical = 0
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 20
+text = "500 watts"
+
+[node name="Charge2" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1883928027]
+custom_minimum_size = Vector2(500, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_styles/panel = ExtResource("4_6lref")
+
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge2" unique_id=1185806984]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge2/CardMargin" unique_id=1288551999]
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_constants/separation = 10
+
+[node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Charge2/CardMargin/CardVBox" unique_id=1420699027]
+custom_minimum_size = Vector2(450, 0)
+layout_mode = 2
+size_flags_horizontal = 0
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 38
+text = "Your smart phone could be fully charged in 18.5 minutes."
+autowrap_mode = 2
+script = ExtResource("11_fgyie")
+
+[node name="Attention" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1368259523]
+visible = false
+layout_mode = 2
+theme_override_styles/panel = ExtResource("4_6lref")
+
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/Attention" unique_id=603207126]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/Attention/CardMargin" unique_id=345325100]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/Attention/CardMargin/CardVBox" unique_id=1494563455]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 35
+text = "Here is some information written that might be important for the cycler"
+autowrap_mode = 2
+
+[node name="Back" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=904147690]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_constants/h_separation = 0
+theme_override_fonts/font = ExtResource("3_riqyx")
+theme_override_font_sizes/font_size = 60
+theme_override_styles/normal = ExtResource("12_nw4u7")
+theme_override_styles/pressed = ExtResource("13_xwfi5")
+theme_override_styles/hover = ExtResource("13_xwfi5")
+text = "Back"
+icon_alignment = 1
+metadata/_edit_use_anchors_ = true
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=948401926]
+position = Vector2(1821, 694.4667)
+scale = Vector2(0.85347027, 0.83508474)
+sprite_frames = SubResource("SpriteFrames_cwejb")
+animation = &"faster"
+autoplay = "default"
+frame_progress = 0.3296865
+script = ExtResource("15_bucke")
+
+[node name="Meteoria2" type="Sprite2D" parent="." unique_id=749458229]
+position = Vector2(588, 927.00006)
+scale = Vector2(0.5172771, 0.47339708)
+texture = ExtResource("16_4qcak")
+
+[node name="Meteoria" type="Control" parent="." unique_id=2100880608]
+visible = false
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+script = ExtResource("17_viyk0")
+
+[node name="powerSolar" type="Label" parent="Meteoria" unique_id=1299442263]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 303.0
+offset_top = 1434.0
+offset_right = 723.0
+offset_bottom = 1665.0
+text = "solar power"
+
+[node name="powerWind" type="Label" parent="Meteoria" unique_id=1954618943]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 316.0
+offset_top = 1643.0
+offset_right = 780.0
+offset_bottom = 1817.0
+text = "Wind power"
+
+[connection signal="pressed" from="MarginContainer/VBoxContainer/VBoxContainer/Back" to="." method="_on_back_pressed"]
