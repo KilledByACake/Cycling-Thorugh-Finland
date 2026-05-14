@@ -32,6 +32,8 @@ func _ready() -> void:
 	dir.list_dir_end()
 	chunks.sort()
 	
+	print("first chunk: ", chunks[0])
+	
 	print(folder_path, " -> ", chunks.size(), " chunks found")
 
 # Runs every frame; loads needed chunks and unloads those far behind.
