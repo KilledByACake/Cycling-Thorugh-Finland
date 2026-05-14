@@ -39,12 +39,15 @@ func _ready() -> void:
 # Runs every frame; loads needed chunks and unloads those far behind.
 func _process(_delta: float) -> void:
 	if chunks.is_empty() or camera == null:
+		print("Bailing - chunks: ", chunks.size(), "camera: ", camera)
 		return
 	
 	var cam_x: float = camera.global_position.x
 	
 	# Determine which chunk index is currently needed based on camera X.
 	var needed: int = max(0, int((cam_x - start_x) / chunk_width))
+	
+	print ("needed:", needed, "laoded: ", loaded.keys())
 	
 	# Load one behind and a few ahead of the camera.
 	for i in range(max(0, needed - 1), min(chunks.size(), needed + chunks_ahead)):
@@ -54,6 +57,7 @@ func _process(_delta: float) -> void:
 	# Unload chunks far behind the camera.
 	for key in loaded.keys().duplicate():
 		if key < needed - 1:
+			print("unlaoding chunck ", key, " because needed is ", needed)
 			loaded[key].queue_free()
 			loaded.erase(key)
 
