@@ -923,17 +923,17 @@ text = "Back"
 icon_alignment = 1
 metadata/_edit_use_anchors_ = true
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=948401926]
-position = Vector2(1821, 694.4667)
-scale = Vector2(0.85347027, 0.83508474)
+[node name="Windmill" type="AnimatedSprite2D" parent="." unique_id=948401926]
+position = Vector2(1773, 700.00006)
+scale = Vector2(1.4134715, 1.3830223)
 sprite_frames = SubResource("SpriteFrames_cwejb")
 autoplay = "default"
-frame_progress = 0.10293749
+frame_progress = 0.8151284
 script = ExtResource("3_yiku2")
 
 [node name="Meteoria2" type="Sprite2D" parent="." unique_id=749458229]
-position = Vector2(588, 927.00006)
-scale = Vector2(0.5172771, 0.47339708)
+position = Vector2(645.4094, 978.5518)
+scale = Vector2(0.5467935, 0.50040966)
 texture = ExtResource("6_be544")
 
 [node name="Meteoria" type="Control" parent="." unique_id=2100880608]
