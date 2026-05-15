@@ -1897,6 +1897,7 @@ v_offset = -170.0
 script = ExtResource("18_dasy0")
 start_marker_path = NodePath("../PathLeft")
 end_marker_path = NodePath("../PathRight")
+wait_frames_for_curve = 0
 
 [node name="Player" parent="Path2D/PathFollow2D" unique_id=801071611 instance=ExtResource("16_n8fgn")]
 position = Vector2(2901.1965, -358.85217)

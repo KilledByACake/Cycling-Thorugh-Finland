@@ -43,6 +43,7 @@ enabled=PackedStringArray("res://addons/rmsmartshape/plugin.cfg")
 player=""
 ui=""
 terrain=""
+unfreezable=""
 
 [layer_names]
 

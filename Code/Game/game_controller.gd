@@ -165,12 +165,17 @@ func _process(delta: float) -> void:
 		_enable_timer_blink(should_blink)
 		_update_timer_blink(delta)
 
-	# Fallback win condition if PathRight is a Node2D (no Area2D)
-	var goal_node: Node2D = _resolve_node_safe(goal_node_path) as Node2D
-	if not round_finished and goal_node != null:
-		var player_nd: Node2D = get_tree().get_first_node_in_group("player") as Node2D
-		if player_nd != null and player_nd.global_position.x >= goal_node.global_position.x:
-			_finish_as_victory()
+	# Prefer PathFollow2D end lock; fallback to X-cross
+	if not round_finished:
+		var player_nd := get_tree().get_first_node_in_group("player") as Node2D
+		if player_nd:
+			var pf := player_nd.get_parent()
+			if pf is PathFollow2D and (pf as PathFollow2D).input_locked:
+				_finish_as_victory()
+		else:
+			var goal_node: Node2D = _resolve_node_safe(goal_node_path) as Node2D
+			if goal_node != null and player_nd.global_position.x >= goal_node.global_position.x:
+				_finish_as_victory()
 
 # Integrate cycling energy (W → kJ) into the single total, then grant whole kJ to the score.
 func _integrate_power_energy(delta: float) -> void:
@@ -270,12 +275,13 @@ func _finish_round() -> void:
 	_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
-	var won: bool = false  # Only PathRight triggers victory
-	_freeze_world()
-	emit_signal("round_over", won)
-	await _show_banner_overlay(won)
-	_show_result_screen_overlay(won, energy_points, TARGET_ENERGY)
 
+	_set_ui_visible(false)
+	_freeze_world()
+	emit_signal("round_over", false)
+	await _show_banner_overlay(false)  # GameOver.tscn
+	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
+	
 # Inactivity detection
 func _setup_inactivity_detection() -> void:
 	inactivity_warning_timer = Timer.new()
@@ -326,11 +332,13 @@ func _game_over_due_to_inactivity() -> void:
 	_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
+
+	_set_ui_visible(false)
 	_freeze_world()
 	emit_signal("round_over", false)
-	await _show_banner_overlay(false)
+	await _show_banner_overlay(false)  # GameOver.tscn
 	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
-
+	
 # Connect goal Area2D once
 func _connect_goal_area() -> void:
 	var area: Area2D = _resolve_node_safe(goal_area_path) as Area2D
@@ -351,38 +359,37 @@ func _finish_as_victory() -> void:
 	round_finished = true
 
 	# Stop timers/blink and reset colors
-	if game_timer:
-		game_timer.stop()
-	if inactivity_warning_timer:
-		inactivity_warning_timer.stop()
-	if inactivity_timer:
-		inactivity_timer.stop()
+	if game_timer: game_timer.stop()
+	if inactivity_warning_timer: inactivity_warning_timer.stop()
+	if inactivity_timer: inactivity_timer.stop()
 	_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
 
-	# 1) Lock path movement where we are, do NOT freeze the player yet (Celebrate must play)
+	# Lock path movement where we are; do NOT freeze yet (Celebrate must play)
 	var player := get_tree().get_first_node_in_group("player")
 	if player != null:
 		var pf := player.get_parent()
 		if pf is PathFollow2D:
 			pf.input_locked = true
 			pf.speed_x = 0.0
-			# keep physics on so the player keeps its position while animating
 
-	# 2) Trigger Celebrate and wait for it to finish
+	# Trigger Celebrate and wait for it to finish (if available)
 	if player and player.has_method("start_celebrate"):
 		player.call("start_celebrate")
 		var spr := player.get("sprite") as AnimatedSprite2D
 		if spr and spr.is_playing():
 			await spr.animation_finished
 
-	# 3) Freeze the world (aurora excluded by step 3 below), then Victory then Result
+	# Hide UI while overlays are on top
+	_set_ui_visible(false)
+
+	# Freeze everything except aurora/UI layers, then show overlays
 	_freeze_world()
 	emit_signal("round_over", true)
-	await _show_banner_overlay(true)   # shows Victory.tscn for BANNER_DURATION_SEC
+	await _show_banner_overlay(true)   # Victory.tscn
 	_show_result_screen_overlay(true, energy_points, TARGET_ENERGY)
-
+	
 # Blink helpers
 func _enable_timer_blink(v: bool) -> void:
 	if _timer_blink_active == v:
@@ -529,6 +536,12 @@ func show_popup_message(text: String, _id: String = "") -> void:
 			panel.queue_free()
 	)
 
+# UI visibility helper
+func _set_ui_visible(v: bool) -> void:
+	var ui := get_node_or_null("UI") as CanvasItem
+	if ui:
+		ui.visible = v
+		
 # UI resolution
 func _resolve_ui_refs() -> void:
 	ui_root = get_node_or_null("UI")
