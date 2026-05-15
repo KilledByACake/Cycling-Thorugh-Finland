@@ -14,6 +14,7 @@ signal round_over(won: bool)
 # Goal: win by reaching PathRight
 @export_node_path("Area2D") var goal_area_path: NodePath = NodePath("Path2D/PathRight")
 @export_node_path("Node2D") var goal_node_path: NodePath = NodePath("Path2D/PathRight")
+@export_range(0.1, 5.0, 0.05) var speed_multiplier: float = 1.5
 
 # End-flow config
 @export var celebrate_max_wait_sec: float = 2.0
@@ -123,11 +124,16 @@ func _process(delta: float) -> void:
 
 	var power_w: float = float(GlobalWahoo.power)
 	var speed_kmh: float = float(GlobalWahoo.speed)
+	
+	# After you’ve decided on speed_kmh
+	speed_kmh *= speed_multiplier
+	GlobalWahoo.speed = speed_kmh
 
 	# Always compute a synthesized speed from power
 	var synth_kmh: float = 0.0
 	if power_w > synth_speed_deadzone_w:
 		synth_kmh = power_w * synth_speed_gain
+		synth_kmh *= speed_multiplier  # boost only synth
 
 	# Take over with synthesized speed if the sensor speed is low or stale
 	if speed_kmh < synth_takeover_threshold_kmh and synth_kmh > speed_kmh:
