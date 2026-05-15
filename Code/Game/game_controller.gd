@@ -171,12 +171,15 @@ func _process(delta: float) -> void:
 	if not round_finished:
 		var player_nd := get_tree().get_first_node_in_group("player") as Node2D
 		if player_nd:
+			var reached := false
 			var pf := player_nd.get_parent()
 			if pf is PathFollow2D and (pf as PathFollow2D).input_locked:
-				_finish_as_victory()
-		else:
-			var goal_node: Node2D = _resolve_node_safe(goal_node_path) as Node2D
-			if goal_node != null and player_nd.global_position.x >= goal_node.global_position.x:
+				reached = true
+			else:
+				var goal_node := _resolve_node_safe(goal_node_path) as Node2D
+				if goal_node != null and player_nd.global_position.x >= goal_node.global_position.x:
+					reached = true
+			if reached:
 				_finish_as_victory()
 
 # Integrate cycling energy (W → kJ) into the single total, then grant whole kJ to the score.
@@ -391,7 +394,7 @@ func _finish_as_victory() -> void:
 		await get_tree().create_timer(celebrate_max_wait_sec).timeout
 
 	# Hide UI while overlays are on top (optional; add this helper if you want UI hidden)
-	# _set_ui_visible(false)
+	_set_ui_visible(false)
 
 	# Freeze everything except nodes in "unfreezable", then show overlays
 	_freeze_world()
