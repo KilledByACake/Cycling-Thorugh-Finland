@@ -496,8 +496,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_wk8sf")
-gauge_path = NodePath("MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer/SolarGauge")
-solar_data_path = NodePath("MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer/SolarData")
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=309210946]
 material = SubResource("ShaderMaterial_n2g2g")
@@ -859,30 +857,6 @@ theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
 text = "500 watts"
 
-[node name="Attention" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1368259523]
-visible = false
-layout_mode = 2
-theme_override_styles/panel = ExtResource("6_v48c6")
-
-[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Attention" unique_id=603207126]
-layout_mode = 2
-theme_override_constants/margin_left = 16
-theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
-theme_override_constants/margin_bottom = 16
-
-[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Attention/CardMargin" unique_id=345325100]
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Attention/CardMargin/CardVBox" unique_id=1494563455]
-layout_mode = 2
-theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
-theme_override_fonts/font = ExtResource("3_sqkkj")
-theme_override_font_sizes/font_size = 35
-text = "Here is some information written that might be important for the cycler"
-autowrap_mode = 2
-
 [node name="Smartphone" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1883928027]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
@@ -912,6 +886,29 @@ text = "Funfact!
 You need to cycle 18.5 more minutes to charge a phone."
 autowrap_mode = 2
 script = ExtResource("10_pp23k")
+
+[node name="Attention" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1368259523]
+layout_mode = 2
+theme_override_styles/panel = ExtResource("6_v48c6")
+
+[node name="CardMargin" type="MarginContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/Attention" unique_id=603207126]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="CardVBox" type="VBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/Attention/CardMargin" unique_id=345325100]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TextLabel" type="Label" parent="MarginContainer/VBoxContainer/VBoxContainer/Attention/CardMargin/CardVBox" unique_id=1494563455]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
+theme_override_fonts/font = ExtResource("3_sqkkj")
+theme_override_font_sizes/font_size = 35
+text = "Here is some information written that might be important for the cycler"
+autowrap_mode = 2
 
 [node name="Back" type="Button" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=904147690]
 layout_mode = 2
