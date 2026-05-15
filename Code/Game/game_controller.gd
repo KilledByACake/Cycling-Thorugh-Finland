@@ -14,7 +14,7 @@ signal round_over(won: bool)
 # Goal: win by reaching PathRight
 @export_node_path("Area2D") var goal_area_path: NodePath = NodePath("Path2D/PathRight")
 @export_node_path("Node2D") var goal_node_path: NodePath = NodePath("Path2D/PathRight")
-@export_range(0.1, 5.0, 0.05) var speed_multiplier: float = 1.2
+@export_range(0.1, 5.0, 0.05) var speed_multiplier: float = 1.0
 
 # End-flow config
 @export var celebrate_max_wait_sec: float = 2.0
@@ -180,19 +180,27 @@ func _process(delta: float) -> void:
 			if reached:
 				_finish_as_victory()
 
-# Integrate cycling energy (W → kJ) into the single total; grant whole kJ to the score.
+# Integrate cycling energy (W → kJ) into the running total.
+# IMPORTANT: Do NOT call add_energy() here, or you will double-count the total.
+# We only award whole kJ to energy_points so UI goals can still use integers.
 func _integrate_power_energy(delta: float) -> void:
 	if round_finished:
 		return
+
 	var power_w: float = float(GlobalWahoo.power)
 	if power_w <= 0.0:
 		return
+
+	# Integrate power (W * s) to energy in kJ
 	energy_kj_total += power_w * delta / 1000.0
-	var pedaled_int: int = int(floor(energy_kj_total))
-	var delta_int: int = pedaled_int - _energy_ui_last_int
+
+	# Award integer points for whole kJ only (without changing energy_kj_total again)
+	var whole_kj: int = int(floor(energy_kj_total))
+	var delta_int: int = whole_kj - _energy_ui_last_int
 	if delta_int > 0:
-		_energy_ui_last_int = pedaled_int
-		add_energy(delta_int)
+		_energy_ui_last_int = whole_kj
+		energy_points += delta_int
+		_refresh_energy_ui()
 
 # External: increase energy (e.g. pickups). Adds to the same total as pedaling.
 func add_energy(amount: int) -> void:
