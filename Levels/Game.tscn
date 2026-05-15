@@ -1807,7 +1807,7 @@ script = ExtResource("16_dasy0")
 terrain_path = NodePath("../Terrain2")
 
 [node name="PathRight" type="Node2D" parent="Path2D" unique_id=2010174335]
-position = Vector2(2000, 1222)
+position = Vector2(113700, 1222)
 
 [node name="PathLeft" type="Node2D" parent="Path2D" unique_id=187768649]
 position = Vector2(1707, 1237)

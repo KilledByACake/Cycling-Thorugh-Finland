@@ -6,6 +6,9 @@ signal round_over(won: bool)
 @export_node_path("Node2D") var rail_path: NodePath
 @export var trigger_path_rebuild: bool = true
 @export var randomize_seed_on_play: bool = true
+# Fallback: synthesize speed from power if sensor speed is 0
+@export var synth_speed_gain: float = 0.12        # km/h per Watt (tune 0.08–0.20)
+@export var synth_speed_deadzone_w: float = 1.0   # ignore tiny power noise
 
 # Goal: win by reaching PathRight
 @export_node_path("Area2D") var goal_area_path: NodePath = NodePath("Path2D/PathRight")
@@ -120,6 +123,12 @@ func _process(delta: float) -> void:
 	# Read sensor values directly (typed)
 	var power_w: float = float(GlobalWahoo.power)
 	var speed_kmh: float = float(GlobalWahoo.speed)
+	
+		# If the device isn't sending speed, synthesize speed from power (so PF can move)
+	if speed_kmh <= 0.01 and power_w > synth_speed_deadzone_w:
+		speed_kmh = power_w * synth_speed_gain
+		# Optional: publish the synthesized speed so anything else (PF, HUD) sees it
+		GlobalWahoo.speed = speed_kmh
 
 	# Integrate pedaling energy (W*s/1000 -> kJ). Grant whole kJ to score via add_energy.
 	_integrate_power_energy(delta)
@@ -396,15 +405,20 @@ func _show_banner_overlay(won: bool) -> void:
 	if is_instance_valid(banner):
 		banner.queue_free()
 
+# Shows the result screen overlay and passes result data.
 func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
+	# Always hide the HUD while Result is on screen
+	_hide_ui()
+
 	_ensure_overlay_layer()
 	var rs: Control = RESULT_SCREEN_SCENE.instantiate() as Control
 	overlay_layer.add_child(rs)
+
 	var player_name_text: String = ""
 	if get_tree().root.has_meta("player_name"):
 		player_name_text = str(get_tree().root.get_meta("player_name"))
-	rs.call_deferred("set_result", won, energy, target, player_name_text)
 
+	rs.call_deferred("set_result", won, energy, target, player_name_text)
 # Popup helper
 func show_popup_message(text: String, _id: String = "") -> void:
 	_ensure_overlay_layer()
