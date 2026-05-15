@@ -986,7 +986,7 @@ icon_alignment = 1
 metadata/_edit_use_anchors_ = true
 
 [node name="Windmill" type="AnimatedSprite2D" parent="." unique_id=948401926]
-position = Vector2(1773, 700.00006)
+position = Vector2(1722.0001, 702)
 scale = Vector2(1.4134715, 1.3830223)
 sprite_frames = SubResource("SpriteFrames_cwejb")
 autoplay = "default"
