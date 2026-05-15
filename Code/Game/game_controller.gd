@@ -9,7 +9,8 @@ signal round_over(won: bool)
 # Fallback: synthesize speed from power if sensor speed is 0
 @export var synth_speed_gain: float = 0.12        # km/h per Watt (tune 0.08–0.20)
 @export var synth_speed_deadzone_w: float = 1.0   # ignore tiny power noise
-
+# Use synthesized speed if the sensor speed is below this (km/h)
+@export var synth_takeover_threshold_kmh: float = 3.0
 # Goal: win by reaching PathRight
 @export_node_path("Area2D") var goal_area_path: NodePath = NodePath("Path2D/PathRight")
 @export_node_path("Node2D") var goal_node_path: NodePath = NodePath("Path2D/PathRight")
@@ -120,15 +121,20 @@ func _process(delta: float) -> void:
 	if round_finished:
 		return
 
-	# Read sensor values directly (typed)
 	var power_w: float = float(GlobalWahoo.power)
 	var speed_kmh: float = float(GlobalWahoo.speed)
-	
-		# If the device isn't sending speed, synthesize speed from power (so PF can move)
-	if speed_kmh <= 0.01 and power_w > synth_speed_deadzone_w:
-		speed_kmh = power_w * synth_speed_gain
-		# Optional: publish the synthesized speed so anything else (PF, HUD) sees it
-		GlobalWahoo.speed = speed_kmh
+
+	# Always compute a synthesized speed from power
+	var synth_kmh: float = 0.0
+	if power_w > synth_speed_deadzone_w:
+		synth_kmh = power_w * synth_speed_gain
+
+	# Take over with synthesized speed if the sensor speed is low or stale
+	if speed_kmh < synth_takeover_threshold_kmh and synth_kmh > speed_kmh:
+		speed_kmh = synth_kmh
+
+	# Publish chosen speed so PF and HUD see the responsive value
+	GlobalWahoo.speed = speed_kmh
 
 	# Integrate pedaling energy (W*s/1000 -> kJ). Grant whole kJ to score via add_energy.
 	_integrate_power_energy(delta)
