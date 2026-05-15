@@ -123,45 +123,48 @@ func _process(delta: float) -> void:
 	if round_finished:
 		return
 
-	# Integrate pedaling energy (Energy.gd owns totals and emits when score integer changes)
-	var pv: Variant = GlobalWahoo.get("power")
-	var power_w: float = (float(pv) if (typeof(pv) == TYPE_FLOAT or typeof(pv) == TYPE_INT) else 0.0)
+	# Read sensor values directly (typed)
+	var power_w: float = float(GlobalWahoo.power)
+	var speed_kmh: float = float(GlobalWahoo.speed)
+
+	# Pedaling energy → Energy.gd (emits on integer change; your _on_energy_changed updates UI + energy_points)
 	Energy.integrate_power(delta, power_w)
 
-	# Activity (resets inactivity timers) by either power or speed
-	var sv: Variant = GlobalWahoo.get("speed")
-	var speed_kmh: float = (float(sv) if (typeof(sv) == TYPE_FLOAT or typeof(sv) == TYPE_INT) else 0.0)
+	# Treat either power or speed as "activity" to reset inactivity timers
 	if power_w > 1.0 or speed_kmh > 0.5:
 		_on_player_pedaled()
 
-	# Speed HUD via UI.gd if present (fallback to label)
+	# Speed HUD via UI.gd if present; fallback to raw label
 	_ui_call("set_speed", [speed_kmh])
 	if _speed_label and (ui_root == null or not ui_root.has_method("set_speed")):
 		_speed_label.text = "%.1f" % speed_kmh
 
-	# Timer HUD and blink
+	# Timer HUD + blink
 	if game_timer:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
-		_ui_call("set_timer_text", [_format_time(t)])
+		var t_txt := _format_time(t)
+		_ui_call("set_timer_text", [t_txt])
 		if timer_label and (ui_root == null or not ui_root.has_method("set_timer_text")):
-			timer_label.text = _format_time(t)
+			timer_label.text = t_txt
+
 		var should_blink: bool = (t <= timer_blink_threshold_sec) or _blink_due_to_inactivity
 		_enable_timer_blink(should_blink)
 		_update_timer_blink(delta)
 
-	# Victory detection: prefer PathFollow2D end-lock; fallback to X-cross
-	var player_nd := get_tree().get_first_node_in_group("player") as Node2D
-	if not round_finished and player_nd:
-		var reached := false
-		var pf := player_nd.get_parent()
-		if pf is PathFollow2D and (pf as PathFollow2D).input_locked:
-			reached = true
-		else:
-			var goal_node := _resolve_node_safe(goal_node_path) as Node2D
-			if goal_node != null and player_nd.global_position.x >= goal_node.global_position.x:
+	# Victory detection: prefer PathFollow2D end-lock; fallback to crossing goal_node X
+	if not round_finished:
+		var player_nd: Node2D = get_tree().get_first_node_in_group("player") as Node2D
+		if player_nd:
+			var reached: bool = false
+			var pf: Node = player_nd.get_parent()
+			if pf is PathFollow2D and (pf as PathFollow2D).input_locked:
 				reached = true
-		if reached:
-			_finish_as_victory()
+			else:
+				var goal_node: Node2D = _resolve_node_safe(goal_node_path) as Node2D
+				if goal_node != null and player_nd.global_position.x >= goal_node.global_position.x:
+					reached = true
+			if reached:
+				_finish_as_victory()
 
 # Energy: forward pickups into Energy.gd (do not handle totals here)
 func add_energy(amount: int) -> void:

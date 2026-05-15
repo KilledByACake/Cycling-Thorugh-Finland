@@ -15,6 +15,7 @@ offset_right = 959.0
 offset_bottom = 556.0
 
 [node name="PlayerNameLabel" type="Label" parent="VBoxContainer" unique_id=967513957]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 150
@@ -30,6 +31,7 @@ expand_mode = 2
 stretch_mode = 4
 
 [node name="SpeedLabel" type="Label" parent="VBoxContainer/Speed" unique_id=1956653022]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
@@ -45,12 +47,14 @@ expand_mode = 2
 stretch_mode = 4
 
 [node name="EnergyLabel" type="Label" parent="VBoxContainer/Energy" unique_id=216446171]
+unique_name_in_owner = true
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 text = "0"
 
 [node name="TimerLabel" type="Label" parent="." unique_id=192753063]
+unique_name_in_owner = true
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
