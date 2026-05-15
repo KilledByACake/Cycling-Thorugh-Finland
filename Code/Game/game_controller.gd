@@ -33,7 +33,7 @@ var _timer_blink_accum: float = 0.0
 var _timer_blink_state: bool = false
 
 # UI references (resolved at runtime)
-var ui_root: Node
+var ui_root: CanvasLayer
 var player_name_label: Label
 var timer_label: Label
 var energy_label: Label
@@ -107,12 +107,13 @@ func _spawn_terrain() -> void:
 func _process(delta: float) -> void:
 	if round_finished:
 		return
+
 	if GlobalWahoo.power > 1: # player is active
 		_on_player_pedaled()
 
-	# Update SpeedLabel every frame (reads only)
+	# Update SpeedLabel every frame (reads only; same source as Dashboard)
 	if speed_label:
-		var sp_var: Variant = GlobalWahoo.get("speed")  # Dashboard uses GlobalWahoo.speed
+		var sp_var: Variant = GlobalWahoo.get("speed")
 		var sp: float = 0.0
 		if typeof(sp_var) == TYPE_FLOAT or typeof(sp_var) == TYPE_INT:
 			sp = float(sp_var)
@@ -453,23 +454,16 @@ func show_popup_message(text: String, _id: String = "") -> void:
 
 # Finds and stores UI nodes (labels) for later updates.
 func _resolve_ui_refs() -> void:
-	# Find UI regardless of its node type (Control or CanvasLayer)
-	ui_root = get_node_or_null("UI")
-	if ui_root == null:
-		ui_root = find_child("UI", true, false)
-
-	# Resolve labels with deep search to be robust
-	if ui_root:
-		timer_label = ui_root.find_child("TimerLabel", true, false) as Label
-		player_name_label = ui_root.find_child("PlayerNameLabel", true, false) as Label
-		energy_label = ui_root.find_child("EnergyLabel", true, false) as Label
-		speed_label = ui_root.find_child("SpeedLabel", true, false) as Label
-	else:
-		# Fallback: search from the whole scene if UI wasn't found by name
-		timer_label = find_child("TimerLabel", true, false) as Label
-		player_name_label = find_child("PlayerNameLabel", true, false) as Label
-		energy_label = find_child("EnergyLabel", true, false) as Label
-		speed_label = find_child("SpeedLabel", true, false) as Label
+	# UI is a CanvasLayer instanced from UI.tscn at "UI"
+	ui_root = get_node_or_null("UI") as CanvasLayer
+	# Resolve labels by exact path inside that UI
+	timer_label = get_node_or_null("UI/VBoxContainer/TimerLabel") as Label
+	player_name_label = get_node_or_null("UI/VBoxContainer/PlayerNameLabel") as Label
+	if player_name_label == null:
+		# If your node is named "PlayerNameLabe" (without the last 'l'), fallback:
+		player_name_label = get_node_or_null("UI/VBoxContainer/PlayerNameLabe") as Label
+	energy_label = get_node_or_null("UI/VBoxContainer/Energy/EnergyLabel") as Label
+	speed_label  = get_node_or_null("UI/VBoxContainer/Speed/SpeedLabel") as Label
 
 # Ensures there is a layer to host transient overlays.
 func _ensure_overlay_layer() -> void:
