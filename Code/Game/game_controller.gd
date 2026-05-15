@@ -27,6 +27,8 @@ const GAME_OVER_SCENE: PackedScene = preload("res://Screen/GameOver.tscn")
 const YOU_WON_SCENE: PackedScene = preload("res://Screen/Victory.tscn")
 const RESULT_SCREEN_SCENE: PackedScene = preload("res://Screen/Result.tscn")
 
+@export var energy_ui_update_interval: float = 0.5
+var _energy_ui_update_accum: float = 0.0
 
 # State
 var energy_points: int = 0
@@ -130,6 +132,11 @@ func _process(delta: float) -> void:
 		return
 
 	_integrate_power_energy(delta)
+	_energy_ui_update_accum += delta
+	if _energy_ui_update_accum >= energy_ui_update_interval:
+		_energy_ui_update_accum = 0.0
+		_set_energy_label_live()
+	
 	# Activity check: power > 1 W counts as active pedaling
 	# Treat either power or speed as activity
 	var power_v: Variant = GlobalWahoo.get("power")
@@ -211,6 +218,14 @@ func _refresh_energy_ui() -> void:
 	else:
 		push_warning("EnergyLabel not found. Expected: UI/VBoxContainer/Energy/EnergyLabel or set energy_label_path.")
 
+#energy as float
+func _set_energy_label_live() -> void:
+	# Show 1 decimal live (float), but keep score logic in whole kJ.
+	if energy_label == null:
+		_resolve_ui_refs()
+	if energy_label:
+		energy_label.text = "%.1f" % energy_kj_total
+		
 # Player name to UI
 func _update_player_name_from_tree() -> void:
 	if not player_name_label:
