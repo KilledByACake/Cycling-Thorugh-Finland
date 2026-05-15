@@ -79,7 +79,8 @@ func set_result(_won: bool, energy: int, _target: int, player_name: String = "")
 			var lines: Array[String] = []
 			for i in range(top.size()):
 				var e: Dictionary = top[i] as Dictionary
-				lines.append("%d. %s — %d" % [i + 1, str(e.get("name", "?")), int(e.get("score", 0))])
+				var score := float(e.get("score", 0.0))
+				lines.append("%d. %s — %.1f" % [i + 1, str(e.get("name", "?")), score])
 			var txt: String = ""
 			for i in range(lines.size()):
 				if i > 0:
