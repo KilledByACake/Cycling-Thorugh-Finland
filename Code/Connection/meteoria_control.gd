@@ -35,7 +35,7 @@ func _al_recibir_mensaje(topic, message):
 		var v = float(message)
 		var area = 1.0
 		# P = 0.5 * 1.225 (Rho) * 1.0 (Area) * v^3
-		var p_eolica = 0.5 * 1.225 * area * pow(v, 3)
-		
+		#var p_eolica = 0.5 * 1.225 * area * pow(v, 3)
+		var p_eolica = 0.5 * 1.225 * area * pow(v, 3)*1000
 		#lbl_wind.text = "VELOCIDAD: " + str(v) + " m/s\n"
 		lbl_wind.text = "wind power " + "%.4f" % p_eolica + " W"
