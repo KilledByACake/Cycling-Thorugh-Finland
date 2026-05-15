@@ -14,7 +14,6 @@ signal round_over(won: bool)
 # Goal: win by reaching PathRight
 @export_node_path("Area2D") var goal_area_path: NodePath = NodePath("Path2D/PathRight")
 @export_node_path("Node2D") var goal_node_path: NodePath = NodePath("Path2D/PathRight")
-@export_range(0.1, 5.0, 0.05) var speed_multiplier: float = 1.0
 
 # End-flow config
 @export var celebrate_max_wait_sec: float = 2.0
@@ -124,10 +123,6 @@ func _process(delta: float) -> void:
 
 	var power_w: float = float(GlobalWahoo.power)
 	var speed_kmh: float = float(GlobalWahoo.speed)
-	
-	# After you’ve decided on speed_kmh
-	speed_kmh *= speed_multiplier
-	GlobalWahoo.speed = speed_kmh
 
 	# Always compute a synthesized speed from power
 	var synth_kmh: float = 0.0
