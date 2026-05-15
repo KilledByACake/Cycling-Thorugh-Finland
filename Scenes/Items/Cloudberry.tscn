@@ -82,7 +82,7 @@ _data = {
 [node name="Cloudberry" type="Area2D" unique_id=658099648]
 script = ExtResource("1_60vhm")
 snap_in_game = true
-message = "The gold of the forst, Cloudberry! A handful of cloudberries gives you 160 ener"
+message = "A handful of the gold of the forest, cloudberries, gives you 160 energy!"
 collector_groups = PackedStringArray("player", "radler")
 award_energy_kj = 160
 

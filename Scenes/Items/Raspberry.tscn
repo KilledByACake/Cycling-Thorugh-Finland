@@ -83,7 +83,7 @@ _data = {
 [node name="Raspberry" type="Area2D" unique_id=658099648]
 script = ExtResource("1_wrmad")
 snap_in_game = true
-message = "Raspberries gives 165 kJ per handful, for something so small, it gives a big flavor!"
+message = "Raspberries gives 165 kJ per handful!"
 collector_groups = PackedStringArray("player", "radler")
 award_energy_kj = 165
 
