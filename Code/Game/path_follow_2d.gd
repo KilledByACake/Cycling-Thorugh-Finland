@@ -6,7 +6,7 @@ extends PathFollow2D
 @export var max_speed: float = 8000.0
 
 # Map sensor speed (km/h) → path speed (pixels/sec). Tune to match scene scale
-@export var speed_kmh_to_path_speed: float = 100.0
+@export var speed_kmh_to_path_speed: float = 110.0
 
 # Extra multiplier to move faster along the path without changing HUD km/h
 @export_range(0.1, 5.0, 0.05) var path_speed_multiplier: float = 1.5
