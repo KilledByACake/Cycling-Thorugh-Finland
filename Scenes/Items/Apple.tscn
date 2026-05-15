@@ -82,9 +82,9 @@ _data = {
 [node name="Apple" type="Area2D" unique_id=658099648]
 script = ExtResource("1_6fv38")
 snap_in_game = true
-message = "A whole apple give around 90 Energy"
+message = "A bite of an apple can be 8 kJ."
 collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 150
+award_energy_kj = 8
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
 position = Vector2(-0.49999678, 0)

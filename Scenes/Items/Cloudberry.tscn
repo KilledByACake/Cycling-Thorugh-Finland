@@ -82,9 +82,9 @@ _data = {
 [node name="Cloudberry" type="Area2D" unique_id=658099648]
 script = ExtResource("1_60vhm")
 snap_in_game = true
-message = "A handful of the gold of the forest, cloudberries, gives you 160 energy!"
+message = "One piece of the forest gold, cloudberry, gives 2 kJ"
 collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 160
+award_energy_kj = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
 position = Vector2(-1.0000001, 0)

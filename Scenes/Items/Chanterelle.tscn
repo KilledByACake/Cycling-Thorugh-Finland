@@ -83,9 +83,9 @@ _data = {
 [node name="Chantrelle" type="Area2D" unique_id=658099648]
 script = ExtResource("1_8wule")
 snap_in_game = true
-message = "Chanterelle gives 45 kJ per handful. It has big aroma,  but small kJ."
+message = "A piece of Chanterelle gives 3 kJ"
 collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 45
+award_energy_kj = 3
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
 position = Vector2(-2.9999998, 0)

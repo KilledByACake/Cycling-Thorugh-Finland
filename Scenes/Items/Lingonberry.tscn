@@ -82,9 +82,9 @@ _data = {
 [node name="Lingonberry" type="Area2D" unique_id=658099648]
 script = ExtResource("1_lqrog")
 snap_in_game = true
-message = "A handful of lingonberries gives 150 kJ!"
+message = "A Lingonberry gives 1 kJ"
 collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 150
+award_energy_kj = 1
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
 position = Vector2(-0.49999678, 0)

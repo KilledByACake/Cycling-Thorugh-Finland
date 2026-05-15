@@ -85,7 +85,7 @@ script = ExtResource("1_wrmad")
 snap_in_game = true
 message = "Raspberries gives 165 kJ per handful!"
 collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = 165
+award_energy_kj = 2
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
 position = Vector2(-5, 0)

@@ -85,7 +85,7 @@ script = ExtResource("1_ds1xf")
 snap_in_game = true
 message = "Noooo! This was poisonous!  -10 kJ for you. You need to cycle slower when you see a Toadstool, if you do not wanna lose points!"
 collector_groups = PackedStringArray("player", "radler")
-award_energy_kj = -10
+award_energy_kj = -5
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=671211417]
 position = Vector2(-4.474945, 0)
