@@ -1542,6 +1542,10 @@ animations = [{
 position = Vector2(-6, 0)
 script = ExtResource("1_eca5b")
 rail_path = NodePath("Path2D")
+speed_label_path = NodePath("UI/VBoxContainer/Speed/SpeedLabel")
+energy_label_path = NodePath("UI/VBoxContainer/Energy/EnergyLabel")
+timer_label_path = NodePath("UI/TimerLabel")
+player_name_label_path = NodePath("UI/VBoxContainer/PlayerNameLabel")
 
 [node name="BackgroundScene" type="Parallax2D" parent="." unique_id=870220922]
 visible = false
