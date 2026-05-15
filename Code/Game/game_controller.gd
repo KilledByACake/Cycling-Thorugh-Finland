@@ -132,6 +132,9 @@ func _process(delta: float) -> void:
 		return
 
 	_integrate_power_energy(delta)
+	# Live HUD: show total kJ with one decimal so it feels immediate
+	if energy_label:
+		energy_label.text = "%.1f" % energy_kj_total
 	_energy_ui_update_accum += delta
 	if _energy_ui_update_accum >= energy_ui_update_interval:
 		_energy_ui_update_accum = 0.0
@@ -169,35 +172,43 @@ func _process(delta: float) -> void:
 		if player_nd != null and player_nd.global_position.x >= goal_node.global_position.x:
 			_finish_as_victory()
 
-# Integrate cycling energy from power (W) over time into kJ and update the UI when the integer changes.
-# Integrate cycling energy from power (W) over time into kJ, and grant score when the integer kJ increases.
+# Integrate cycling energy (W → kJ) into the single total, then grant whole kJ to the score.
 func _integrate_power_energy(delta: float) -> void:
 	if round_finished:
 		return
 	var pv: Variant = GlobalWahoo.get("power")
-	var power_w: float = float(pv) if (typeof(pv) == TYPE_FLOAT or typeof(pv) == TYPE_INT) else 0.0
+	var power_w: float = 0.0
+	if typeof(pv) == TYPE_FLOAT or typeof(pv) == TYPE_INT:
+		power_w = float(pv)
 	if power_w <= 0.0:
 		return
 
-	# kJ = W * s / 1000
+	# Add to the single total (kJ = W * s / 1000)
 	energy_kj_total += power_w * delta / 1000.0
 
-	# Grant only whole kJ to the score (same unit as pickups), via add_energy()
+	# Grant only whole kJ to the score, through the same path pickups use
 	var pedaled_int: int = int(floor(energy_kj_total))
 	var delta_int: int = pedaled_int - _energy_ui_last_int
 	if delta_int > 0:
 		_energy_ui_last_int = pedaled_int
-		add_energy(delta_int)  # this updates energy_points and refreshes the UI
+		add_energy(delta_int)  # increments energy_points and refreshes the UI
 	
 # Keep (optional) UI refresh helper, but never overwrite the score from pedaled kJ.
 func _sync_energy_points_and_ui() -> void:
 	_refresh_energy_ui()
 	
-# External: increase energy
+# External: increase energy (e.g. from pickups). Adds to the same total as pedaling.
 func add_energy(amount: int) -> void:
 	if round_finished:
 		return
-	energy_points += amount
+	# Add pickup kJ into the single total, then grant only the integer delta
+	energy_kj_total += float(amount)
+
+	var new_int: int = int(floor(energy_kj_total))
+	var delta_int: int = new_int - _energy_ui_last_int
+	if delta_int > 0:
+		_energy_ui_last_int = new_int
+		energy_points += delta_int
 	_refresh_energy_ui()
 
 # External: set energy explicitly
