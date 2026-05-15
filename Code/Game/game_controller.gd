@@ -37,7 +37,7 @@ var ui_root: CanvasLayer
 var player_name_label: Label
 var timer_label: Label
 var energy_label: Label
-var speed_label: Label  # Speed HUD
+var speed_label: Label  # NEW: Speed HUD label
 
 @export var hill_scene: PackedScene
 @export_range(0.0, 1.0, 0.01) var terrain_difficulty: float = 0.4
@@ -68,7 +68,6 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_resolve_ui_refs()
 	_refresh_energy_ui()
-	_refresh_speed_ui()  # Initialize speed HUD (safe/no side effects)
 	_update_player_name_from_tree()
 	_start_round_timer()
 	_setup_inactivity_detection()
@@ -108,11 +107,29 @@ func _spawn_terrain() -> void:
 func _process(delta: float) -> void:
 	if round_finished:
 		return
-	if GlobalWahoo.power > 1: # more than 1W → player active
+	if GlobalWahoo.power > 1: # Si hay más de 1W, el jugador está activo
 		_on_player_pedaled()
 
-	# Update speed HUD each frame (pure read, fully guarded)
-	_refresh_speed_ui()
+	# NEW: update speed HUD (pure read, no side effects)
+	if speed_label:
+		var sp: float = 0.0
+		if GlobalWahoo.has_method("get_speed_kmh"):
+			var r_kmh: Variant = GlobalWahoo.call("get_speed_kmh")
+			if typeof(r_kmh) == TYPE_FLOAT or typeof(r_kmh) == TYPE_INT:
+				sp = float(r_kmh)
+		else:
+			var v_kmh: Variant = GlobalWahoo.get("speed_kmh")
+			if typeof(v_kmh) == TYPE_FLOAT or typeof(v_kmh) == TYPE_INT:
+				sp = float(v_kmh)
+			else:
+				var v_mps: Variant = GlobalWahoo.get("speed_mps")
+				if typeof(v_mps) == TYPE_FLOAT or typeof(v_mps) == TYPE_INT:
+					sp = float(v_mps) * 3.6
+				else:
+					var v_any: Variant = GlobalWahoo.get("speed")  # last resort, assumed km/h
+					if typeof(v_any) == TYPE_FLOAT or typeof(v_any) == TYPE_INT:
+						sp = float(v_any)
+		speed_label.text = str(int(round(sp)))  # use "%.1f" % sp for 1 decimal
 
 	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
@@ -157,50 +174,6 @@ func _refresh_energy_ui() -> void:
 		energy_label.text = str(energy_points)
 	else:
 		push_warning("EnergyLabel not found under UI. Expected path: UI/VBoxContainer/Energy/EnergyLabel")
-
-# Returns current speed in km/h (float, safe). If unavailable, returns 0.0.
-func _get_current_speed_kmh() -> float:
-	# Guard against anything unexpected
-	if typeof(GlobalWahoo) != TYPE_OBJECT:
-		return 0.0
-
-	# 1) Method get_speed_kmh()
-	if GlobalWahoo.has_method("get_speed_kmh"):
-		var res_kmh: Variant = GlobalWahoo.call("get_speed_kmh")
-		if typeof(res_kmh) == TYPE_FLOAT or typeof(res_kmh) == TYPE_INT:
-			return float(res_kmh)
-
-	# 2) Property speed_kmh
-	var p_kmh: Variant = GlobalWahoo.get("speed_kmh")
-	if typeof(p_kmh) == TYPE_FLOAT or typeof(p_kmh) == TYPE_INT:
-		return float(p_kmh)
-
-	# 3) Method get_speed() (assumed km/h if that’s your API)
-	if GlobalWahoo.has_method("get_speed"):
-		var res_speed: Variant = GlobalWahoo.call("get_speed")
-		if typeof(res_speed) == TYPE_FLOAT or typeof(res_speed) == TYPE_INT:
-			return float(res_speed)
-
-	# 4) Property speed_mps (convert to km/h)
-	var p_mps: Variant = GlobalWahoo.get("speed_mps")
-	if typeof(p_mps) == TYPE_FLOAT or typeof(p_mps) == TYPE_INT:
-		return float(p_mps) * 3.6
-
-	# 5) Property speed (assumed km/h as last resort)
-	var p_speed: Variant = GlobalWahoo.get("speed")
-	if typeof(p_speed) == TYPE_FLOAT or typeof(p_speed) == TYPE_INT:
-		return float(p_speed)
-
-	return 0.0
-
-# Updates the speed UI label (no side effects)
-func _refresh_speed_ui() -> void:
-	if speed_label == null:
-		_resolve_ui_refs()
-	if speed_label:
-		var v: float = _get_current_speed_kmh()
-		# Show integer km/h; change to "%.1f" % v if you want one decimal
-		speed_label.text = str(int(round(v)))
 
 # Pulls the player name from the tree metadata into the label.
 func _update_player_name_from_tree() -> void:
@@ -360,8 +333,8 @@ func _update_timer_blink(delta: float) -> void:
 	_timer_blink_accum += delta
 	if _timer_blink_accum >= timer_blink_interval_sec:
 		_timer_blink_accum = 0.0
-	_timer_blink_state = not _timer_blink_state
-	_set_timer_label_color(timer_blink_color if _timer_blink_state else timer_normal_color)
+		_timer_blink_state = not _timer_blink_state
+		_set_timer_label_color(timer_blink_color if _timer_blink_state else timer_normal_color)
 
 # Sets the timer label color (with theme override and tint).
 func _set_timer_label_color(col: Color) -> void:
@@ -460,9 +433,9 @@ func show_popup_message(text: String, _id: String = "") -> void:
 	lbl.bbcode_enabled = true
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.scroll_active = false
-	lbl.fit_content = true
+	lbl.fit_content = true  # box expands in height so text fits
 	lbl.add_theme_font_size_override("normal_font_size", font_size_px)
-	lbl.add_theme_color_override("default_color", Color("#314219"))
+	lbl.add_theme_color_override("default_color", Color("#314219"))  # Font Color
 	lbl.text = "[left]" + text + "[/left]"
 	lbl.anchor_left = 0.0
 	lbl.anchor_right = 1.0
@@ -475,6 +448,7 @@ func show_popup_message(text: String, _id: String = "") -> void:
 	panel.add_child(lbl)
 	overlay_layer.add_child(panel)
 	
+	#auto height calculation
 	await get_tree().process_frame
 	var actual_height: float = lbl.get_content_height() + padding_px * 2
 	panel.offset_top = -actual_height * 0.5
@@ -502,15 +476,16 @@ func _resolve_ui_refs() -> void:
 		if player_name_label == null:
 			player_name_label = ui_root.find_child("PlayerNameLabel", true, false) as Label
 
+		# FIX: use the actual path/name
 		energy_label = ui_root.get_node_or_null("VBoxContainer/Energy/EnergyLabel") as Label
 		if energy_label == null:
 			energy_label = ui_root.find_child("EnergyLabel", true, false) as Label
 
-		# Speed label
+		# NEW: Speed label
 		speed_label = ui_root.get_node_or_null("VBoxContainer/Speed/SpeedLabel") as Label
 		if speed_label == null:
 			speed_label = ui_root.find_child("SpeedLabel", true, false) as Label
-
+			
 # Ensures there is a layer to host transient overlays.
 func _ensure_overlay_layer() -> void:
 	if overlay_layer == null:
@@ -553,6 +528,7 @@ func _scan_and_fix_nodepaths(root: Node, auto_fix: bool = true) -> void:
 
 # Recursive helper: rewrite absolute NodePaths on a node (and its children) to relative paths.
 func _scan_np_recursive(n: Node, auto_fix: bool) -> void:
+	# Check all properties; if a property is a NodePath and absolute, try to make it relative.
 	for d in n.get_property_list():
 		if typeof(d) == TYPE_DICTIONARY and d.has("type") and int(d["type"]) == TYPE_NODE_PATH:
 			var pname: StringName = StringName(d["name"])
@@ -566,6 +542,7 @@ func _scan_np_recursive(n: Node, auto_fix: bool) -> void:
 					print("Fixed absolute NodePath: ", n.get_path(), ".", String(pname), " -> ", String(rel))
 				else:
 					print("Found absolute NodePath but target missing: ", n.get_path(), ".", String(pname), " = ", String(np))
+	# Recurse into children.
 	for c in n.get_children():
 		if c is Node:
 			_scan_np_recursive(c, auto_fix)
