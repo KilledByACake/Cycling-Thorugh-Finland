@@ -27,6 +27,7 @@ const GAME_OVER_SCENE: PackedScene = preload("res://Screen/GameOver.tscn")
 const YOU_WON_SCENE: PackedScene = preload("res://Screen/Victory.tscn")
 const RESULT_SCREEN_SCENE: PackedScene = preload("res://Screen/Result.tscn")
 
+
 # State
 var energy_points: int = 0
 var round_finished: bool = false
@@ -131,11 +132,11 @@ func _process(delta: float) -> void:
 	_integrate_power_energy(delta)
 	# Activity check: power > 1 W counts as active pedaling
 	# Treat either power or speed as activity
-	var pow_v: Variant = GlobalWahoo.get("power")
-	var spd_v: Variant = GlobalWahoo.get("speed")
-	var pow: float = float(pow_v) if (typeof(pow_v) == TYPE_FLOAT or typeof(pow_v) == TYPE_INT) else 0.0
-	var spd: float = float(spd_v) if (typeof(spd_v) == TYPE_FLOAT or typeof(spd_v) == TYPE_INT) else 0.0
-	if pow > 1.0 or spd > 0.5:
+	var power_v: Variant = GlobalWahoo.get("power")
+	var speed_v: Variant = GlobalWahoo.get("speed")
+	var power_w: float = float(power_v) if (typeof(power_v) == TYPE_FLOAT or typeof(power_v) == TYPE_INT) else 0.0
+	var speed_kmh: float = float(speed_v) if (typeof(speed_v) == TYPE_FLOAT or typeof(speed_v) == TYPE_INT) else 0.0
+	if power_w > 1.0 or speed_kmh > 0.5:
 		_on_player_pedaled()
 
 	# Update SpeedLabel (same source as Dashboard)
@@ -162,6 +163,7 @@ func _process(delta: float) -> void:
 			_finish_as_victory()
 
 # Integrate cycling energy from power (W) over time into kJ and update the UI when the integer changes.
+# Integrate cycling energy from power (W) over time into kJ, and grant score when the integer kJ increases.
 func _integrate_power_energy(delta: float) -> void:
 	if round_finished:
 		return
@@ -169,17 +171,20 @@ func _integrate_power_energy(delta: float) -> void:
 	var power_w: float = float(pv) if (typeof(pv) == TYPE_FLOAT or typeof(pv) == TYPE_INT) else 0.0
 	if power_w <= 0.0:
 		return
+
 	# kJ = W * s / 1000
 	energy_kj_total += power_w * delta / 1000.0
-	_sync_energy_points_and_ui()
+
+	# Grant only whole kJ to the score (same unit as pickups), via add_energy()
+	var pedaled_int: int = int(floor(energy_kj_total))
+	var delta_int: int = pedaled_int - _energy_ui_last_int
+	if delta_int > 0:
+		_energy_ui_last_int = pedaled_int
+		add_energy(delta_int)  # this updates energy_points and refreshes the UI
 	
-	# Keep the displayed integer in sync with the float total and refresh the UI only on change.
+# Keep (optional) UI refresh helper, but never overwrite the score from pedaled kJ.
 func _sync_energy_points_and_ui() -> void:
-	var current_int: int = int(floor(energy_kj_total + 0.0001))
-	if current_int != _energy_ui_last_int:
-		_energy_ui_last_int = current_int
-		energy_points = current_int
-		_refresh_energy_ui()
+	_refresh_energy_ui()
 	
 # External: increase energy
 func add_energy(amount: int) -> void:
