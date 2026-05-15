@@ -42,6 +42,7 @@ enabled=PackedStringArray("res://addons/rmsmartshape/plugin.cfg")
 
 player=""
 ui=""
+terrain=""
 
 [layer_names]
 

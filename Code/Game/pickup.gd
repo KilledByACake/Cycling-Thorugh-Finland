@@ -121,15 +121,24 @@ func _find_level() -> Node:
 		return n
 	return get_tree().current_scene
 
-# Snaps the pickup to the terrain surface (and optionally aligns to slope).
 func _snap_to_ground() -> void:
-	var terrain: Node2D = _resolve_node(terrain_path) as Node2D
-	if terrain == null or not terrain.has_method("get_surface_y"):
+	var terrain := _resolve_node(terrain_path) as Node2D
+
+	# If no explicit path, try to auto-find a valid terrain node
+	if terrain == null and auto_find_terrain:
+		terrain = _find_terrain_in_tree()
+
+	# Hard guard: no terrain or method → do nothing (avoid error spam)
+	if terrain == null:
+		return
+	var fn := Callable(terrain, "get_surface_y")
+	if not fn.is_valid():
 		return
 
+	# Compute world/local coordinates and snap
 	var world_x: float = global_position.x
 	var x_in_terrain: Vector2 = terrain.to_local(Vector2(world_x, 0.0))
-	var y: float = float(terrain.call("get_surface_y", x_in_terrain.x))
+	var y: float = float(fn.call(x_in_terrain.x))
 	var desired_world: Vector2 = terrain.to_global(Vector2(x_in_terrain.x, y + snap_y_offset))
 
 	var parent_nd: Node2D = get_parent() as Node2D
@@ -139,8 +148,8 @@ func _snap_to_ground() -> void:
 		global_position = desired_world
 
 	if snap_align_to_slope:
-		var y_l: float = float(terrain.call("get_surface_y", x_in_terrain.x - 2.0))
-		var y_r: float = float(terrain.call("get_surface_y", x_in_terrain.x + 2.0))
+		var y_l: float = float(fn.call(x_in_terrain.x - 2.0))
+		var y_r: float = float(fn.call(x_in_terrain.x + 2.0))
 		global_rotation = atan2(y_r - y_l, 4.0)
 
 # Returns an AnimationPlayer on this node or the first child one.
@@ -177,11 +186,20 @@ func _find_terrain_in_tree() -> Node2D:
 	var root: Node = get_tree().current_scene
 	if root == null:
 		return null
+
+	# 1) Prefer any node in group "terrain" that has the method
+	var terrains := get_tree().get_nodes_in_group("terrain")
+	for n in terrains:
+		if n is Node2D and Callable(n, "get_surface_y").is_valid():
+			return n as Node2D
+
+	# 2) Fallback: scan the tree for a Node2D with the method
 	var stack: Array[Node] = [root]
 	while stack.size() > 0:
-		var n: Node = stack.pop_back()
-		if n is Node2D and n.has_method("get_surface_y"):
-			return n as Node2D
-		for c in n.get_children():
+		var node: Node = stack.pop_back()
+		if node is Node2D and Callable(node, "get_surface_y").is_valid():
+			return node as Node2D
+		for c in node.get_children():
 			stack.append(c)
+
 	return null
