@@ -3,6 +3,7 @@
 [ext_resource type="Texture2D" uid="uid://cysq5ewo8ye0o" path="res://Images/Icons/tachometer.png" id="2_dnerv"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_nf4gj"]
 [ext_resource type="Texture2D" uid="uid://la3vhsxmnn0o" path="res://Images/Icons/speed_icon.png" id="3_0dhui"]
+[ext_resource type="Script" uid="uid://d35icowiqcyq1" path="res://Code/Screens/ui_speed_label.gd" id="3_hnd3u"]
 
 [node name="UI" type="CanvasLayer" unique_id=482392122 groups=["ui"]]
 
@@ -32,6 +33,7 @@ layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 text = "0"
+script = ExtResource("3_hnd3u")
 
 [node name="Energy" type="HBoxContainer" parent="VBoxContainer" unique_id=1741399407]
 layout_mode = 2
