@@ -23,7 +23,7 @@ const YOU_WON_SCENE: PackedScene = preload("res://Screen/Victory.tscn")
 const RESULT_SCREEN_SCENE: PackedScene = preload("res://Screen/Result.tscn")
 
 # State
-var energy_points: int = 0              # kept for Result/Highscore; driven by Energy.gd
+var energy_points: int = 0
 var round_finished: bool = false
 var game_timer: Timer
 
@@ -36,8 +36,8 @@ var _timer_blink_active: bool = false
 var _timer_blink_accum: float = 0.0
 var _timer_blink_state: bool = false
 
-# UI references (fallbacks if UI.gd methods aren’t present)
-var ui_root: Node                          # UI CanvasLayer
+# UI references
+var ui_root: Node
 var player_name_label: Label
 var timer_label: Label
 var energy_label: Label
@@ -63,7 +63,10 @@ var _blink_due_to_inactivity: bool = false
 # Overlay layer
 var overlay_layer: CanvasLayer
 
-# Entry point
+# Energy accumulation (kJ)
+var energy_kj_total: float = 0.0
+var _energy_ui_last_int: int = 0
+
 func _ready() -> void:
 	_ensure_overlay_layer()
 	_scan_and_fix_nodepaths(self, true)
@@ -75,26 +78,18 @@ func _ready() -> void:
 	_resolve_ui_refs()
 	_resolve_speed_label()
 
-	# Hook Energy singleton → keep legacy energy_points + HUD in sync
-	if not Energy.changed.is_connected(_on_energy_changed):
-		Energy.changed.connect(_on_energy_changed)
-	_on_energy_changed(Energy.total_kj, Energy.score_int)
-
-	# Initial speed (via UI if available)
-	var v0: float = 0.0
-	var vv0: Variant = GlobalWahoo.get("speed")
-	if typeof(vv0) == TYPE_FLOAT or typeof(vv0) == TYPE_INT:
-		v0 = float(vv0)
-	_ui_call("set_speed", [v0])
-	if _speed_label and not ui_root or (ui_root and not ui_root.has_method("set_speed")):
+	# Initial speed text
+	var v0: float = float(GlobalWahoo.speed)
+	if _speed_label:
 		_speed_label.text = "%.1f" % v0
 
+	# Init HUD
+	_refresh_energy_ui()
 	_update_player_name_from_tree()
 	_start_round_timer()
 	_setup_inactivity_detection()
 	_connect_goal_area()
 
-# Terrain spawn
 func _spawn_terrain() -> void:
 	if hill_scene == null:
 		return
@@ -118,7 +113,6 @@ func _spawn_terrain() -> void:
 	await get_tree().process_frame
 	_scan_and_fix_nodepaths(self, true)
 
-# Per-frame update
 func _process(delta: float) -> void:
 	if round_finished:
 		return
@@ -127,26 +121,26 @@ func _process(delta: float) -> void:
 	var power_w: float = float(GlobalWahoo.power)
 	var speed_kmh: float = float(GlobalWahoo.speed)
 
-	# Pedaling energy → Energy.gd (emits on integer change; your _on_energy_changed updates UI + energy_points)
-	Energy.integrate_power(delta, power_w)
+	# Integrate pedaling energy (W*s/1000 -> kJ). Grant whole kJ to score via add_energy.
+	_integrate_power_energy(delta)
+
+	# Live HUD for energy (decimal total)
+	if energy_label:
+		energy_label.text = "%.1f" % energy_kj_total
 
 	# Treat either power or speed as "activity" to reset inactivity timers
 	if power_w > 1.0 or speed_kmh > 0.5:
 		_on_player_pedaled()
 
-	# Speed HUD via UI.gd if present; fallback to raw label
-	_ui_call("set_speed", [speed_kmh])
-	if _speed_label and (ui_root == null or not ui_root.has_method("set_speed")):
+	# Speed HUD (fallback label)
+	if _speed_label:
 		_speed_label.text = "%.1f" % speed_kmh
 
 	# Timer HUD + blink
 	if game_timer:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
-		var t_txt := _format_time(t)
-		_ui_call("set_timer_text", [t_txt])
-		if timer_label and (ui_root == null or not ui_root.has_method("set_timer_text")):
-			timer_label.text = t_txt
-
+		if timer_label:
+			timer_label.text = _format_time(t)
 		var should_blink: bool = (t <= timer_blink_threshold_sec) or _blink_due_to_inactivity
 		_enable_timer_blink(should_blink)
 		_update_timer_blink(delta)
@@ -166,32 +160,48 @@ func _process(delta: float) -> void:
 			if reached:
 				_finish_as_victory()
 
-# Energy: forward pickups into Energy.gd (do not handle totals here)
+# Integrate cycling energy (W → kJ) into the single total; grant whole kJ to the score.
+func _integrate_power_energy(delta: float) -> void:
+	if round_finished:
+		return
+	var power_w: float = float(GlobalWahoo.power)
+	if power_w <= 0.0:
+		return
+	energy_kj_total += power_w * delta / 1000.0
+	var pedaled_int: int = int(floor(energy_kj_total))
+	var delta_int: int = pedaled_int - _energy_ui_last_int
+	if delta_int > 0:
+		_energy_ui_last_int = pedaled_int
+		add_energy(delta_int)
+
+# External: increase energy (e.g. pickups). Adds to the same total as pedaling.
 func add_energy(amount: int) -> void:
 	if round_finished:
 		return
-	Energy.add_pickup(amount)
-	# Energy.changed will call _on_energy_changed → updates energy_points + HUD
+	energy_kj_total += float(amount)
+	var new_int: int = int(floor(energy_kj_total))
+	var delta_int: int = new_int - _energy_ui_last_int
+	if delta_int > 0:
+		_energy_ui_last_int = new_int
+		energy_points += delta_int
+	_refresh_energy_ui()
 
-# Energy change handler (from Energy.gd)
-func _on_energy_changed(total_kj: float, score_int: int) -> void:
-	energy_points = score_int
-	_ui_call("set_energy_total_kj", [total_kj])
-	if energy_label and (ui_root == null or not ui_root.has_method("set_energy_total_kj")):
-		energy_label.text = "%.1f" % total_kj
+# Update energy in UI (kept simple; we also set a live decimal each frame in _process)
+func _refresh_energy_ui() -> void:
+	if ui_root == null or energy_label == null:
+		_resolve_ui_refs()
+	if energy_label:
+		energy_label.text = "%.1f" % energy_kj_total
 
-# Player name to UI
 func _update_player_name_from_tree() -> void:
-	if ui_root:
-		var n := ""
-		if get_tree().root.has_meta("player_name"):
-			n = str(get_tree().root.get_meta("player_name"))
-		if n != "":
-			_ui_call("set_player_name", [n])
-			if player_name_label and (ui_root == null or not ui_root.has_method("set_player_name")):
-				player_name_label.text = n
+	if not player_name_label:
+		return
+	var n: String = ""
+	if get_tree().root.has_meta("player_name"):
+		n = str(get_tree().root.get_meta("player_name"))
+	if n != "":
+		player_name_label.text = n
 
-# Round timer
 func _start_round_timer() -> void:
 	game_timer = Timer.new()
 	game_timer.one_shot = true
@@ -199,13 +209,11 @@ func _start_round_timer() -> void:
 	add_child(game_timer)
 	game_timer.timeout.connect(_finish_round)
 	game_timer.start()
-	_ui_call("set_timer_text", [_format_time(ROUND_TIME_SEC)])
-	if timer_label and (ui_root == null or not ui_root.has_method("set_timer_text")):
+	if timer_label:
 		timer_label.text = _format_time(ROUND_TIME_SEC)
 	_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 
-# Round end by time (loss)
 func _finish_round() -> void:
 	if round_finished:
 		return
@@ -220,7 +228,6 @@ func _finish_round() -> void:
 	await _show_banner_overlay(false)
 	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
 
-# Inactivity detection
 func _setup_inactivity_detection() -> void:
 	inactivity_warning_timer = Timer.new()
 	inactivity_warning_timer.one_shot = true
@@ -237,7 +244,6 @@ func _setup_inactivity_detection() -> void:
 	inactivity_warning_timer.start()
 	inactivity_timer.start()
 
-# Pedaling → reset inactivity timers
 func _on_player_pedaled() -> void:
 	if round_finished:
 		return
@@ -246,23 +252,20 @@ func _on_player_pedaled() -> void:
 	if inactivity_timer:
 		inactivity_timer.start()
 	_blink_due_to_inactivity = false
-	if game_timer:
+	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		_enable_timer_blink((t <= timer_blink_threshold_sec) or _blink_due_to_inactivity)
 
-# Inactivity warning crosses threshold (start blinking)
 func _on_inactivity_warning_timeout() -> void:
 	if round_finished:
 		return
 	_blink_due_to_inactivity = true
 
-# Inactivity timeout → game over
 func _on_inactivity_timeout() -> void:
 	if round_finished:
 		return
 	_game_over_due_to_inactivity()
 
-# Game over due to inactivity
 func _game_over_due_to_inactivity() -> void:
 	round_finished = true
 	if game_timer:
@@ -277,7 +280,6 @@ func _game_over_due_to_inactivity() -> void:
 	await _show_banner_overlay(false)
 	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
 
-# Connect goal Area2D once
 func _connect_goal_area() -> void:
 	var area: Area2D = _resolve_node_safe(goal_area_path) as Area2D
 	if area != null and not area.body_entered.is_connected(_on_goal_area_body_entered):
@@ -462,12 +464,9 @@ func show_popup_message(text: String, _id: String = "") -> void:
 			panel.queue_free()
 	)
 
-# UI helpers
+# UI helpers and resolution
 func _set_ui_visible(v: bool) -> void:
-	# Preferred: hide/show every node in the “ui” group (your UI CanvasLayer should be in this group)
 	get_tree().call_group("ui", "set_visible", v)
-
-	# Fallback: also try a node named “UI” if present (in case the group is missing in some scenes)
 	var ui := get_node_or_null("UI") as CanvasItem
 	if ui:
 		ui.visible = v
@@ -475,7 +474,6 @@ func _set_ui_visible(v: bool) -> void:
 func _hide_ui() -> void:
 	_set_ui_visible(false)
 
-# Resolve UI nodes (fallbacks if UI.gd is missing)
 func _resolve_ui_refs() -> void:
 	ui_root = get_node_or_null("UI")
 	if ui_root == null:
@@ -491,12 +489,8 @@ func _resolve_speed_label() -> void:
 		return
 	_speed_label = _resolve_label(NodePath(), "UI/VBoxContainer/Speed/SpeedLabel", "SpeedLabel")
 
-func _resolve_label(exported: NodePath, canonical_path: String, name_only: String) -> Label:
-	var n: Node = null
-	if not exported.is_empty():
-		n = _resolve_node_safe(exported)
-	if n == null:
-		n = get_node_or_null(NodePath(canonical_path))
+func _resolve_label(_exported: NodePath, canonical_path: String, name_only: String) -> Label:
+	var n: Node = get_node_or_null(NodePath(canonical_path))
 	if n == null:
 		if ui_root:
 			n = ui_root.find_child(name_only, true, false)
@@ -511,11 +505,6 @@ func _ensure_overlay_layer() -> void:
 		overlay_layer.name = "OverlayLayer"
 		overlay_layer.layer = 10
 		add_child(overlay_layer)
-
-# Small UI caller that prefers UI.gd methods
-func _ui_call(method: StringName, args: Array = []) -> void:
-	if ui_root and ui_root.has_method(method):
-		ui_root.callv(method, args)
 
 # Formatting/utilities
 func _format_time(t: int) -> String:
