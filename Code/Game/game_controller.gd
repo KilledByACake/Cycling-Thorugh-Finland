@@ -2,27 +2,37 @@ extends Node2D
 
 signal round_over(won: bool)
 
-@export_node_path("Path2D") var rail_path: NodePath
+# Scene/Node references
+@export_node_path("Node2D") var rail_path: NodePath
 @export var trigger_path_rebuild: bool = true
 @export var randomize_seed_on_play: bool = true
 
-# Win when the player reaches PathRight (configure these to match your scene).
-@export_node_path("Area2D") var goal_area_path: NodePath = NodePath("Path2D/PathRight")  # If PathRight is an Area2D
-@export_node_path("Node2D") var goal_node_path: NodePath = NodePath("Path2D/PathRight")  # Fallback if PathRight is Node2D
+# Goal: win by reaching PathRight
+@export_node_path("Area2D") var goal_area_path: NodePath = NodePath("Path2D/PathRight")
+@export_node_path("Node2D") var goal_node_path: NodePath = NodePath("Path2D/PathRight")  # fallback if PathRight is not an Area2D
 
+# UI label paths (set these in the Inspector to avoid ownership/% issues)
+@export_node_path("Label") var speed_label_path: NodePath
+@export_node_path("Label") var energy_label_path: NodePath
+@export_node_path("Label") var timer_label_path: NodePath
+@export_node_path("Label") var player_name_label_path: NodePath
+
+# Round config
 const ROUND_TIME_SEC: int = 100
 const TARGET_ENERGY: int = 200
 const BANNER_DURATION_SEC: float = 2.0
 
+# Screens
 const GAME_OVER_SCENE: PackedScene = preload("res://Screen/GameOver.tscn")
 const YOU_WON_SCENE: PackedScene = preload("res://Screen/Victory.tscn")
 const RESULT_SCREEN_SCENE: PackedScene = preload("res://Screen/Result.tscn")
 
+# State
 var energy_points: int = 0
 var round_finished: bool = false
 var game_timer: Timer
 
-# Timer blinking (UI)
+# Timer blink config
 @export var timer_blink_threshold_sec: int = 5
 @export var timer_blink_interval_sec: float = 0.3
 @export var timer_blink_color: Color = Color(1, 0.2, 0.2)
@@ -32,13 +42,14 @@ var _timer_blink_active: bool = false
 var _timer_blink_accum: float = 0.0
 var _timer_blink_state: bool = false
 
-# UI references (resolved at runtime)
-var ui_root: CanvasLayer
+# UI references
+var ui_root: Node
 var player_name_label: Label
 var timer_label: Label
 var energy_label: Label
-var speed_label: Label  # Speed HUD label
+var _speed_label: Label
 
+# Terrain export
 @export var hill_scene: PackedScene
 @export_range(0.0, 1.0, 0.01) var terrain_difficulty: float = 0.4
 @export var terrain_length: int = 8000
@@ -48,32 +59,35 @@ var speed_label: Label  # Speed HUD label
 @export var terrain_max_slope_deg: float = 18.0
 @export var terrain_sample_step: int = 4
 
-# Inactivity → Game Over (10s total), with warning blink for last 5s of inactivity
+# Inactivity → Game Over (10s), with warning blink at 5s
 @export var inactivity_timeout_sec: float = 10.0
 @export var inactivity_warning_threshold_sec: float = 5.0
 var inactivity_timer: Timer
 var inactivity_warning_timer: Timer
 var _blink_due_to_inactivity: bool = false
 
-# Overlay
+# Overlay layer
 var overlay_layer: CanvasLayer
 
-# Called when the node enters the scene tree; sets up terrain, UI, timers, and goal trigger.
+# Entry point
 func _ready() -> void:
 	_ensure_overlay_layer()
 	_scan_and_fix_nodepaths(self, true)
-	# Only spawn terrain if a scene is provided to avoid warnings.
+
+	# Spawn terrain if provided
 	if hill_scene != null:
 		_spawn_terrain()
+
 	await get_tree().process_frame
 	_resolve_ui_refs()
+	_resolve_speed_label()
 	_refresh_energy_ui()
 	_update_player_name_from_tree()
 	_start_round_timer()
 	_setup_inactivity_detection()
-	_connect_goal_area()  # Connect PathRight (Area2D) if available
+	_connect_goal_area()
 
-# Spawns terrain instance and configures its exported properties.
+# Terrain spawn
 func _spawn_terrain() -> void:
 	if hill_scene == null:
 		return
@@ -87,7 +101,7 @@ func _spawn_terrain() -> void:
 	_set_if_has_property(hill, "max_slope_deg", terrain_max_slope_deg)
 	_set_if_has_property(hill, "sample_step", terrain_sample_step)
 	if randomize_seed_on_play:
-		var rng: RandomNumberGenerator = RandomNumberGenerator.new()
+		var rng := RandomNumberGenerator.new()
 		rng.randomize()
 		if _has_property(hill, "rng_seed"):
 			hill.set("rng_seed", rng.randi())
@@ -96,74 +110,60 @@ func _spawn_terrain() -> void:
 	add_child(hill)
 	await get_tree().process_frame
 	_scan_and_fix_nodepaths(self, true)
-	if trigger_path_rebuild:
-		var p2d: Path2D = _resolve_node_safe(rail_path) as Path2D
-		if p2d != null and p2d.has_method("rebuild_auto"):
-			p2d.call("rebuild_auto")
-		elif p2d != null and p2d.has_method("_rebuild_from_terrain"):
-			p2d.call("_rebuild_from_terrain")
+	# No Path2D-specific rebuild calls here (your path is a Node2D).
 
-# Per-frame update; updates timer UI and checks goal (fallback for Node2D goal).
+# Per-frame update
 func _process(delta: float) -> void:
 	if round_finished:
 		return
 
-	if GlobalWahoo.power > 1: # player is active
+	# Activity check: power > 1 W counts as active pedaling
+	if GlobalWahoo.power > 1:
 		_on_player_pedaled()
 
-	# Update SpeedLabel every frame (reads only; same source as Dashboard)
-	if speed_label:
-		var sp_var: Variant = GlobalWahoo.get("speed")
-		var sp: float = 0.0
-		if typeof(sp_var) == TYPE_FLOAT or typeof(sp_var) == TYPE_INT:
-			sp = float(sp_var)
-		speed_label.text = "%.1f" % sp
+	
 
+	# Update countdown UI and blink behavior
 	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		timer_label.text = _format_time(t)
-		# Blink if round timer is low or inactivity warning is active.
 		var should_blink: bool = (t <= timer_blink_threshold_sec) or _blink_due_to_inactivity
 		_enable_timer_blink(should_blink)
 		_update_timer_blink(delta)
 
-	# Fallback win: if PathRight is a Node2D, finish when the player crosses its X.
+	# Fallback win condition if PathRight is a Node2D (no Area2D)
 	var goal_node: Node2D = _resolve_node_safe(goal_node_path) as Node2D
 	if not round_finished and goal_node != null:
 		var player_nd: Node2D = get_tree().get_first_node_in_group("player") as Node2D
-		if player_nd == null:
-			player_nd = get_tree().get_first_node_in_group("radler") as Node2D
 		if player_nd != null and player_nd.global_position.x >= goal_node.global_position.x:
 			_finish_as_victory()
 
-# Increases energy by amount and refreshes UI.
+# External: increase energy
 func add_energy(amount: int) -> void:
 	if round_finished:
 		return
 	energy_points += amount
 	_refresh_energy_ui()
 
-# Sets energy to a specific value and refreshes UI.
+# External: set energy explicitly
 func update_energy_UI(value: int) -> void:
 	if round_finished:
 		return
 	energy_points = value
 	_refresh_energy_ui()
 
-# Updates the energy UI (via UI script method or fallback label).
+# Update energy in UI
 func _refresh_energy_ui() -> void:
-	# If UI wasn’t ready yet, try to resolve once more.
 	if ui_root == null or energy_label == null:
 		_resolve_ui_refs()
-
 	if ui_root and ui_root.has_method("set_energy"):
 		ui_root.call("set_energy", energy_points)
 	elif energy_label:
 		energy_label.text = str(energy_points)
 	else:
-		push_warning("EnergyLabel not found under UI. Expected path: UI/VBoxContainer/Energy/EnergyLabel")
+		push_warning("EnergyLabel not found. Expected: UI/VBoxContainer/Energy/EnergyLabel or set energy_label_path.")
 
-# Pulls the player name from the tree metadata into the label.
+# Player name to UI
 func _update_player_name_from_tree() -> void:
 	if not player_name_label:
 		return
@@ -173,7 +173,7 @@ func _update_player_name_from_tree() -> void:
 	if n != "":
 		player_name_label.text = n
 
-# Starts the round timer and initializes UI for the countdown.
+# Round timer
 func _start_round_timer() -> void:
 	game_timer = Timer.new()
 	game_timer.one_shot = true
@@ -186,7 +186,7 @@ func _start_round_timer() -> void:
 		_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 
-# Called when the round timer finishes; freezes world and shows results (win by energy).
+# Round end by time
 func _finish_round() -> void:
 	if round_finished:
 		return
@@ -202,7 +202,7 @@ func _finish_round() -> void:
 	await _show_banner_overlay(won)
 	_show_result_screen_overlay(won, energy_points, TARGET_ENERGY)
 
-# Sets up inactivity timers and connects to pedaling signal.
+# Inactivity detection
 func _setup_inactivity_detection() -> void:
 	inactivity_warning_timer = Timer.new()
 	inactivity_warning_timer.one_shot = true
@@ -216,15 +216,10 @@ func _setup_inactivity_detection() -> void:
 	add_child(inactivity_timer)
 	inactivity_timer.timeout.connect(_on_inactivity_timeout)
 
-	# Start both timers; pedaling will keep resetting them.
 	inactivity_warning_timer.start()
 	inactivity_timer.start()
 
-	#var radler: Node = get_tree().get_first_node_in_group("radler")
-	#if radler and radler.has_signal("pedal_tapped"):
-	#	radler.connect("pedal_tapped", Callable(self, "_on_player_pedaled"))
-
-# Handles player pedaling; resets inactivity timers and updates blink state.
+# Pedaling → reset inactivity timers
 func _on_player_pedaled() -> void:
 	if round_finished:
 		return
@@ -237,19 +232,19 @@ func _on_player_pedaled() -> void:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		_enable_timer_blink((t <= timer_blink_threshold_sec) or _blink_due_to_inactivity)
 
-# Called when inactivity warning threshold elapses; enables blink.
+# Inactivity warning crosses threshold (start blinking)
 func _on_inactivity_warning_timeout() -> void:
 	if round_finished:
 		return
 	_blink_due_to_inactivity = true
 
-# Called when inactivity timeout elapses; ends the round as a loss.
+# Inactivity timeout → game over
 func _on_inactivity_timeout() -> void:
 	if round_finished:
 		return
 	_game_over_due_to_inactivity()
 
-# Ends the round due to inactivity and shows overlays.
+# Game over due to inactivity
 func _game_over_due_to_inactivity() -> void:
 	round_finished = true
 	if game_timer:
@@ -262,25 +257,26 @@ func _game_over_due_to_inactivity() -> void:
 	await _show_banner_overlay(false)
 	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
 
-# Connects to PathRight (Area2D) once; safe if PathRight is not an Area2D.
+# Connect goal Area2D once
 func _connect_goal_area() -> void:
 	var area: Area2D = _resolve_node_safe(goal_area_path) as Area2D
 	if area != null and not area.body_entered.is_connected(_on_goal_area_body_entered):
 		area.body_entered.connect(_on_goal_area_body_entered)
 
-# Called when the player enters PathRight (Area2D); finishes as victory.
+# Entering goal Area2D → victory
 func _on_goal_area_body_entered(body: Node) -> void:
 	if round_finished:
 		return
-	if body != null and (body.is_in_group("player") or body.is_in_group("radler")):
+	if body != null and body.is_in_group("player"):
 		_finish_as_victory()
 
-# Ends the round immediately as a win and shows Victory.
+# Win immediately
 func _finish_as_victory() -> void:
 	if round_finished:
 		return
 	round_finished = true
-	# Stop timers/blink and reset colors.
+
+	# Stop timers/blink and reset colors
 	if game_timer:
 		game_timer.stop()
 	if inactivity_warning_timer:
@@ -291,7 +287,7 @@ func _finish_as_victory() -> void:
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
 
-	# ADD: trigger celebrate and wait until it finishes (plays once)
+	# Optional: trigger celebrate animation on the player and wait for it
 	var p := get_tree().get_first_node_in_group("player")
 	if p and p.has_method("start_celebrate"):
 		p.call("start_celebrate")
@@ -299,13 +295,13 @@ func _finish_as_victory() -> void:
 		if spr and spr.is_playing():
 			await spr.animation_finished
 
-	# Freeze world and show overlays.
+	# Freeze world and show overlays
 	_freeze_world()
 	emit_signal("round_over", true)
 	await _show_banner_overlay(true)
 	_show_result_screen_overlay(true, energy_points, TARGET_ENERGY)
 
-# Enables or disables timer blinking and resets blink state.
+# Blink helpers
 func _enable_timer_blink(v: bool) -> void:
 	if _timer_blink_active == v:
 		return
@@ -314,7 +310,6 @@ func _enable_timer_blink(v: bool) -> void:
 	_timer_blink_state = false
 	_set_timer_label_color(timer_normal_color)
 
-# Updates blink timer and toggles label color.
 func _update_timer_blink(delta: float) -> void:
 	if not _timer_blink_active or timer_label == null:
 		return
@@ -324,19 +319,17 @@ func _update_timer_blink(delta: float) -> void:
 		_timer_blink_state = not _timer_blink_state
 		_set_timer_label_color(timer_blink_color if _timer_blink_state else timer_normal_color)
 
-# Sets the timer label color (with theme override and tint).
 func _set_timer_label_color(col: Color) -> void:
 	if timer_label == null:
 		return
 	timer_label.add_theme_color_override("font_color", col)
 	timer_label.modulate = col
 
-# Freezes the entire world except UI layers.
+# Freeze everything except UI/Overlay layers
 func _freeze_world() -> void:
 	get_tree().call_group("freezable", "freeze")
 	_freeze_recursive(self)
 
-# Recursively freezes nodes, skipping UI layers.
 func _freeze_recursive(n: Node) -> void:
 	if n == null:
 		return
@@ -346,14 +339,13 @@ func _freeze_recursive(n: Node) -> void:
 	for c in n.get_children():
 		_freeze_recursive(c)
 
-# Applies freeze behavior to a single node.
 func _freeze_node(n: Node) -> void:
 	if n is CharacterBody2D:
-		var cb: CharacterBody2D = n as CharacterBody2D
+		var cb := n as CharacterBody2D
 		cb.velocity = Vector2.ZERO
 		cb.set_physics_process(false)
 	elif n is RigidBody2D:
-		var rb: RigidBody2D = n as RigidBody2D
+		var rb := n as RigidBody2D
 		rb.linear_velocity = Vector2.ZERO
 		rb.angular_velocity = 0.0
 		rb.sleeping = true
@@ -373,7 +365,7 @@ func _freeze_node(n: Node) -> void:
 	elif n is AudioStreamPlayer:
 		(n as AudioStreamPlayer).stop()
 
-# Shows a brief banner overlay (win/lose) then hides it.
+# Overlay banners and result screen
 func _show_banner_overlay(won: bool) -> void:
 	_ensure_overlay_layer()
 	var scene: PackedScene = YOU_WON_SCENE if won else GAME_OVER_SCENE
@@ -383,7 +375,6 @@ func _show_banner_overlay(won: bool) -> void:
 	if is_instance_valid(banner):
 		banner.queue_free()
 
-# Shows the result screen overlay and passes result data.
 func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
 	_ensure_overlay_layer()
 	var rs: Control = RESULT_SCREEN_SCENE.instantiate() as Control
@@ -393,16 +384,17 @@ func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
 		player_name_text = str(get_tree().root.get_meta("player_name"))
 	rs.call_deferred("set_result", won, energy, target, player_name_text)
 
-# Shows a temporary popup message near the right side of the screen.
+# Popup helper (unchanged except English comments)
 func show_popup_message(text: String, _id: String = "") -> void:
 	_ensure_overlay_layer()
-	var panel_size: Vector2 = Vector2(720, 140)
+	var panel_size := Vector2(720, 140)
 	var right_offset_px: float = 200.0
 	var font_size_px: int = 36
 	var padding_px: int = 20
-	var panel: Panel = Panel.new()
-	var sb: StyleBoxFlat = StyleBoxFlat.new()
-	sb.bg_color = Color(1.0, 1.0, 1.0, 0.9) # BG Color
+
+	var panel := Panel.new()
+	var sb := StyleBoxFlat.new()
+	sb.bg_color = Color(1.0, 1.0, 1.0, 0.9)
 	sb.corner_radius_top_left = 18
 	sb.corner_radius_top_right = 18
 	sb.corner_radius_bottom_left = 18
@@ -417,13 +409,14 @@ func show_popup_message(text: String, _id: String = "") -> void:
 	panel.offset_top = -panel_size.y * 0.5
 	panel.offset_right = right_offset_px + panel_size.x
 	panel.offset_bottom = -panel_size.y * 0.5 + panel_size.y
-	var lbl: RichTextLabel = RichTextLabel.new()
+
+	var lbl := RichTextLabel.new()
 	lbl.bbcode_enabled = true
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	lbl.scroll_active = false
-	lbl.fit_content = true  # box expands in height so text fits
+	lbl.fit_content = true
 	lbl.add_theme_font_size_override("normal_font_size", font_size_px)
-	lbl.add_theme_color_override("default_color", Color("#314219"))  # Font Color
+	lbl.add_theme_color_override("default_color", Color("#314219"))
 	lbl.text = "[left]" + text + "[/left]"
 	lbl.anchor_left = 0.0
 	lbl.anchor_right = 1.0
@@ -435,15 +428,14 @@ func show_popup_message(text: String, _id: String = "") -> void:
 	lbl.offset_bottom = -padding_px
 	panel.add_child(lbl)
 	overlay_layer.add_child(panel)
-	
-	#auto height calculation
+
 	await get_tree().process_frame
 	var actual_height: float = lbl.get_content_height() + padding_px * 2
 	panel.offset_top = -actual_height * 0.5
 	panel.offset_bottom = actual_height * 0.5
 	panel.offset_right = right_offset_px + 720.0
-	
-	var tw: Tween = create_tween()
+
+	var tw := create_tween()
 	tw.tween_property(panel, "modulate", Color(1, 1, 1, 1), 0.18)
 	tw.tween_interval(1.6)
 	tw.tween_property(panel, "modulate", Color(1, 1, 1, 0), 0.25)
@@ -452,20 +444,39 @@ func show_popup_message(text: String, _id: String = "") -> void:
 			panel.queue_free()
 	)
 
-# Finds and stores UI nodes (labels) for later updates.
+# UI resolution
 func _resolve_ui_refs() -> void:
-	# UI is a CanvasLayer instanced from UI.tscn at "UI"
-	ui_root = get_node_or_null("UI") as CanvasLayer
-	# Resolve labels by exact path inside that UI
-	timer_label = get_node_or_null("UI/VBoxContainer/TimerLabel") as Label
-	player_name_label = get_node_or_null("UI/VBoxContainer/PlayerNameLabel") as Label
-	if player_name_label == null:
-		# If your node is named "PlayerNameLabe" (without the last 'l'), fallback:
-		player_name_label = get_node_or_null("UI/VBoxContainer/PlayerNameLabe") as Label
-	energy_label = get_node_or_null("UI/VBoxContainer/Energy/EnergyLabel") as Label
-	speed_label  = get_node_or_null("UI/VBoxContainer/Speed/SpeedLabel") as Label
+	ui_root = get_node_or_null("UI")
+	if ui_root == null:
+		ui_root = get_tree().root.find_child("UI", true, false)
 
-# Ensures there is a layer to host transient overlays.
+	# Resolve labels via exported NodePaths first, then canonical paths, then deep search
+	timer_label = _resolve_label(timer_label_path, "UI/VBoxContainer/TimerLabel", "TimerLabel")
+	player_name_label = _resolve_label(player_name_label_path, "UI/VBoxContainer/PlayerNameLabel", "PlayerNameLabel")
+	if player_name_label == null:
+		# Support minor name variation seen in screenshots
+		player_name_label = _resolve_label(NodePath(""), "UI/VBoxContainer/PlayerNameLabe", "PlayerNameLabe")
+	energy_label = _resolve_label(energy_label_path, "UI/VBoxContainer/Energy/EnergyLabel", "EnergyLabel")
+
+func _resolve_speed_label() -> void:
+	if _speed_label != null:
+		return
+	_speed_label = _resolve_label(speed_label_path, "UI/VBoxContainer/Speed/SpeedLabel", "SpeedLabel")
+
+func _resolve_label(exported: NodePath, canonical_path: String, name_only: String) -> Label:
+	var n: Node = null
+	if not exported.is_empty():
+		n = _resolve_node_safe(exported)
+	if n == null:
+		n = get_node_or_null(NodePath(canonical_path))
+	if n == null:
+		if ui_root:
+			n = ui_root.find_child(name_only, true, false)
+		else:
+			n = get_tree().root.find_child(name_only, true, false)
+	return n as Label
+
+# Overlay layer helper
 func _ensure_overlay_layer() -> void:
 	if overlay_layer == null:
 		overlay_layer = CanvasLayer.new()
@@ -473,13 +484,13 @@ func _ensure_overlay_layer() -> void:
 		overlay_layer.layer = 10
 		add_child(overlay_layer)
 
-# Formats seconds as MM:SS.
+# MM:SS
 func _format_time(t: int) -> String:
 	var m: int = int(t / 60.0)
 	var s: int = t % 60
 	return "%02d:%02d" % [m, s]
 
-# Safely resolves a NodePath to a node (handles absolute/relative).
+# Safe node resolver
 func _resolve_node_safe(path: NodePath) -> Node:
 	if path.is_empty():
 		return null
@@ -489,25 +500,22 @@ func _resolve_node_safe(path: NodePath) -> Node:
 		return get_tree().root.get_node_or_null(path)
 	return get_node_or_null(path)
 
-# Checks if an object has a property by name.
+# Property helpers
 func _has_property(obj: Object, prop: StringName) -> bool:
 	for d in obj.get_property_list():
 		if typeof(d) == TYPE_DICTIONARY and d.has("name") and StringName(d["name"]) == prop:
 			return true
 	return false
 
-# Sets a property if it exists on the object.
 func _set_if_has_property(obj: Object, prop: StringName, value) -> void:
 	if _has_property(obj, prop):
 		obj.set(prop, value)
 
-# Scans tree for absolute NodePaths and converts them to relative.
+# Convert absolute NodePaths to relative where possible (safe to keep)
 func _scan_and_fix_nodepaths(root: Node, auto_fix: bool = true) -> void:
 	_scan_np_recursive(root, auto_fix)
 
-# Recursive helper: rewrite absolute NodePaths on a node (and its children) to relative paths.
 func _scan_np_recursive(n: Node, auto_fix: bool) -> void:
-	# Check all properties; if a property is a NodePath and absolute, try to make it relative.
 	for d in n.get_property_list():
 		if typeof(d) == TYPE_DICTIONARY and d.has("type") and int(d["type"]) == TYPE_NODE_PATH:
 			var pname: StringName = StringName(d["name"])
@@ -521,7 +529,6 @@ func _scan_np_recursive(n: Node, auto_fix: bool) -> void:
 					print("Fixed absolute NodePath: ", n.get_path(), ".", String(pname), " -> ", String(rel))
 				else:
 					print("Found absolute NodePath but target missing: ", n.get_path(), ".", String(pname), " = ", String(np))
-	# Recurse into children.
 	for c in n.get_children():
 		if c is Node:
 			_scan_np_recursive(c, auto_fix)
