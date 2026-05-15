@@ -1,12 +1,18 @@
 extends PathFollow2D
 
-@export var max_speed: float = 2000.0
-@export var power_to_speed_multiplier: float = 5.0
+@export var max_speed: float = 3000.0           # clamp for path speed (pixels/sec)
 @export var loop_path: bool = false
 @export var lock_when_reached_end: bool = true
 
-# Use speed (km/h) to path speed when power is near zero
-@export var speed_kmh_to_path_speed: float = 20.0  # km/h → path units per second
+# Map sensor speed (km/h) → path speed (pixels/sec). Tune to match your scene scale.
+@export var speed_kmh_to_path_speed: float = 30.0
+
+# Asymmetric responsiveness (units/sec^2): slower ramp-up, faster slowdown (coasting feel)
+@export var accel_up_units: float = 2500.0
+@export var decel_units: float = 6000.0
+
+# Treat tiny sensor noise as stopped
+@export var stop_threshold_kmh: float = 0.3
 
 # Markers and path
 @export_node_path("Node2D") var start_marker_path: NodePath
@@ -15,7 +21,7 @@ extends PathFollow2D
 @export var wait_frames_for_curve: int = 5
 
 # State
-var speed_x: float = 0.0
+var speed_x: float = 0.0        # current path speed (pixels/sec)
 var input_locked: bool = false
 var frozen: bool = false
 var start_offset: float = 0.0
@@ -39,44 +45,38 @@ func _physics_process(delta: float) -> void:
 	if frozen or input_locked:
 		return
 
-	# Compute desired path speed from sensor input.
-	# Prefer power; if power is near zero, fall back to speed (km/h).
-	var power_w: float = 0.0
+	# Read live bike speed (km/h) from your sensor/autoload (same as Dashboard)
 	var speed_kmh: float = 0.0
-
-	var pv: Variant = GlobalWahoo.get("power")
-	if typeof(pv) == TYPE_FLOAT or typeof(pv) == TYPE_INT:
-		power_w = float(pv)
-
 	var sv: Variant = GlobalWahoo.get("speed")
 	if typeof(sv) == TYPE_FLOAT or typeof(sv) == TYPE_INT:
 		speed_kmh = float(sv)
 
-	var target_speed: float = 0.0
-	if power_w > 1.0:
-		target_speed = power_w * power_to_speed_multiplier
-	else:
-		target_speed = speed_kmh * speed_kmh_to_path_speed
+	# Target path speed in pixels/sec
+	var target_speed: float = speed_kmh * speed_kmh_to_path_speed
+	if speed_kmh < stop_threshold_kmh:
+		target_speed = 0.0
 
-	speed_x = lerp(speed_x, target_speed, 4.0 * delta)
+	# Asymmetric smoothing: ramp up modestly, slow down quickly (coasting)
+	var rate: float = accel_up_units if target_speed > speed_x else decel_units
+	speed_x = move_toward(speed_x, target_speed, rate * delta)
 	speed_x = clamp(speed_x, 0.0, max_speed)
 
-	# Move along the path
-	if speed_x > 0.1:
+	# Move along path
+	if speed_x > 0.0:
 		progress += speed_x * delta
-		
+
 		# Respect end offset if not looping
-		if not loop and progress > end_offset:
+		if not loop_path and progress > end_offset:
 			progress = end_offset
 
-		var reached_end_now: bool = (not loop) and (prev_progress < end_offset - 0.1) and (progress >= end_offset - 0.1)
+		var reached_end_now: bool = (not loop_path) and (prev_progress < end_offset - 0.1) and (progress >= end_offset - 0.1)
 		prev_progress = progress
 
 		if reached_end_now and lock_when_reached_end:
 			input_locked = true
 			speed_x = 0.0
 
-# --- Helpers (unchanged behavior) ---
+# --- Helpers (unchanged) ---
 
 func _wait_for_curve_ready() -> void:
 	for i in range(wait_frames_for_curve):
