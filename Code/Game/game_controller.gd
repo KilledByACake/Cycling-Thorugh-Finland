@@ -69,6 +69,10 @@ var _blink_due_to_inactivity: bool = false
 # Overlay layer
 var overlay_layer: CanvasLayer
 
+# Energy accumulation (kJ)
+var energy_kj_total: float = 0.0
+var _energy_ui_last_int: int = 0
+
 # Entry point
 func _ready() -> void:
 	_ensure_overlay_layer()
@@ -124,6 +128,7 @@ func _process(delta: float) -> void:
 	if round_finished:
 		return
 
+	_integrate_power_energy(delta)
 	# Activity check: power > 1 W counts as active pedaling
 	# Treat either power or speed as activity
 	var pow_v: Variant = GlobalWahoo.get("power")
@@ -156,6 +161,26 @@ func _process(delta: float) -> void:
 		if player_nd != null and player_nd.global_position.x >= goal_node.global_position.x:
 			_finish_as_victory()
 
+# Integrate cycling energy from power (W) over time into kJ and update the UI when the integer changes.
+func _integrate_power_energy(delta: float) -> void:
+	if round_finished:
+		return
+	var pv: Variant = GlobalWahoo.get("power")
+	var power_w: float = float(pv) if (typeof(pv) == TYPE_FLOAT or typeof(pv) == TYPE_INT) else 0.0
+	if power_w <= 0.0:
+		return
+	# kJ = W * s / 1000
+	energy_kj_total += power_w * delta / 1000.0
+	_sync_energy_points_and_ui()
+	
+	# Keep the displayed integer in sync with the float total and refresh the UI only on change.
+func _sync_energy_points_and_ui() -> void:
+	var current_int: int = int(floor(energy_kj_total + 0.0001))
+	if current_int != _energy_ui_last_int:
+		_energy_ui_last_int = current_int
+		energy_points = current_int
+		_refresh_energy_ui()
+	
 # External: increase energy
 func add_energy(amount: int) -> void:
 	if round_finished:
