@@ -37,6 +37,7 @@ var ui_root: CanvasLayer
 var player_name_label: Label
 var timer_label: Label
 var energy_label: Label
+var speed_label: Label  # NEW
 
 @export var hill_scene: PackedScene
 @export_range(0.0, 1.0, 0.01) var terrain_difficulty: float = 0.4
@@ -67,6 +68,7 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_resolve_ui_refs()
 	_refresh_energy_ui()
+	_refresh_speed_ui()  # NEW: initialize speed display
 	_update_player_name_from_tree()
 	_start_round_timer()
 	_setup_inactivity_detection()
@@ -108,6 +110,10 @@ func _process(delta: float) -> void:
 		return
 	if GlobalWahoo.power > 1: # Si hay más de 1W, el jugador está activo
 		_on_player_pedaled()
+
+	# NEW: update speed HUD each frame
+	_refresh_speed_ui()
+
 	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		timer_label.text = _format_time(t)
@@ -151,7 +157,40 @@ func _refresh_energy_ui() -> void:
 		energy_label.text = str(energy_points)
 	else:
 		push_warning("EnergyLabel not found under UI. Expected path: UI/VBoxContainer/Energy/EnergyLabel")
-		
+
+# NEW: Returns current speed in km/h (float). If unavailable, returns 0.0
+func _get_current_speed_kmh() -> float:
+	# Prefer explicit km/h method
+	if GlobalWahoo.has_method("get_speed_kmh"):
+		return float(GlobalWahoo.call("get_speed_kmh"))
+
+	# Try property 'speed_kmh'
+	var v_kmh: Variant = GlobalWahoo.get("speed_kmh")
+	if v_kmh != null:
+		return float(v_kmh)
+
+	# Fallbacks
+	if GlobalWahoo.has_method("get_speed"):
+		return float(GlobalWahoo.call("get_speed"))  # assume km/h if your provider defines it that way
+
+	var v_mps: Variant = GlobalWahoo.get("speed_mps")
+	if v_mps != null:
+		return float(v_mps) * 3.6
+
+	var v: Variant = GlobalWahoo.get("speed")
+	if v != null:
+		return float(v)
+
+	return 0.0
+
+# NEW: Updates the speed UI label
+func _refresh_speed_ui() -> void:
+	if speed_label == null:
+		_resolve_ui_refs()
+	if speed_label:
+		var v: float = _get_current_speed_kmh()
+		# Show integer km/h; change to "%.1f" % v for one decimal
+		speed_label.text = str(int(round(v)))
 
 # Pulls the player name from the tree metadata into the label.
 func _update_player_name_from_tree() -> void:
@@ -454,11 +493,15 @@ func _resolve_ui_refs() -> void:
 		if player_name_label == null:
 			player_name_label = ui_root.find_child("PlayerNameLabel", true, false) as Label
 
-		# FIX: use the actual path/name
 		energy_label = ui_root.get_node_or_null("VBoxContainer/Energy/EnergyLabel") as Label
 		if energy_label == null:
 			energy_label = ui_root.find_child("EnergyLabel", true, false) as Label
-			
+
+		# NEW: resolve SpeedLabel
+		speed_label = ui_root.get_node_or_null("VBoxContainer/Speed/SpeedLabel") as Label
+		if speed_label == null:
+			speed_label = ui_root.find_child("SpeedLabel", true, false) as Label
+
 # Ensures there is a layer to host transient overlays.
 func _ensure_overlay_layer() -> void:
 	if overlay_layer == null:

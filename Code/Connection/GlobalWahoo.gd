@@ -16,10 +16,12 @@ func _ready():
 	#var ruta_segura = "file:///" + ruta_bat
 	#var error_bat = OS.shell_open(ruta_segura)
 	
-	if error_bat == OK:
-		print("✅ Archivo .bat ejecutado correctamente.")
-	else:
-		print("❌ Error al ejecutar el .bat: ", error_bat)
+	
+	#got error, trying to remove to see if it is safe
+	#if error_bat == OK:
+		#print("✅ Archivo .bat ejecutado correctamente.")
+	#else:
+		#print("❌ Error al ejecutar el .bat: ", error_bat)
 	
 	# 2. Abrir el puerto UDP
 	var error_udp = udp.bind(puerto_escucha)
