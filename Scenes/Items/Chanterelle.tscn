@@ -83,7 +83,7 @@ _data = {
 [node name="Chantrelle" type="Area2D" unique_id=658099648]
 script = ExtResource("1_8wule")
 snap_in_game = true
-message = "Chanterelle ≈ 45 kJ per handful — big aroma, small kJ."
+message = "Chanterelle gives 45 kJ per handful. It has big aroma,  but small kJ."
 collector_groups = PackedStringArray("player", "radler")
 award_energy_kj = 45
 

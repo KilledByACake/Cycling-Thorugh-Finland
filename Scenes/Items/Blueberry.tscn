@@ -82,7 +82,7 @@ _data = {
 [node name="Blueberry" type="Area2D" unique_id=658099648]
 script = ExtResource("1_vwcqu")
 snap_in_game = true
-message = "A fist of blueberries gives ≈ 180 kJ. In Finland you can pick “mustikka” thanks to jokamiehenoikeus (everyman’s right)"
+message = "A fist of blueberries gives you 180 kJ.In Finland you can pick “mustikka” thanks to jokamiehenoikeus (everyman’s right)"
 collector_groups = PackedStringArray("player", "radler")
 award_energy_kj = 180
 
