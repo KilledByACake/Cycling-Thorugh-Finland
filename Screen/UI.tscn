@@ -1,10 +1,12 @@
 [gd_scene format=3 uid="uid://cppeck65bvb3k"]
 
+[ext_resource type="Script" uid="uid://baeqqqid4gp2" path="res://Code/Screens/ui.gd" id="1_0dhui"]
 [ext_resource type="Texture2D" uid="uid://cysq5ewo8ye0o" path="res://Images/Icons/tachometer.png" id="2_dnerv"]
 [ext_resource type="FontFile" uid="uid://cljnie40osirv" path="res://Style/fredoka-one.one-regular.ttf" id="2_nf4gj"]
 [ext_resource type="Texture2D" uid="uid://la3vhsxmnn0o" path="res://Images/Icons/speed_icon.png" id="3_0dhui"]
 
 [node name="UI" type="CanvasLayer" unique_id=482392122 groups=["ui"]]
+script = ExtResource("1_0dhui")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=576102572]
 offset_left = 39.0

@@ -9,17 +9,10 @@ signal round_over(won: bool)
 
 # Goal: win by reaching PathRight
 @export_node_path("Area2D") var goal_area_path: NodePath = NodePath("Path2D/PathRight")
-@export_node_path("Node2D") var goal_node_path: NodePath = NodePath("Path2D/PathRight")  # fallback if PathRight is not an Area2D
+@export_node_path("Node2D") var goal_node_path: NodePath = NodePath("Path2D/PathRight")
 
-# UI label paths (set these in the Inspector to avoid ownership/% issues)
-@export_node_path("Label") var speed_label_path: NodePath
-@export_node_path("Label") var energy_label_path: NodePath
-@export_node_path("Label") var timer_label_path: NodePath
-@export_node_path("Label") var player_name_label_path: NodePath
-
-# Freeze
-@export var celebrate_max_wait_sec: float = 2.0  # how long we let the Celebrate play before proceeding
-# Round config
+# End-flow config
+@export var celebrate_max_wait_sec: float = 2.0
 const ROUND_TIME_SEC: int = 100
 const TARGET_ENERGY: int = 200
 const BANNER_DURATION_SEC: float = 2.0
@@ -29,11 +22,8 @@ const GAME_OVER_SCENE: PackedScene = preload("res://Screen/GameOver.tscn")
 const YOU_WON_SCENE: PackedScene = preload("res://Screen/Victory.tscn")
 const RESULT_SCREEN_SCENE: PackedScene = preload("res://Screen/Result.tscn")
 
-@export var energy_ui_update_interval: float = 0.5
-var _energy_ui_update_accum: float = 0.0
-
 # State
-var energy_points: int = 0
+var energy_points: int = 0              # kept for Result/Highscore; driven by Energy.gd
 var round_finished: bool = false
 var game_timer: Timer
 
@@ -42,13 +32,12 @@ var game_timer: Timer
 @export var timer_blink_interval_sec: float = 0.3
 @export var timer_blink_color: Color = Color(1, 0.2, 0.2)
 @export var timer_normal_color: Color = Color(1, 1, 1)
-
 var _timer_blink_active: bool = false
 var _timer_blink_accum: float = 0.0
 var _timer_blink_state: bool = false
 
-# UI references
-var ui_root: Node
+# UI references (fallbacks if UI.gd methods aren’t present)
+var ui_root: Node                          # UI CanvasLayer
 var player_name_label: Label
 var timer_label: Label
 var energy_label: Label
@@ -74,16 +63,11 @@ var _blink_due_to_inactivity: bool = false
 # Overlay layer
 var overlay_layer: CanvasLayer
 
-# Energy accumulation (kJ)
-var energy_kj_total: float = 0.0
-var _energy_ui_last_int: int = 0
-
 # Entry point
 func _ready() -> void:
 	_ensure_overlay_layer()
 	_scan_and_fix_nodepaths(self, true)
 
-	# Spawn terrain if provided
 	if hill_scene != null:
 		_spawn_terrain()
 
@@ -91,13 +75,20 @@ func _ready() -> void:
 	_resolve_ui_refs()
 	_resolve_speed_label()
 
-	# Initial speed text (same source as Dashboard)
-	if _speed_label:
-		var v0: Variant = GlobalWahoo.get("speed")
-		var kmh0: float = float(v0) if (typeof(v0) == TYPE_FLOAT or typeof(v0) == TYPE_INT) else 0.0
-		_speed_label.text = "%.1f" % kmh0
+	# Hook Energy singleton → keep legacy energy_points + HUD in sync
+	if not Energy.changed.is_connected(_on_energy_changed):
+		Energy.changed.connect(_on_energy_changed)
+	_on_energy_changed(Energy.total_kj, Energy.score_int)
 
-	_refresh_energy_ui()
+	# Initial speed (via UI if available)
+	var v0: float = 0.0
+	var vv0: Variant = GlobalWahoo.get("speed")
+	if typeof(vv0) == TYPE_FLOAT or typeof(vv0) == TYPE_INT:
+		v0 = float(vv0)
+	_ui_call("set_speed", [v0])
+	if _speed_label and not ui_root or (ui_root and not ui_root.has_method("set_speed")):
+		_speed_label.text = "%.1f" % v0
+
 	_update_player_name_from_tree()
 	_start_round_timer()
 	_setup_inactivity_detection()
@@ -126,136 +117,76 @@ func _spawn_terrain() -> void:
 	add_child(hill)
 	await get_tree().process_frame
 	_scan_and_fix_nodepaths(self, true)
-	# No Path2D-specific rebuild calls here (your path is a Node2D).
 
 # Per-frame update
 func _process(delta: float) -> void:
 	if round_finished:
 		return
 
-	_integrate_power_energy(delta)
-	# Live HUD: show total kJ with one decimal so it feels immediate
-	if energy_label:
-		energy_label.text = "%.1f" % energy_kj_total
-	_energy_ui_update_accum += delta
-	if _energy_ui_update_accum >= energy_ui_update_interval:
-		_energy_ui_update_accum = 0.0
-		_set_energy_label_live()
-	
-	# Activity check: power > 1 W counts as active pedaling
-	# Treat either power or speed as activity
-	var power_v: Variant = GlobalWahoo.get("power")
-	var speed_v: Variant = GlobalWahoo.get("speed")
-	var power_w: float = float(power_v) if (typeof(power_v) == TYPE_FLOAT or typeof(power_v) == TYPE_INT) else 0.0
-	var speed_kmh: float = float(speed_v) if (typeof(speed_v) == TYPE_FLOAT or typeof(speed_v) == TYPE_INT) else 0.0
+	# Integrate pedaling energy (Energy.gd owns totals and emits when score integer changes)
+	var pv: Variant = GlobalWahoo.get("power")
+	var power_w: float = (float(pv) if (typeof(pv) == TYPE_FLOAT or typeof(pv) == TYPE_INT) else 0.0)
+	Energy.integrate_power(delta, power_w)
+
+	# Activity (resets inactivity timers) by either power or speed
+	var sv: Variant = GlobalWahoo.get("speed")
+	var speed_kmh: float = (float(sv) if (typeof(sv) == TYPE_FLOAT or typeof(sv) == TYPE_INT) else 0.0)
 	if power_w > 1.0 or speed_kmh > 0.5:
 		_on_player_pedaled()
 
-	# Update SpeedLabel (same source as Dashboard)
-	if _speed_label == null:
-		_resolve_speed_label()
-	if _speed_label:
-		var v: Variant = GlobalWahoo.get("speed")
-		var kmh: float = float(v) if (typeof(v) == TYPE_FLOAT or typeof(v) == TYPE_INT) else 0.0
-		_speed_label.text = "%.1f" % kmh
+	# Speed HUD via UI.gd if present (fallback to label)
+	_ui_call("set_speed", [speed_kmh])
+	if _speed_label and (ui_root == null or not ui_root.has_method("set_speed")):
+		_speed_label.text = "%.1f" % speed_kmh
 
-	# Update countdown UI and blink behavior
-	if game_timer and timer_label:
+	# Timer HUD and blink
+	if game_timer:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
-		timer_label.text = _format_time(t)
+		_ui_call("set_timer_text", [_format_time(t)])
+		if timer_label and (ui_root == null or not ui_root.has_method("set_timer_text")):
+			timer_label.text = _format_time(t)
 		var should_blink: bool = (t <= timer_blink_threshold_sec) or _blink_due_to_inactivity
 		_enable_timer_blink(should_blink)
 		_update_timer_blink(delta)
 
-	# Prefer PathFollow2D end lock; fallback to X-cross
-	if not round_finished:
-		var player_nd := get_tree().get_first_node_in_group("player") as Node2D
-		if player_nd:
-			var reached := false
-			var pf := player_nd.get_parent()
-			if pf is PathFollow2D and (pf as PathFollow2D).input_locked:
+	# Victory detection: prefer PathFollow2D end-lock; fallback to X-cross
+	var player_nd := get_tree().get_first_node_in_group("player") as Node2D
+	if not round_finished and player_nd:
+		var reached := false
+		var pf := player_nd.get_parent()
+		if pf is PathFollow2D and (pf as PathFollow2D).input_locked:
+			reached = true
+		else:
+			var goal_node := _resolve_node_safe(goal_node_path) as Node2D
+			if goal_node != null and player_nd.global_position.x >= goal_node.global_position.x:
 				reached = true
-			else:
-				var goal_node := _resolve_node_safe(goal_node_path) as Node2D
-				if goal_node != null and player_nd.global_position.x >= goal_node.global_position.x:
-					reached = true
-			if reached:
-				_finish_as_victory()
+		if reached:
+			_finish_as_victory()
 
-# Integrate cycling energy (W → kJ) into the single total, then grant whole kJ to the score.
-func _integrate_power_energy(delta: float) -> void:
-	if round_finished:
-		return
-	var pv: Variant = GlobalWahoo.get("power")
-	var power_w: float = 0.0
-	if typeof(pv) == TYPE_FLOAT or typeof(pv) == TYPE_INT:
-		power_w = float(pv)
-	if power_w <= 0.0:
-		return
-
-	# Add to the single total (kJ = W * s / 1000)
-	energy_kj_total += power_w * delta / 1000.0
-
-	# Grant only whole kJ to the score, through the same path pickups use
-	var pedaled_int: int = int(floor(energy_kj_total))
-	var delta_int: int = pedaled_int - _energy_ui_last_int
-	if delta_int > 0:
-		_energy_ui_last_int = pedaled_int
-		add_energy(delta_int)  # increments energy_points and refreshes the UI
-	
-# Keep (optional) UI refresh helper, but never overwrite the score from pedaled kJ.
-func _sync_energy_points_and_ui() -> void:
-	_refresh_energy_ui()
-	
-# External: increase energy (e.g. from pickups). Adds to the same total as pedaling.
+# Energy: forward pickups into Energy.gd (do not handle totals here)
 func add_energy(amount: int) -> void:
 	if round_finished:
 		return
-	# Add pickup kJ into the single total, then grant only the integer delta
-	energy_kj_total += float(amount)
+	Energy.add_pickup(amount)
+	# Energy.changed will call _on_energy_changed → updates energy_points + HUD
 
-	var new_int: int = int(floor(energy_kj_total))
-	var delta_int: int = new_int - _energy_ui_last_int
-	if delta_int > 0:
-		_energy_ui_last_int = new_int
-		energy_points += delta_int
-	_refresh_energy_ui()
+# Energy change handler (from Energy.gd)
+func _on_energy_changed(total_kj: float, score_int: int) -> void:
+	energy_points = score_int
+	_ui_call("set_energy_total_kj", [total_kj])
+	if energy_label and (ui_root == null or not ui_root.has_method("set_energy_total_kj")):
+		energy_label.text = "%.1f" % total_kj
 
-# External: set energy explicitly
-func update_energy_UI(value: int) -> void:
-	if round_finished:
-		return
-	energy_points = value
-	_refresh_energy_ui()
-
-# Update energy in UI
-func _refresh_energy_ui() -> void:
-	if ui_root == null or energy_label == null:
-		_resolve_ui_refs()
-	if ui_root and ui_root.has_method("set_energy"):
-		ui_root.call("set_energy", energy_points)
-	elif energy_label:
-		energy_label.text = str(energy_points)
-	else:
-		push_warning("EnergyLabel not found. Expected: UI/VBoxContainer/Energy/EnergyLabel or set energy_label_path.")
-
-#energy as float
-func _set_energy_label_live() -> void:
-	# Show 1 decimal live (float), but keep score logic in whole kJ.
-	if energy_label == null:
-		_resolve_ui_refs()
-	if energy_label:
-		energy_label.text = "%.1f" % energy_kj_total
-		
 # Player name to UI
 func _update_player_name_from_tree() -> void:
-	if not player_name_label:
-		return
-	var n: String = ""
-	if get_tree().root.has_meta("player_name"):
-		n = str(get_tree().root.get_meta("player_name"))
-	if n != "":
-		player_name_label.text = n
+	if ui_root:
+		var n := ""
+		if get_tree().root.has_meta("player_name"):
+			n = str(get_tree().root.get_meta("player_name"))
+		if n != "":
+			_ui_call("set_player_name", [n])
+			if player_name_label and (ui_root == null or not ui_root.has_method("set_player_name")):
+				player_name_label.text = n
 
 # Round timer
 func _start_round_timer() -> void:
@@ -265,28 +196,27 @@ func _start_round_timer() -> void:
 	add_child(game_timer)
 	game_timer.timeout.connect(_finish_round)
 	game_timer.start()
-	if timer_label:
+	_ui_call("set_timer_text", [_format_time(ROUND_TIME_SEC)])
+	if timer_label and (ui_root == null or not ui_root.has_method("set_timer_text")):
 		timer_label.text = _format_time(ROUND_TIME_SEC)
-		_set_timer_label_color(timer_normal_color)
+	_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 
-# Round end by time
+# Round end by time (loss)
 func _finish_round() -> void:
 	if round_finished:
 		return
 	round_finished = true
-	if timer_label:
-		timer_label.text = "00:00"
 	_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
 
-	_set_ui_visible(false)
+	_hide_ui()
 	_freeze_world()
 	emit_signal("round_over", false)
-	await _show_banner_overlay(false)  # GameOver.tscn
+	await _show_banner_overlay(false)
 	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
-	
+
 # Inactivity detection
 func _setup_inactivity_detection() -> void:
 	inactivity_warning_timer = Timer.new()
@@ -313,7 +243,7 @@ func _on_player_pedaled() -> void:
 	if inactivity_timer:
 		inactivity_timer.start()
 	_blink_due_to_inactivity = false
-	if game_timer and timer_label:
+	if game_timer:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
 		_enable_timer_blink((t <= timer_blink_threshold_sec) or _blink_due_to_inactivity)
 
@@ -338,32 +268,30 @@ func _game_over_due_to_inactivity() -> void:
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
 
-	_set_ui_visible(false)
+	_hide_ui()
 	_freeze_world()
 	emit_signal("round_over", false)
-	await _show_banner_overlay(false)  # GameOver.tscn
+	await _show_banner_overlay(false)
 	_show_result_screen_overlay(false, energy_points, TARGET_ENERGY)
-	
+
 # Connect goal Area2D once
 func _connect_goal_area() -> void:
 	var area: Area2D = _resolve_node_safe(goal_area_path) as Area2D
 	if area != null and not area.body_entered.is_connected(_on_goal_area_body_entered):
 		area.body_entered.connect(_on_goal_area_body_entered)
 
-# Entering goal Area2D → victory
 func _on_goal_area_body_entered(body: Node) -> void:
 	if round_finished:
 		return
 	if body != null and body.is_in_group("player"):
 		_finish_as_victory()
 
-# You reach victory! (RightPath)
+# Victory: stop moving, let Celebrate play, hide UI, freeze world, show overlays
 func _finish_as_victory() -> void:
 	if round_finished:
 		return
 	round_finished = true
 
-	# Stop timers/blink and reset colors
 	if game_timer: game_timer.stop()
 	if inactivity_warning_timer: inactivity_warning_timer.stop()
 	if inactivity_timer: inactivity_timer.stop()
@@ -371,37 +299,24 @@ func _finish_as_victory() -> void:
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
 
-	# Lock path movement where we are; do NOT freeze yet (we need Celebrate to play)
 	var player := get_tree().get_first_node_in_group("player")
-	if player != null:
+	if player:
 		var pf := player.get_parent()
 		if pf is PathFollow2D:
 			pf.input_locked = true
 			pf.speed_x = 0.0
+		if not player.is_in_group("unfreezable"):
+			player.add_to_group("unfreezable")
+		if player.has_method("start_celebrate"):
+			player.call("start_celebrate")
 
-	# Play Celebrate once (force non-loop) and wait a short, fixed time
-	if player and player.has_method("start_celebrate"):
-		player.call("start_celebrate")
-		var spr := player.get("sprite") as AnimatedSprite2D
-		if spr:
-			var frames := spr.sprite_frames
-			if frames and frames.has_animation(player.celebrate_anim_name):
-				# Force Celebrate to not loop so it can finish visually
-				if frames.get_animation_loop(player.celebrate_anim_name):
-					frames.set_animation_loop(player.celebrate_anim_name, false)
-			# Optionally restart Celebrate to be sure we’re on it
-			spr.play(player.celebrate_anim_name)
-		await get_tree().create_timer(celebrate_max_wait_sec).timeout
-
-	# Hide UI while overlays are on top (optional; add this helper if you want UI hidden)
-	_set_ui_visible(false)
-
-	# Freeze everything except nodes in "unfreezable", then show overlays
+	_hide_ui()
 	_freeze_world()
+
 	emit_signal("round_over", true)
-	await _show_banner_overlay(true)   # Victory.tscn
+	await _show_banner_overlay(true)
 	_show_result_screen_overlay(true, energy_points, TARGET_ENERGY)
-	
+
 # Blink helpers
 func _enable_timer_blink(v: bool) -> void:
 	if _timer_blink_active == v:
@@ -421,24 +336,20 @@ func _update_timer_blink(delta: float) -> void:
 		_set_timer_label_color(timer_blink_color if _timer_blink_state else timer_normal_color)
 
 func _set_timer_label_color(col: Color) -> void:
-	if timer_label == null:
-		return
-	timer_label.add_theme_color_override("font_color", col)
-	timer_label.modulate = col
+	if timer_label:
+		timer_label.add_theme_color_override("font_color", col)
+		timer_label.modulate = col
 
-# Freeze everything except UI/Overlay layers
+# Freeze everything except UI/Overlay layers and nodes in "unfreezable"
 func _freeze_world() -> void:
 	get_tree().call_group("freezable", "freeze")
 	_freeze_recursive(self)
 
-
 func _freeze_recursive(n: Node) -> void:
 	if n == null:
 		return
-	# Skip UI layers and anything explicitly marked unfreezable (e.g., aurora)
 	if (n is CanvasLayer and (n.name == "UI" or n.name == "OverlayLayer")) or n.is_in_group("unfreezable"):
 		return
-
 	_freeze_node(n)
 	for c in n.get_children():
 		if c is Node:
@@ -470,7 +381,7 @@ func _freeze_node(n: Node) -> void:
 	elif n is AudioStreamPlayer:
 		(n as AudioStreamPlayer).stop()
 
-# Overlay banners and result screen
+# Overlays
 func _show_banner_overlay(won: bool) -> void:
 	_ensure_overlay_layer()
 	var scene: PackedScene = YOU_WON_SCENE if won else GAME_OVER_SCENE
@@ -514,7 +425,6 @@ func show_popup_message(text: String, _id: String = "") -> void:
 	panel.offset_top = -panel_size.y * 0.5
 	panel.offset_right = right_offset_px + panel_size.x
 	panel.offset_bottom = -panel_size.y * 0.5 + panel_size.y
-
 	var lbl := RichTextLabel.new()
 	lbl.bbcode_enabled = true
 	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
@@ -549,33 +459,34 @@ func show_popup_message(text: String, _id: String = "") -> void:
 			panel.queue_free()
 	)
 
-# UI visibility helper
+# UI helpers
 func _set_ui_visible(v: bool) -> void:
+	# Preferred: hide/show every node in the “ui” group (your UI CanvasLayer should be in this group)
+	get_tree().call_group("ui", "set_visible", v)
+
+	# Fallback: also try a node named “UI” if present (in case the group is missing in some scenes)
 	var ui := get_node_or_null("UI") as CanvasItem
 	if ui:
 		ui.visible = v
-		
-# UI resolution
+
+func _hide_ui() -> void:
+	_set_ui_visible(false)
+
+# Resolve UI nodes (fallbacks if UI.gd is missing)
 func _resolve_ui_refs() -> void:
 	ui_root = get_node_or_null("UI")
 	if ui_root == null:
 		ui_root = get_tree().root.find_child("UI", true, false)
-
-	# Resolve labels via exported NodePaths first, then canonical paths, then deep search
-	timer_label = _resolve_label(timer_label_path, "UI/VBoxContainer/TimerLabel", "TimerLabel")
-	player_name_label = _resolve_label(player_name_label_path, "UI/VBoxContainer/PlayerNameLabel", "PlayerNameLabel")
+	timer_label = _resolve_label(NodePath(), "UI/VBoxContainer/TimerLabel", "TimerLabel")
+	player_name_label = _resolve_label(NodePath(), "UI/VBoxContainer/PlayerNameLabel", "PlayerNameLabel")
 	if player_name_label == null:
-		# Support minor name variation seen in screenshots
-		player_name_label = _resolve_label(NodePath(""), "UI/VBoxContainer/PlayerNameLabe", "PlayerNameLabe")
-	energy_label = _resolve_label(energy_label_path, "UI/VBoxContainer/Energy/EnergyLabel", "EnergyLabel")
+		player_name_label = _resolve_label(NodePath(), "UI/VBoxContainer/PlayerNameLabe", "PlayerNameLabe")
+	energy_label = _resolve_label(NodePath(), "UI/VBoxContainer/Energy/EnergyLabel", "EnergyLabel")
 
 func _resolve_speed_label() -> void:
 	if _speed_label != null:
 		return
-	_speed_label = _resolve_label(speed_label_path, "UI/VBoxContainer/Speed/SpeedLabel", "SpeedLabel")
-	if _speed_label:
-		print("SpeedLabel:", _speed_label.get_path())
-		_speed_label.text = "TEST"
+	_speed_label = _resolve_label(NodePath(), "UI/VBoxContainer/Speed/SpeedLabel", "SpeedLabel")
 
 func _resolve_label(exported: NodePath, canonical_path: String, name_only: String) -> Label:
 	var n: Node = null
@@ -598,23 +509,23 @@ func _ensure_overlay_layer() -> void:
 		overlay_layer.layer = 10
 		add_child(overlay_layer)
 
-# MM:SS
+# Small UI caller that prefers UI.gd methods
+func _ui_call(method: StringName, args: Array = []) -> void:
+	if ui_root and ui_root.has_method(method):
+		ui_root.callv(method, args)
+
+# Formatting/utilities
 func _format_time(t: int) -> String:
 	var m: int = int(t / 60.0)
 	var s: int = t % 60
 	return "%02d:%02d" % [m, s]
 
-# Safe node resolver
 func _resolve_node_safe(path: NodePath) -> Node:
-	if path.is_empty():
-		return null
-	if not is_inside_tree():
-		return null
-	if path.is_absolute():
-		return get_tree().root.get_node_or_null(path)
+	if path.is_empty(): return null
+	if not is_inside_tree(): return null
+	if path.is_absolute(): return get_tree().root.get_node_or_null(path)
 	return get_node_or_null(path)
 
-# Property helpers
 func _has_property(obj: Object, prop: StringName) -> bool:
 	for d in obj.get_property_list():
 		if typeof(d) == TYPE_DICTIONARY and d.has("name") and StringName(d["name"]) == prop:
@@ -625,7 +536,6 @@ func _set_if_has_property(obj: Object, prop: StringName, value) -> void:
 	if _has_property(obj, prop):
 		obj.set(prop, value)
 
-# Convert absolute NodePaths to relative where possible (safe to keep)
 func _scan_and_fix_nodepaths(root: Node, auto_fix: bool = true) -> void:
 	_scan_np_recursive(root, auto_fix)
 
