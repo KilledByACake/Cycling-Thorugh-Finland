@@ -948,6 +948,7 @@ autowrap_mode = 2
 script = ExtResource("10_pp23k")
 
 [node name="Attention" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer" unique_id=1368259523]
+visible = false
 layout_mode = 2
 theme_override_styles/panel = ExtResource("6_v48c6")
 
