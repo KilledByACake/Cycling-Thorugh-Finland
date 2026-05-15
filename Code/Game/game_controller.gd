@@ -270,7 +270,7 @@ func _finish_round() -> void:
 	_set_timer_label_color(timer_normal_color)
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
-	var won: bool = energy_points >= TARGET_ENERGY
+	var won: bool = false  # Only PathRight triggers victory
 	_freeze_world()
 	emit_signal("round_over", won)
 	await _show_banner_overlay(won)
@@ -344,7 +344,7 @@ func _on_goal_area_body_entered(body: Node) -> void:
 	if body != null and body.is_in_group("player"):
 		_finish_as_victory()
 
-# Win immediately
+# You reach victory! (RightPath)
 func _finish_as_victory() -> void:
 	if round_finished:
 		return
@@ -361,18 +361,26 @@ func _finish_as_victory() -> void:
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
 
-	# Optional: trigger celebrate animation on the player and wait for it
-	var p := get_tree().get_first_node_in_group("player")
-	if p and p.has_method("start_celebrate"):
-		p.call("start_celebrate")
-		var spr := p.get("sprite") as AnimatedSprite2D
+	# 1) Lock path movement where we are, do NOT freeze the player yet (Celebrate must play)
+	var player := get_tree().get_first_node_in_group("player")
+	if player != null:
+		var pf := player.get_parent()
+		if pf is PathFollow2D:
+			pf.input_locked = true
+			pf.speed_x = 0.0
+			# keep physics on so the player keeps its position while animating
+
+	# 2) Trigger Celebrate and wait for it to finish
+	if player and player.has_method("start_celebrate"):
+		player.call("start_celebrate")
+		var spr := player.get("sprite") as AnimatedSprite2D
 		if spr and spr.is_playing():
 			await spr.animation_finished
 
-	# Freeze world and show overlays
+	# 3) Freeze the world (aurora excluded by step 3 below), then Victory then Result
 	_freeze_world()
 	emit_signal("round_over", true)
-	await _show_banner_overlay(true)
+	await _show_banner_overlay(true)   # shows Victory.tscn for BANNER_DURATION_SEC
 	_show_result_screen_overlay(true, energy_points, TARGET_ENERGY)
 
 # Blink helpers
@@ -407,11 +415,14 @@ func _freeze_world() -> void:
 func _freeze_recursive(n: Node) -> void:
 	if n == null:
 		return
-	if (n is CanvasLayer) and (n.name == "UI" or n.name == "OverlayLayer"):
+	# Skip UI layers and anything explicitly marked unfreezable (e.g., aurora)
+	if (n is CanvasLayer and (n.name == "UI" or n.name == "OverlayLayer")) or n.is_in_group("unfreezable"):
 		return
+
 	_freeze_node(n)
 	for c in n.get_children():
-		_freeze_recursive(c)
+		if c is Node:
+			_freeze_recursive(c)
 
 func _freeze_node(n: Node) -> void:
 	if n is CharacterBody2D:
