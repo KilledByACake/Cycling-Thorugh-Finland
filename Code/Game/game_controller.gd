@@ -17,6 +17,8 @@ signal round_over(won: bool)
 @export_node_path("Label") var timer_label_path: NodePath
 @export_node_path("Label") var player_name_label_path: NodePath
 
+# Freeze
+@export var celebrate_max_wait_sec: float = 2.0  # how long we let the Celebrate play before proceeding
 # Round config
 const ROUND_TIME_SEC: int = 100
 const TARGET_ENERGY: int = 200
@@ -366,7 +368,7 @@ func _finish_as_victory() -> void:
 	_enable_timer_blink(false)
 	_blink_due_to_inactivity = false
 
-	# Lock path movement where we are; do NOT freeze yet (Celebrate must play)
+	# Lock path movement where we are; do NOT freeze yet (we need Celebrate to play)
 	var player := get_tree().get_first_node_in_group("player")
 	if player != null:
 		var pf := player.get_parent()
@@ -374,17 +376,24 @@ func _finish_as_victory() -> void:
 			pf.input_locked = true
 			pf.speed_x = 0.0
 
-	# Trigger Celebrate and wait for it to finish (if available)
+	# Play Celebrate once (force non-loop) and wait a short, fixed time
 	if player and player.has_method("start_celebrate"):
 		player.call("start_celebrate")
 		var spr := player.get("sprite") as AnimatedSprite2D
-		if spr and spr.is_playing():
-			await spr.animation_finished
+		if spr:
+			var frames := spr.sprite_frames
+			if frames and frames.has_animation(player.celebrate_anim_name):
+				# Force Celebrate to not loop so it can finish visually
+				if frames.get_animation_loop(player.celebrate_anim_name):
+					frames.set_animation_loop(player.celebrate_anim_name, false)
+			# Optionally restart Celebrate to be sure we’re on it
+			spr.play(player.celebrate_anim_name)
+		await get_tree().create_timer(celebrate_max_wait_sec).timeout
 
-	# Hide UI while overlays are on top
-	_set_ui_visible(false)
+	# Hide UI while overlays are on top (optional; add this helper if you want UI hidden)
+	# _set_ui_visible(false)
 
-	# Freeze everything except aurora/UI layers, then show overlays
+	# Freeze everything except nodes in "unfreezable", then show overlays
 	_freeze_world()
 	emit_signal("round_over", true)
 	await _show_banner_overlay(true)   # Victory.tscn
@@ -418,6 +427,7 @@ func _set_timer_label_color(col: Color) -> void:
 func _freeze_world() -> void:
 	get_tree().call_group("freezable", "freeze")
 	_freeze_recursive(self)
+
 
 func _freeze_recursive(n: Node) -> void:
 	if n == null:
