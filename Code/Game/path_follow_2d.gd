@@ -3,6 +3,7 @@ extends PathFollow2D
 @export var max_speed: float = 3000.0           # clamp for path speed (pixels/sec)
 @export var loop_path: bool = false
 @export var lock_when_reached_end: bool = true
+@export_range(0.1, 5.0, 0.05) var path_speed_multiplier: float = 2
 
 # Map sensor speed (km/h) → path speed (pixels/sec). Tune to match your scene scale.
 @export var speed_kmh_to_path_speed: float = 30.0
@@ -15,6 +16,7 @@ extends PathFollow2D
 @export var stop_threshold_kmh: float = 0.3
 
 # Markers and path
+
 @export_node_path("Node2D") var start_marker_path: NodePath
 @export_node_path("Node2D") var end_marker_path: NodePath
 @export var search_samples: int = 600
