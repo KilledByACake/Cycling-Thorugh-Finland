@@ -125,7 +125,12 @@ func _process(delta: float) -> void:
 		return
 
 	# Activity check: power > 1 W counts as active pedaling
-	if GlobalWahoo.power > 1:
+	# Treat either power or speed as activity
+	var pow_v: Variant = GlobalWahoo.get("power")
+	var spd_v: Variant = GlobalWahoo.get("speed")
+	var pow: float = float(pow_v) if (typeof(pow_v) == TYPE_FLOAT or typeof(pow_v) == TYPE_INT) else 0.0
+	var spd: float = float(spd_v) if (typeof(spd_v) == TYPE_FLOAT or typeof(spd_v) == TYPE_INT) else 0.0
+	if pow > 1.0 or spd > 0.5:
 		_on_player_pedaled()
 
 	# Update SpeedLabel (same source as Dashboard)
