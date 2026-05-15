@@ -18,7 +18,7 @@ signal round_over(won: bool)
 
 # End-flow config
 @export var celebrate_max_wait_sec: float = 2.0
-const ROUND_TIME_SEC: int = 100
+const ROUND_TIME_SEC: int = 140
 const TARGET_ENERGY: int = 200
 const BANNER_DURATION_SEC: float = 2.0
 
