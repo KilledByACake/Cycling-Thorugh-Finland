@@ -81,6 +81,13 @@ func _ready() -> void:
 	await get_tree().process_frame
 	_resolve_ui_refs()
 	_resolve_speed_label()
+
+	# Initial speed text (same source as Dashboard)
+	if _speed_label:
+		var v0: Variant = GlobalWahoo.get("speed")
+		var kmh0: float = float(v0) if (typeof(v0) == TYPE_FLOAT or typeof(v0) == TYPE_INT) else 0.0
+		_speed_label.text = "%.1f" % kmh0
+
 	_refresh_energy_ui()
 	_update_player_name_from_tree()
 	_start_round_timer()
@@ -121,7 +128,13 @@ func _process(delta: float) -> void:
 	if GlobalWahoo.power > 1:
 		_on_player_pedaled()
 
-	
+	# Update SpeedLabel (same source as Dashboard)
+	if _speed_label == null:
+		_resolve_speed_label()
+	if _speed_label:
+		var v: Variant = GlobalWahoo.get("speed")
+		var kmh: float = float(v) if (typeof(v) == TYPE_FLOAT or typeof(v) == TYPE_INT) else 0.0
+		_speed_label.text = "%.1f" % kmh
 
 	# Update countdown UI and blink behavior
 	if game_timer and timer_label:
@@ -384,7 +397,7 @@ func _show_result_screen_overlay(won: bool, energy: int, target: int) -> void:
 		player_name_text = str(get_tree().root.get_meta("player_name"))
 	rs.call_deferred("set_result", won, energy, target, player_name_text)
 
-# Popup helper (unchanged except English comments)
+# Popup helper
 func show_popup_message(text: String, _id: String = "") -> void:
 	_ensure_overlay_layer()
 	var panel_size := Vector2(720, 140)
@@ -462,6 +475,9 @@ func _resolve_speed_label() -> void:
 	if _speed_label != null:
 		return
 	_speed_label = _resolve_label(speed_label_path, "UI/VBoxContainer/Speed/SpeedLabel", "SpeedLabel")
+	if _speed_label:
+		print("SpeedLabel:", _speed_label.get_path())
+		_speed_label.text = "TEST"
 
 func _resolve_label(exported: NodePath, canonical_path: String, name_only: String) -> Label:
 	var n: Node = null
