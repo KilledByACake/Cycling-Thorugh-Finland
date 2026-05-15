@@ -33,11 +33,11 @@ var _timer_blink_accum: float = 0.0
 var _timer_blink_state: bool = false
 
 # UI references (resolved at runtime)
-var ui_root: CanvasLayer
+var ui_root: Node
 var player_name_label: Label
 var timer_label: Label
 var energy_label: Label
-var speed_label: Label  # NEW: Speed HUD label
+var speed_label: Label  # Speed HUD label
 
 @export var hill_scene: PackedScene
 @export_range(0.0, 1.0, 0.01) var terrain_difficulty: float = 0.4
@@ -107,17 +107,16 @@ func _spawn_terrain() -> void:
 func _process(delta: float) -> void:
 	if round_finished:
 		return
-
 	if GlobalWahoo.power > 1: # player is active
 		_on_player_pedaled()
 
-	# NEW: update SpeedLabel every frame (reads only)
+	# Update SpeedLabel every frame (reads only)
 	if speed_label:
 		var sp_var: Variant = GlobalWahoo.get("speed")  # Dashboard uses GlobalWahoo.speed
 		var sp: float = 0.0
 		if typeof(sp_var) == TYPE_FLOAT or typeof(sp_var) == TYPE_INT:
 			sp = float(sp_var)
-		speed_label.text = "%.1f" % sp  # same format as Dashboard
+		speed_label.text = "%.1f" % sp
 
 	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
@@ -454,28 +453,23 @@ func show_popup_message(text: String, _id: String = "") -> void:
 
 # Finds and stores UI nodes (labels) for later updates.
 func _resolve_ui_refs() -> void:
-	# Try direct child named "UI", then fallback to a deep search by name.
-	ui_root = get_node_or_null("UI") as CanvasLayer
+	# Find UI regardless of its node type (Control or CanvasLayer)
+	ui_root = get_node_or_null("UI")
 	if ui_root == null:
-		ui_root = find_child("UI", true, false) as CanvasLayer
+		ui_root = find_child("UI", true, false)
 
+	# Resolve labels with deep search to be robust
 	if ui_root:
-		timer_label = ui_root.get_node_or_null("VBoxContainer/TimerLabel") as Label
-		if timer_label == null:
-			timer_label = ui_root.find_child("TimerLabel", true, false) as Label
-
-		player_name_label = ui_root.get_node_or_null("VBoxContainer/PlayerNameLabel") as Label
-		if player_name_label == null:
-			player_name_label = ui_root.find_child("PlayerNameLabel", true, false) as Label
-
-		energy_label = ui_root.get_node_or_null("VBoxContainer/Energy/EnergyLabel") as Label
-		if energy_label == null:
-			energy_label = ui_root.find_child("EnergyLabel", true, false) as Label
-
-		# NEW: Speed label
-		speed_label = ui_root.get_node_or_null("VBoxContainer/Speed/SpeedLabel") as Label
-		if speed_label == null:
-			speed_label = ui_root.find_child("SpeedLabel", true, false) as Label
+		timer_label = ui_root.find_child("TimerLabel", true, false) as Label
+		player_name_label = ui_root.find_child("PlayerNameLabel", true, false) as Label
+		energy_label = ui_root.find_child("EnergyLabel", true, false) as Label
+		speed_label = ui_root.find_child("SpeedLabel", true, false) as Label
+	else:
+		# Fallback: search from the whole scene if UI wasn't found by name
+		timer_label = find_child("TimerLabel", true, false) as Label
+		player_name_label = find_child("PlayerNameLabel", true, false) as Label
+		energy_label = find_child("EnergyLabel", true, false) as Label
+		speed_label = find_child("SpeedLabel", true, false) as Label
 
 # Ensures there is a layer to host transient overlays.
 func _ensure_overlay_layer() -> void:
