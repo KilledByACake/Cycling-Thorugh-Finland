@@ -107,29 +107,17 @@ func _spawn_terrain() -> void:
 func _process(delta: float) -> void:
 	if round_finished:
 		return
-	if GlobalWahoo.power > 1: # Si hay más de 1W, el jugador está activo
+
+	if GlobalWahoo.power > 1: # player is active
 		_on_player_pedaled()
 
-	# NEW: update speed HUD (pure read, no side effects)
+	# NEW: update SpeedLabel every frame (reads only)
 	if speed_label:
+		var sp_var: Variant = GlobalWahoo.get("speed")  # Dashboard uses GlobalWahoo.speed
 		var sp: float = 0.0
-		if GlobalWahoo.has_method("get_speed_kmh"):
-			var r_kmh: Variant = GlobalWahoo.call("get_speed_kmh")
-			if typeof(r_kmh) == TYPE_FLOAT or typeof(r_kmh) == TYPE_INT:
-				sp = float(r_kmh)
-		else:
-			var v_kmh: Variant = GlobalWahoo.get("speed_kmh")
-			if typeof(v_kmh) == TYPE_FLOAT or typeof(v_kmh) == TYPE_INT:
-				sp = float(v_kmh)
-			else:
-				var v_mps: Variant = GlobalWahoo.get("speed_mps")
-				if typeof(v_mps) == TYPE_FLOAT or typeof(v_mps) == TYPE_INT:
-					sp = float(v_mps) * 3.6
-				else:
-					var v_any: Variant = GlobalWahoo.get("speed")  # last resort, assumed km/h
-					if typeof(v_any) == TYPE_FLOAT or typeof(v_any) == TYPE_INT:
-						sp = float(v_any)
-		speed_label.text = str(int(round(sp)))  # use "%.1f" % sp for 1 decimal
+		if typeof(sp_var) == TYPE_FLOAT or typeof(sp_var) == TYPE_INT:
+			sp = float(sp_var)
+		speed_label.text = "%.1f" % sp  # same format as Dashboard
 
 	if game_timer and timer_label:
 		var t: int = max(0, int(ceil(game_timer.time_left)))
@@ -466,7 +454,11 @@ func show_popup_message(text: String, _id: String = "") -> void:
 
 # Finds and stores UI nodes (labels) for later updates.
 func _resolve_ui_refs() -> void:
+	# Try direct child named "UI", then fallback to a deep search by name.
 	ui_root = get_node_or_null("UI") as CanvasLayer
+	if ui_root == null:
+		ui_root = find_child("UI", true, false) as CanvasLayer
+
 	if ui_root:
 		timer_label = ui_root.get_node_or_null("VBoxContainer/TimerLabel") as Label
 		if timer_label == null:
@@ -476,7 +468,6 @@ func _resolve_ui_refs() -> void:
 		if player_name_label == null:
 			player_name_label = ui_root.find_child("PlayerNameLabel", true, false) as Label
 
-		# FIX: use the actual path/name
 		energy_label = ui_root.get_node_or_null("VBoxContainer/Energy/EnergyLabel") as Label
 		if energy_label == null:
 			energy_label = ui_root.find_child("EnergyLabel", true, false) as Label
@@ -485,7 +476,7 @@ func _resolve_ui_refs() -> void:
 		speed_label = ui_root.get_node_or_null("VBoxContainer/Speed/SpeedLabel") as Label
 		if speed_label == null:
 			speed_label = ui_root.find_child("SpeedLabel", true, false) as Label
-			
+
 # Ensures there is a layer to host transient overlays.
 func _ensure_overlay_layer() -> void:
 	if overlay_layer == null:
