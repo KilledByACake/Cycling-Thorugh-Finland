@@ -27,11 +27,21 @@ texture = ExtResource("3_0dhui")
 expand_mode = 2
 stretch_mode = 4
 
-[node name="SpeedLabel" type="Label" parent="VBoxContainer/Speed" unique_id=1956653022]
+[node name="VBoxContainer" type="HBoxContainer" parent="VBoxContainer/Speed" unique_id=373270269]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="SpeedLabel" type="Label" parent="VBoxContainer/Speed/VBoxContainer" unique_id=1956653022]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 text = "0"
+
+[node name="Unit" type="Label" parent="VBoxContainer/Speed/VBoxContainer" unique_id=1469372314]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_nf4gj")
+theme_override_font_sizes/font_size = 120
+text = "watts"
 
 [node name="Energy" type="HBoxContainer" parent="VBoxContainer" unique_id=1741399407]
 layout_mode = 2
@@ -42,11 +52,21 @@ texture = ExtResource("2_dnerv")
 expand_mode = 2
 stretch_mode = 4
 
-[node name="EnergyLabel" type="Label" parent="VBoxContainer/Energy" unique_id=216446171]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer/Energy" unique_id=513283410]
+layout_mode = 2
+theme_override_constants/separation = 50
+
+[node name="EnergyLabel" type="Label" parent="VBoxContainer/Energy/HBoxContainer" unique_id=216446171]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 text = "0"
+
+[node name="Unit" type="Label" parent="VBoxContainer/Energy/HBoxContainer" unique_id=1292370602]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("2_nf4gj")
+theme_override_font_sizes/font_size = 120
+text = "km/t"
 
 [node name="TimerLabel" type="Label" parent="." unique_id=192753063]
 anchors_preset = 1
