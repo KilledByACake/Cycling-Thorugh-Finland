@@ -834,6 +834,7 @@ custom_minimum_size = Vector2(250, 125)
 layout_mode = 2
 size_flags_vertical = 0
 script = ExtResource("8_be544")
+max_value = 500.0
 margin_px = 12.0
 
 [node name="HBoxContainer3" type="HBoxContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer" unique_id=964211574]
@@ -856,7 +857,7 @@ size_flags_vertical = 0
 theme_override_colors/font_color = Color(0.19607843, 0.25490198, 0.101960786, 1)
 theme_override_fonts/font = ExtResource("3_sqkkj")
 theme_override_font_sizes/font_size = 20
-text = "500 watts"
+text = "100 watts"
 
 [node name="Windmill" type="PanelContainer" parent="MarginContainer/VBoxContainer/VBoxContainer/GridContainer" unique_id=1229265380]
 layout_mode = 2

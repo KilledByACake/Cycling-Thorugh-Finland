@@ -2,7 +2,7 @@
 extends Control
 
 @export var min_value: float = 0.0
-@export var max_value: float = 500.0
+@export var max_value: float = 100.0
 @export var value: float = 0.0 : set = set_value
 
 @export var arc_color: Color = Color8(181, 143, 25, 255)
