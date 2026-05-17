@@ -11,15 +11,17 @@ offset_left = 39.0
 offset_top = -1.0
 offset_right = 959.0
 offset_bottom = 556.0
+scale = Vector2(0.7, 0.7)
 
 [node name="PlayerNameLabel" type="Label" parent="VBoxContainer" unique_id=967513957]
 layout_mode = 2
 theme_override_fonts/font = ExtResource("2_nf4gj")
-theme_override_font_sizes/font_size = 150
+theme_override_font_sizes/font_size = 170
 text = "Player Name"
 
 [node name="Speed" type="HBoxContainer" parent="VBoxContainer" unique_id=1817900206]
 layout_mode = 2
+theme_override_constants/separation = 50
 
 [node name="Picture" type="TextureRect" parent="VBoxContainer/Speed" unique_id=1717586164]
 layout_mode = 2
@@ -37,15 +39,16 @@ theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 text = "0"
 
-[node name="Unit" type="Label" parent="VBoxContainer/Speed/VBoxContainer" unique_id=1469372314]
+[node name="UnitKMH" type="Label" parent="VBoxContainer/Speed/VBoxContainer" unique_id=1292370602]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 60
-text = "watts"
+text = "km/h"
 
 [node name="Energy" type="HBoxContainer" parent="VBoxContainer" unique_id=1741399407]
 layout_mode = 2
+theme_override_constants/separation = 50
 
 [node name="Picture" type="TextureRect" parent="VBoxContainer/Energy" unique_id=1524677923]
 layout_mode = 2
@@ -63,12 +66,12 @@ theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 120
 text = "0"
 
-[node name="Unit" type="Label" parent="VBoxContainer/Energy/HBoxContainer" unique_id=1292370602]
+[node name="UnitW" type="Label" parent="VBoxContainer/Energy/HBoxContainer" unique_id=1469372314]
 layout_mode = 2
 size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("2_nf4gj")
 theme_override_font_sizes/font_size = 60
-text = "km/t"
+text = "watts"
 
 [node name="TimerLabel" type="Label" parent="." unique_id=192753063]
 anchors_preset = 1

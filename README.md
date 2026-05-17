@@ -113,3 +113,6 @@ Here, you can:
 - Showcase your project
 - Speak with the developers directly
 
+NOTE FROM DEVELOPERS 
+- the data is not really live and updates every sth seconds, we think
+- solar power is not really connected we think
