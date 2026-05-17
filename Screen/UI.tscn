@@ -39,8 +39,9 @@ text = "0"
 
 [node name="Unit" type="Label" parent="VBoxContainer/Speed/VBoxContainer" unique_id=1469372314]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("2_nf4gj")
-theme_override_font_sizes/font_size = 120
+theme_override_font_sizes/font_size = 60
 text = "watts"
 
 [node name="Energy" type="HBoxContainer" parent="VBoxContainer" unique_id=1741399407]
@@ -64,8 +65,9 @@ text = "0"
 
 [node name="Unit" type="Label" parent="VBoxContainer/Energy/HBoxContainer" unique_id=1292370602]
 layout_mode = 2
+size_flags_vertical = 8
 theme_override_fonts/font = ExtResource("2_nf4gj")
-theme_override_font_sizes/font_size = 120
+theme_override_font_sizes/font_size = 60
 text = "km/t"
 
 [node name="TimerLabel" type="Label" parent="." unique_id=192753063]
