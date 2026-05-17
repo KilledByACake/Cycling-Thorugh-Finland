@@ -497,6 +497,8 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_wk8sf")
+gauge_path = NodePath("MarginContainer/VBoxContainer/VBoxContainer/GridContainer/Solarpanel/CardMargin/CardVBox/VBoxContainer/SolarGauge")
+solar_data_path = NodePath("Meteoria/powerSolar")
 
 [node name="BackgroundColor" type="ColorRect" parent="." unique_id=309210946]
 material = SubResource("ShaderMaterial_n2g2g")
