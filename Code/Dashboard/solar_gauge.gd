@@ -14,17 +14,17 @@ extends Control
 @export var needle_width_px: float = 8.0
 @export var needle_inner_ratio: float = 0.15
 
-# Clamps and sets the value, then schedules a redraw.
+# Sets clamped value and requests a redraw.
 func set_value(v: float) -> void:
 	value = clampf(v, min_value, max_value)
 	queue_redraw()
 
-# Hooks resize to redraw and triggers the first draw.
+# Redraws on resize and triggers the initial draw.
 func _ready() -> void:
 	resized.connect(func(): queue_redraw())
 	queue_redraw()
 
-# Draws the arc and the needle for the current value.
+# Renders the semicircle arc and the needle based on the current value.
 func _draw() -> void:
 	var s: Vector2 = size
 	if s.x <= 1.0 or s.y <= 1.0:
@@ -42,11 +42,13 @@ func _draw() -> void:
 	var a_end: float = TAU
 	var segs: int = 96
 
+	# Arc with rounded end caps.
 	draw_arc(center, radius, a_start, a_end, segs, arc_color, thickness_px, true)
 	var cap_r: float = half_t
 	draw_circle(center + Vector2(cos(a_start), sin(a_start)) * radius, cap_r, arc_color)
 	draw_circle(center + Vector2(cos(a_end), sin(a_end)) * radius, cap_r, arc_color)
 
+	# Needle angle from normalized value.
 	var t: float = (value - min_value) / maxf(0.00001, max_value - min_value)
 	var ang: float = lerpf(a_start, a_end, t)
 	var dir: Vector2 = Vector2(cos(ang), sin(ang))
@@ -54,6 +56,7 @@ func _draw() -> void:
 	var tip: Vector2 = center + dir * radius
 	var base: Vector2 = center + dir * (radius * needle_inner_ratio)
 
+	# Needle triangle.
 	var half_w: float = maxf(needle_width_px * 0.5, 1.0)
 	var perp: Vector2 = Vector2(-dir.y, dir.x) * half_w
 	var poly: PackedVector2Array = PackedVector2Array([base + perp, base - perp, tip])

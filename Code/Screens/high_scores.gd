@@ -1,19 +1,24 @@
 extends Node
-# TO RESET DAILY HIGH SCORE, FILL OUT _RESET
+# High score store: keeps history and ranked buckets (daily/monthly/yearly/all-time), plus a display-only daily reset session.
 
+# Path to the JSON file on disk.
 const FILE_PATH: String = "user://highscores.json"
 
+# Bucket capacities.
 const TOPN_DAILY: int = 30
 const TOPN_MONTHLY: int = 5
 const TOPN_YEARLY: int = 5
 const TOPN_ALLTIME: int = 5
 
+# In-memory store (rebuilt at load).
 var store: Dictionary = {}
 
+# Initializes the store from disk and handles day rollover.
 func _ready() -> void:
 	store = _load_store()
 	_rollover_if_new_day()
 
+# Creates an empty store with all required sections.
 func _empty_store() -> Dictionary:
 	return {
 		"history": [],
@@ -26,14 +31,16 @@ func _empty_store() -> Dictionary:
 		"last_seen_date": ""
 	}
 
+# Returns today's date as YYYY-MM-DD.
 func _today_iso() -> String:
 	var d: Dictionary = Time.get_date_dict_from_system()
 	return "%04d-%02d-%02d" % [d.year, d.month, d.day]
 
+# Returns [day_key, month_key, year_key] derived from a date string.
 func _bucket_keys(datestr: String) -> Array:
 	return [datestr, datestr.substr(0, 7), datestr.substr(0, 4)]
 
-# Insert ascending by key with a cap; returns inserted index or -1 if dropped.
+# Inserts entry into an ascending array by key with a cap; returns inserted index or -1 if dropped.
 func _asc_insert_cap(arr: Array, entry: Dictionary, key: String = "score", cap: int = 5) -> int:
 	arr.append(entry)
 	var i: int = arr.size() - 1
@@ -50,16 +57,19 @@ func _asc_insert_cap(arr: Array, entry: Dictionary, key: String = "score", cap: 
 		i = (i - extras) if kept else -1
 	return i
 
+# Converts an index in an ascending bucket into a rank where 1 = best.
 func _idx_to_rank(idx: int, bucket: Array) -> Variant:
 	if idx < 0:
 		return null
 	return bucket.size() - idx # 1 = best
 
+# Writes the current store to disk as JSON.
 func _save_store() -> void:
 	var f: FileAccess = FileAccess.open(FILE_PATH, FileAccess.WRITE)
 	if f:
 		f.store_string(JSON.stringify(store, "\t"))
 
+# Normalizes an entry to the canonical schema and types.
 func _normalize_entry(entry: Dictionary) -> Dictionary:
 	return {
 		"name": str(entry.get("name", "Unknown")),
@@ -71,11 +81,11 @@ func _normalize_entry(entry: Dictionary) -> Dictionary:
 		"avg_speed": entry.get("avg_speed", null),
 	}
 
-# Normalize a name key (trim whitespace).
+# Trims a player name for key comparisons.
 func _name_key(raw_name: String) -> String:
 	return raw_name.strip_edges(true, true)
 
-# Find the index for a name in a bucket (returns -1 if not found).
+# Finds the index of a player name in a bucket (or -1 if not present).
 func _index_of_name(arr: Array, player_name: String) -> int:
 	var k: String = _name_key(player_name)
 	for i in range(arr.size()):
@@ -84,9 +94,7 @@ func _index_of_name(arr: Array, player_name: String) -> int:
 			return i
 	return -1
 
-# Unique per name per bucket:
-# - Keep the best score per name (higher is better).
-# - Returns the index of the new entry, or -1 if dropped (existing was better/equal).
+# Inserts or updates the best score per name; returns new index or -1 if dropped by better/equal existing score.
 func _upsert_unique_by_name(arr: Array, entry: Dictionary, cap: int) -> int:
 	var k: String = _name_key(str(entry.get("name", "")))
 	var existing_idx: int = -1
@@ -110,14 +118,14 @@ func _upsert_unique_by_name(arr: Array, entry: Dictionary, cap: int) -> int:
 
 	return _asc_insert_cap(arr, entry, "score", cap)
 
-# Helper: compose the reset key for today’s active session.
+# Builds the display-only reset bucket key for a given day and current session pointer.
 func _reset_key_for(day_key: String, sessions: Dictionary) -> String:
 	var sess: int = int(sessions.get(day_key, 0))
 	if sess <= 0:
 		return ""
 	return "%s#%d" % [day_key, sess]
 
-# Ensure a fresh session pointer when the day changes.
+# Resets the daily reset-session pointer when the day changes.
 func _rollover_if_new_day() -> void:
 	var today: String = _today_iso()
 	var last: String = str(store.get("last_seen_date", ""))
@@ -130,7 +138,7 @@ func _rollover_if_new_day() -> void:
 		store["daily_reset_session"] = new_sessions
 		_save_store()
 
-# Rebuild canonical buckets from history.
+# Loads the JSON file, rebuilds canonical buckets from history, and returns a fresh store.
 func _load_store() -> Dictionary:
 	if not FileAccess.file_exists(FILE_PATH):
 		return _empty_store()
@@ -141,7 +149,7 @@ func _load_store() -> Dictionary:
 		var s: Dictionary = _empty_store()
 		for e in (data as Dictionary).get("history", []):
 			_add_score_internal(s, e as Dictionary, false)
-		# carry optional fields if present
+		# Carry optional fields if present
 		if (data as Dictionary).has("daily_reset"):
 			s["daily_reset"] = (data as Dictionary)["daily_reset"]
 		if (data as Dictionary).has("daily_reset_session"):
@@ -156,6 +164,7 @@ func _load_store() -> Dictionary:
 		return s2
 	return _empty_store()
 
+# Inserts one normalized entry into history and all canonical buckets; optionally saves.
 func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool) -> Dictionary:
 	var e: Dictionary = _normalize_entry(entry)
 	dst_store["history"].append(e)
@@ -165,7 +174,7 @@ func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool
 	var month_key: String = keys[1]
 	var year_key: String = keys[2]
 
-	# Canonical buckets
+	# Canonical buckets (unique per name, best only)
 	var daily: Array = (dst_store["daily"].get(day_key, []) as Array)
 	dst_store["daily"][day_key] = daily
 	var di: int = _upsert_unique_by_name(daily, e, TOPN_DAILY)
@@ -190,7 +199,7 @@ func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool
 	if ai == -1:
 		ai = _index_of_name(alltime, e["name"])
 
-	# Display-only: add to active reset session for that day if any
+	# Display-only: also add to today's active reset session if any
 	var daily_reset: Dictionary = (dst_store.get("daily_reset", {}) as Dictionary)
 	dst_store["daily_reset"] = daily_reset
 	var sessions: Dictionary = (dst_store.get("daily_reset_session", {}) as Dictionary)
@@ -211,12 +220,11 @@ func _add_score_internal(dst_store: Dictionary, entry: Dictionary, do_save: bool
 		"alltime_rank": _idx_to_rank(ai, alltime),
 	}
 
-# Public API
-
+# Adds a score to the live store and persists it; returns ranks in each bucket.
 func add_score(entry: Dictionary) -> Dictionary:
 	return _add_score_internal(store, entry, true)
 
-# Start a new display-only session for today
+# Starts a new display-only daily session (used by UI reset flow).
 func reset_today_view() -> void:
 	var today: String = _today_iso()
 	var sessions: Dictionary = (store.get("daily_reset_session", {}) as Dictionary)
@@ -230,7 +238,7 @@ func reset_today_view() -> void:
 	store["last_seen_date"] = today
 	_save_store()
 
-# Read only the newest session for today (or empty if none)
+# Returns top N from the newest display-only session for today (or empty).
 func top_today_reset(n: int = 5, highest_first: bool = true) -> Array:
 	var today: String = _today_iso()
 	var sessions: Dictionary = (store.get("daily_reset_session", {}) as Dictionary)
@@ -241,29 +249,35 @@ func top_today_reset(n: int = 5, highest_first: bool = true) -> Array:
 	var bucket: Array = (store.get("daily_reset", {}) as Dictionary).get(key, []) as Array
 	return _top_from_bucket(bucket, n, highest_first)
 
+# Returns top N from today's canonical daily bucket.
 func top_today(n: int = 5, highest_first: bool = true) -> Array:
 	var bucket: Array = store["daily"].get(_today_iso(), []) as Array
 	return _top_from_bucket(bucket, n, highest_first)
 
+# Returns top N for this month from the canonical bucket.
 func top_month(n: int = 5, highest_first: bool = true) -> Array:
 	var d: Dictionary = Time.get_date_dict_from_system()
 	var key: String = "%04d-%02d" % [d.year, d.month]
 	var bucket: Array = store["monthly"].get(key, []) as Array
 	return _top_from_bucket(bucket, n, highest_first)
 
+# Returns top N for this year from the canonical bucket.
 func top_year(n: int = 5, highest_first: bool = true) -> Array:
 	var d: Dictionary = Time.get_date_dict_from_system()
 	var key: String = "%04d" % [d.year]
 	var bucket: Array = store["yearly"].get(key, []) as Array
 	return _top_from_bucket(bucket, n, highest_first)
 
+# Returns top N for all-time from the canonical bucket.
 func top_alltime(n: int = 5, highest_first: bool = true) -> Array:
 	var bucket: Array = store.get("alltime", []) as Array
 	return _top_from_bucket(bucket, n, highest_first)
 
+# Returns total count of entries in the all-time bucket.
 func alltime_count() -> int:
 	return (store.get("alltime", []) as Array).size()
 
+# Picks the last N (highest) entries from an ascending bucket and returns them optionally reversed to highest-first.
 func _top_from_bucket(bucket: Array, n: int, highest_first: bool) -> Array:
 	var take: int = min(n, bucket.size())
 	var tail: Array = []

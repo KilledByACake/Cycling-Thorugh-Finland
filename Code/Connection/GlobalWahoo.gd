@@ -1,45 +1,33 @@
 extends Node
 
-# Variables globales donde guardaremos los datos
+# Global variables to store incoming data
 var power: int = 0
 var speed: float = 0.0
 
-# Herramientas para la conexión
+# Networking tools for the connection
 var udp := PacketPeerUDP.new()
 var puerto_escucha = 4242
 
 func _ready():
-	print("--- Iniciando GlobalTraining ---")
+	print("--- Starting GlobalTraining ---")
 	
-	# 1. Arrancar el .bat
-	#var ruta_bat = ProjectSettings.globalize_path("res://arrancar.bat")
-	#var ruta_segura = "file:///" + ruta_bat
-	#var error_bat = OS.shell_open(ruta_segura)
-	
-	
-	#got error, trying to remove to see if it is safe
-	#if error_bat == OK:
-		#print("✅ Archivo .bat ejecutado correctamente.")
-	#else:
-		#print("❌ Error al ejecutar el .bat: ", error_bat)
-	
-	# 2. Abrir el puerto UDP
+	# 1 Open the UDP port
 	var error_udp = udp.bind(puerto_escucha)
 	if error_udp == OK:
-		print("✅ Escuchando datos en el puerto UDP: ", puerto_escucha)
+		print("Listening for data on UDP port: ", puerto_escucha)
 	else:
-		print("❌ Error al abrir el puerto UDP: ", error_udp)
+		print("Error opening UDP port: ", error_udp)
 
 func _process(_delta):
-	# 3. Leer los datos si llegan
+	# 2. Read packets if available
 	while udp.get_available_packet_count() > 0:
 		var paquete = udp.get_packet().get_string_from_utf8()
 		var datos = JSON.parse_string(paquete)
 		
-		# Si los datos son válidos, los guardamos y los imprimimos
+		# If the JSON is valid, store and print values
 		if datos:
 			power = datos.get("power", 0)
 			speed = datos.get("speed", 0.0)
 			
-			# ¡AQUÍ ESTÁ LA MAGIA PARA COMPROBARLO!
-			print("🚴 Datos en vivo -> Potencia: ", power, " W | Velocidad: ", speed, " km/h")
+			# Live data log
+			print("Live data -> Power: ", power, " W | Speed: ", speed, " km/h")

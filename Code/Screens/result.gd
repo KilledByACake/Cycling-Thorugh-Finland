@@ -110,11 +110,3 @@ func _on_Main_Menu_pressed() -> void:
 func _today_iso() -> String:
 	var d: Dictionary = Time.get_date_dict_from_system()
 	return "%04d-%02d-%02d" % [d.year, d.month, d.day]
-
-
-func _on_main_menu_pressed() -> void:
-	pass # Replace with function body.
-
-
-func _on_retry_pressed() -> void:
-	pass # Replace with function body.
