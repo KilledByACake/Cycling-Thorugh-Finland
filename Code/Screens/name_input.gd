@@ -27,6 +27,9 @@ var indents: PackedInt32Array = [0, 0, 0, 0]
 
 var name_text: String = ""
 
+var _name_label_base_modulate: Color = Color(1, 1, 1)
+var _flash_token: int = 0
+
 @onready var grid: GridContainer = $GridContainer
 @onready var name_label: Label = $Label
 
@@ -34,16 +37,28 @@ var name_text: String = ""
 var _confirm_reset_dlg: ConfirmationDialog
 var _info_dlg: AcceptDialog
 
+# Allowed characters for physical keyboard input (built from rows)
+var _allowed_chars: Dictionary = {}
+
+func _build_allowed_set() -> void:
+	_allowed_chars.clear()
+	for row in rows:
+		for ch in (row as Array):
+			_allowed_chars[String(ch)] = true
+
 # Called when the node enters the scene; builds the keyboard and centers it.
 func _ready() -> void:
 	grid.columns = _calc_columns()
 	_build_character_grid()
+	_build_allowed_set()
 	await get_tree().process_frame
 	_center_grid()
 	_show_name_input()
+	if name_label:
+		_name_label_base_modulate = name_label.modulate
 	if get_tree().root.has_signal("size_changed"):
 		get_tree().root.size_changed.connect(_center_grid)
-
+		
 # Computes the maximum number of columns considering per-row indents.
 func _calc_columns() -> int:
 	var cols: int = 0
@@ -64,7 +79,8 @@ func _build_character_grid() -> void:
 		for ch in (rows[i] as Array):
 			var btn: Button = Button.new()
 			btn.text = String(ch)
-			btn.pressed.connect(CharacterButtonPressed.bind(String(ch)))
+			# Bind button to insert the same character as on-screen
+			btn.pressed.connect(Callable(self, "CharacterButtonPressed").bind(String(ch)))
 			grid.add_child(btn)
 		var trailing: int = columns - indent - (rows[i] as Array).size()
 		_add_spacers(trailing)
@@ -118,15 +134,19 @@ func _first_focusable_button() -> Button:
 func _update_name_label() -> void:
 	if name_label:
 		name_label.text = name_text + ("_" if name_text.length() < MAX_NAME_CHARACTERS else "")
-
+		name_label.modulate = _name_label_base_modulate
+		
 # Briefly flashes the name label to indicate an invalid action (e.g., too long).
 func _flash_name_label() -> void:
 	if not name_label:
 		return
-	var original: Color = name_label.modulate
+	_flash_token += 1
+	var token := _flash_token
 	name_label.modulate = Color(1, 0.6, 0.6)
 	await get_tree().create_timer(0.12).timeout
-	name_label.modulate = original
+	# Bare denne siste kallelsen får lov å gjenopprette fargen
+	if token == _flash_token:
+		name_label.modulate = _name_label_base_modulate
 
 # Leaves to the main menu scene.
 func _on_quit_pressed() -> void:
@@ -238,3 +258,40 @@ func _show_info_and_return() -> void:
 # Navigates back to the main menu after info is acknowledged.
 func _on_info_ok() -> void:
 	get_tree().change_scene_to_file(MAIN_MENU_SCENE_PATH)
+
+# Physical keyboard input mapped to the same behavior as on-screen buttons.
+func _unhandled_input(event: InputEvent) -> void:
+	# Handle only non-repeating key presses.
+	if event is InputEventKey and event.pressed and not event.echo:
+		var k := event as InputEventKey
+
+		# Backspace: delete the last character.
+		if k.keycode == KEY_BACKSPACE:
+			_on_backspace_pressed()
+			accept_event()
+			return
+
+		# Enter or Numpad Enter: confirm the current input.
+		if k.keycode == KEY_ENTER or k.keycode == KEY_KP_ENTER:
+			_on_done_pressed()
+			accept_event()
+			return
+
+		# Escape: leave to main menu.
+		if k.keycode == KEY_ESCAPE:
+			_on_quit_pressed()
+			accept_event()
+			return
+
+		# Ignore shortcut combinations (Ctrl/Cmd/Alt).
+		if k.ctrl_pressed or k.meta_pressed or k.alt_pressed:
+			return
+
+		# Convert the pressed key to an uppercase character and validate against allowed set.
+		if k.unicode != 0:
+			var ch: String = String.chr(k.unicode).to_upper()
+			if _allowed_chars.has(ch):
+				CharacterButtonPressed(ch)
+				accept_event()
+			else:
+				_flash_name_label()
