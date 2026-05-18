@@ -21,4 +21,4 @@ func _process(_delta: float) -> void:
 	if v > 0.0 and p > 0.0:
 		diameter = sqrt((8.0 * p) / (coeff * pow(v, 3.0)))
 
-	text = "Whooooooosh!\nAbout a %.2f m wind turbine." % diameter
+	text = "Whooooooosh!\nYou are about a %.2f m of a wind turbine." % diameter
