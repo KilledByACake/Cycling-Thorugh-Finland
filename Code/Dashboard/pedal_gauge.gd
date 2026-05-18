@@ -65,11 +65,11 @@ func _refresh_all() -> void:
 func _update_bar_shader() -> void:
 	if _bar and _bar.material is ShaderMaterial:
 		var m: ShaderMaterial = _bar.material as ShaderMaterial
-		var scale: Vector2 = _bar.get_global_transform().get_scale().abs()
-		var px_size: Vector2 = _bar.size * scale
+		var bar_scale: Vector2 = _bar.get_global_transform().get_scale().abs()
+		var px_size: Vector2 = _bar.size * bar_scale
 		m.set_shader_parameter("rect_size", px_size)
-		m.set_shader_parameter("corner_px", bar_corner_px * max(scale.x, scale.y))
-
+		m.set_shader_parameter("corner_px", bar_corner_px * max(bar_scale.x, bar_scale.y))
+		
 # Positions the needle and clamps it inside the bar.
 func _update_needle() -> void:
 	if not (is_instance_valid(_bar) and is_instance_valid(_needle)):
