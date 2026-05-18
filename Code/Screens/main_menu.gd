@@ -47,16 +47,16 @@ func _preload_scenes_in_folder(dir_path: String) -> void:
 		return
 
 	dir.list_dir_begin()
-	var name: String = dir.get_next()
-	while name != "":
+	var entry_name: String = dir.get_next()
+	while entry_name != "":
 		if dir.current_is_dir():
-			if name != "." and name != "..":
-				_preload_scenes_in_folder(dir_path + "/" + name)
+			if entry_name != "." and entry_name != "..":
+				_preload_scenes_in_folder(dir_path + "/" + entry_name)
 		else:
-			if name.ends_with(".tscn"):
-				var full_path: String = dir_path + "/" + name
+			if entry_name.ends_with(".tscn"):
+				var full_path: String = dir_path + "/" + entry_name
 				var res: Resource = ResourceLoader.load(full_path)
 				if res is PackedScene:
 					_scene_cache[full_path] = res
-		name = dir.get_next()
+		entry_name = dir.get_next()
 	dir.list_dir_end()
