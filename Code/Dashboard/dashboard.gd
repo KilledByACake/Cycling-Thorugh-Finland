@@ -25,7 +25,7 @@ func _ready() -> void:
 		push_error("SolarGauge not found. Set 'gauge_path'.")
 
 # Updates labels each frame.
-func _process(delta: float) -> void:
+func _process(_delta: float) -> void:
 	if label_speed:
 		label_speed.text = "%.1f" % GlobalWahoo.speed
 	if label_power:
