@@ -3,7 +3,7 @@ extends Label
 # Number of decimals to display (0 = integer)
 @export var digits: int = 0
 # Exponential smoothing time constant in seconds (0 = no smoothing)
-@export var smoothing_tau_sec: float = 0.25
+@export var smoothing_tau_sec: float = 0.1
 
 # Internal smoothed value
 var _display_w: float = 0.0
