@@ -19,7 +19,7 @@ func _ready() -> void:
 		if not data_node.is_connected("solar2_changed", Callable(self, "_on_solar2_changed")):
 			data_node.connect("solar2_changed", Callable(self, "_on_solar2_changed"))
 	else:
-		push_error("SolarData not found or missing 'solar2_changed' signal. Set 'solar_data_path'.")
+		push_error("SolarData  not found or missing 'solar2_changed' signal. Set 'solar_data_path'.")
 
 	if gauge == null:
 		push_error("SolarGauge not found. Set 'gauge_path'.")
